@@ -12,15 +12,19 @@
             <x-input-error :messages="$errors->get('username')" class="mt-2" />
         </div> 
 
-        <!-- Password -->
-        <div class="mt-4">
+        <!-- Password with Show/Hide -->
+        <div class="mt-4 relative">
             <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full"
-                          type="password"
-                          name="password"
-                          required autocomplete="current-password" />
+            <x-text-input id="password" class="block mt-1 w-full pr-10"
+                  type="password"
+                  name="password"
+                  required autocomplete="current-password" />
+            <button type="button" onclick="togglePassword()" class="absolute right-3 top-8 text-sm text-gray-600">
+            Show
+            </button>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
+
 
         <!-- Remember Me -->
         <div class="block mt-4">
@@ -49,4 +53,19 @@
             </div>
         </div>
     </form>
+
+    <script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const toggleBtn = event.target;
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleBtn.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            toggleBtn.textContent = "Show";
+        }
+    }
+    </script>
+
 </x-guest-layout>
