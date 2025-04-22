@@ -1,2 +1,5 @@
-<h1>Dashboard Rental</h1>
-<p>Selamat datang, {{ auth()->user()->name }}</p>
+@extends('layouts.app')
+
+@section('content')
+    <h1>Selamat datang di dashboard</h1>
+@endsection

@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsRental;
+use App\Http\Middleware\IsPelanggan;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -40,6 +44,13 @@ Route::middleware(['auth'])->group(function () {
     // Admin
     Route::get('/admin/dashboard', fn() => view('dashboard.admin'))->name('admin.dashboard');
 });
+
+Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles.show');
+
+Route::middleware(['auth', IsAdmin::class])->get('/admin/dashboard', fn () => view('dashboard.admin'));
+Route::middleware(['auth', IsRental::class])->get('/rental/dashboard', fn () => view('dashboard.rental'));
+Route::middleware(['auth', IsPelanggan::class])->get('/user/dashboard', fn () => view('dashboard.user'));
 
 
 require __DIR__.'/auth.php';

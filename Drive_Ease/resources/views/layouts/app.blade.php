@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DriveEase</title>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body class="font-sans antialiased">
+    <nav class="bg-gray-800 text-white p-4 flex justify-between">
+        <div>
+            <a href="/" class="font-bold">DriveEase</a>
         </div>
-    </body>
+        <div class="space-x-4">
+            @auth
+                @if(auth()->user()->role === 'pelanggan')
+                    <a href="{{ route('user.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('vehicles.index') }}">Cari Kendaraan</a>
+                @elseif(auth()->user()->role === 'rental')
+                    <a href="{{ route('rental.dashboard') }}">Dashboard</a>
+                @elseif(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}">Login</a>
+                <a href="{{ route('register') }}">Register</a>
+            @endauth
+        </div>
+    </nav>
+
+    <main class="p-4">
+        @yield('content')
+    </main>
+</body>
 </html>
