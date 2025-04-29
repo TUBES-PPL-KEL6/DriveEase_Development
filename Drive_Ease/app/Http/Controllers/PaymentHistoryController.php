@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\PaymentHistory;
+use App\Models\Rent;
 use Illuminate\Http\Request;
 
 
@@ -23,8 +25,27 @@ class PaymentHistoryController extends Controller
 
         PaymentHistory::create($request->only(['username', 'car', 'price']));
 
-        return redirect()->route('user.dashboard')->with('success', 'Transaksi Berhasil');
+        // store  rent data
+        $rent = Rent::create([
+            'customer_id' => auth()->user()->id,
+            'car_id' => $request->car,
+            'start_date' => now(),
+            'end_date' => now()->addDays(7),
+            'total_price' => $request->price,
+            'status' => 'menunggu',
+        ]);
 
+        // push notification to rental owner
+        $notification = Notification::create([
+            'user_id' => $rent->car->owner->id,
+            'title' => 'Penyewaan Baru',
+            'message' => 'Penyewaan baru telah dibuat oleh ' . $rent->customer->username . ' untuk ' . $rent->car->name . ' sebesar ' . $rent->total_price . ' menunggu konfirmasi',
+            'type' => 'rent',
+            'status' => 'unread',
+            'link' => '/rental/rents/' . $rent->id,
+        ]);
+
+        return redirect()->route('user.dashboard')->with('success', 'Transaksi Berhasil');
     }
 
     public function index()
