@@ -21,4 +21,15 @@ class Car extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Review::class);
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating'), 1); // dibulatkan 1 angka di belakang koma
+    }
+
 }
