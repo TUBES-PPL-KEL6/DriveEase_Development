@@ -11,3 +11,15 @@
         <p>{{ $review->comment }}</p>
     </div>
 @endforeach
+
+@if(auth()->user()->role === 'pelanggan')
+    <h3>Form Pemesanan</h3>
+    <form action="{{ route('bookings.store', $vehicle->id) }}" method="POST">
+        @csrf
+        <label for="start_date">Tanggal Mulai:</label>
+        <input type="date" name="start_date" required>
+        <label for="end_date">Tanggal Selesai:</label>
+        <input type="date" name="end_date" required>
+        <button type="submit">Pesan Kendaraan</button>
+    </form>
+@endif

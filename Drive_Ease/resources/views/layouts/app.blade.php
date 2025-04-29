@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>DriveEase</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
-    <nav class="bg-gray-800 text-white p-4 flex justify-between">
-        <div>
-            <a href="/" class="font-bold">DriveEase</a>
-        </div>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+        <div class="font-bold text-xl text-blue-600">DriveEase</div>
         <div class="space-x-4">
             @auth
                 @if(auth()->user()->role === 'pelanggan')
-                    <a href="{{ route('user.dashboard') }}">Dashboard</a>
-                    <a href="{{ route('vehicles.index') }}">Cari Kendaraan</a>
+                    <a href="{{ route('user.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard</a>
+                    <a href="{{ route('vehicles.index') }}" class="text-sm hover:text-blue-600">Cari Kendaraan</a>
                 @elseif(auth()->user()->role === 'rental')
-                    <a href="{{ route('rental.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('rental.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard Rental</a>
                 @elseif(auth()->user()->role === 'admin')
-                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard Admin</a>
                 @endif
+
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
-                    <button type="submit">Logout</button>
+                    <button type="submit" class="text-sm text-red-500 hover:underline">Logout</button>
                 </form>
             @else
-                <a href="{{ route('login') }}">Login</a>
-                <a href="{{ route('register') }}">Register</a>
+                <a href="{{ route('login') }}" class="text-sm hover:text-blue-600">Login</a>
+                <a href="{{ route('register') }}" class="text-sm hover:text-blue-600">Register</a>
             @endauth
         </div>
     </nav>
 
-    <main class="p-4">
+    <main class="max-w-6xl mx-auto p-6">
         @yield('content')
     </main>
 </body>

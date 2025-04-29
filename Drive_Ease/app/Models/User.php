@@ -23,6 +23,11 @@ class User extends Authenticatable
         'password',
         'role',
     ];
+
+    public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
     
 
     /**
