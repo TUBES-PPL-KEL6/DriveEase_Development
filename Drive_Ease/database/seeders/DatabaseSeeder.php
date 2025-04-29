@@ -15,9 +15,25 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::insert([
+            [
+                'name' => 'pelanggan',
+                'username' => 'pelanggan',
+                'email' => 'pelanggan@gmail.com',
+                'role' => 'pelanggan',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'rental',
+                'username' => 'rental',
+                'email' => 'rental@gmail.com',
+                'role' => 'rental',
+                'password' => bcrypt('password'),
+            ]
+        ]);
+
+        $this->call([
+            CarSeeder::class,
         ]);
     }
 }
