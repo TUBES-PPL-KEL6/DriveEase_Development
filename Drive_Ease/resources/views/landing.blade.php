@@ -90,12 +90,11 @@
 </nav>
 
 {{-- Hero --}}
-<section class="text-white d-flex align-items-center justify-center text-center"
-    style="background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('/images/hero-car.png') no-repeat right center / contain; background-color: #0f2027; height: 100vh;">
+<section class="hero text-white" id="home">
     <div class="container">
-        <h1 class="display-4 fw-bold">Selamat Datang di <span style="color:#00ffae; text-shadow: 0 0 10px rgba(0,255,174,0.6);">DriveEase</span></h1>
-        <p class="lead">Sewa kendaraan tanpa ribet, cukup dari genggamanmu.</p>
-        <a href="#features" class="btn btn-success btn-lg mt-3">🚗 Jelajahi Fitur</a>
+        <h1 data-aos="fade-down">Selamat Datang di DriveEase</h1>
+        <p class="lead" data-aos="fade-up" data-aos-delay="200">Sewa kendaraan tanpa ribet, cukup dari genggamanmu.</p>
+        <a href="#features" class="btn btn-primary btn-lg mt-3" data-aos="zoom-in" data-aos-delay="400">Jelajahi Fitur</a>
     </div>
 </section>
 
