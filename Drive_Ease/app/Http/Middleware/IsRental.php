@@ -16,7 +16,7 @@ class IsRental
     public function handle($request, Closure $next)
 {
     if (auth()->user()?->role !== 'rental') {
-        abort(403, 'Akses hanya untuk perental');
+        abort(403, 'Akses hanya untuk pengguna dengan role rental');
     }
 
     return $next($request);

@@ -26,4 +26,5 @@ public function vehicle()
     return $this->belongsTo(Vehicle::class);
 }
 
+
 }
