@@ -18,9 +18,23 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'role',
     ];
+
+    public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
+
+public function vehicles()
+{
+    return $this->hasMany(Vehicle::class, 'rental_id');
+}
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,4 +58,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // public function reviews()
+    // {
+    //     return $this->hasMany(Review::class);
+    // }
 }
