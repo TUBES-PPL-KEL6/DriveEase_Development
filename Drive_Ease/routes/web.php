@@ -23,7 +23,10 @@ use App\Http\Middleware\IsPelanggan;
 // ===========================
 
 // Halaman awal redirect ke login
-Route::get('/', fn () => redirect('/login'));
+Route::get('/', function () {
+    return view('landing');
+});
+
 
 // Redirect ke dashboard sesuai role
 Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
