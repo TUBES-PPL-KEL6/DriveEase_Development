@@ -6,6 +6,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\RentalRentController;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -71,6 +73,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
     Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
     Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+    // Review
+    Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
 });
 
 
