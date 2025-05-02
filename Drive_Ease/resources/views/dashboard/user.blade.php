@@ -30,7 +30,7 @@
     <button type="submit">checkout</button>
 </form> --}}
 
-<x-app-layout>
+{{-- <x-app-layout>
     <x-slot name="header">
         <h1>Dashboard Pelanggan</h1>
     </x-slot>
@@ -39,4 +39,4 @@
         @csrf
         <button type="submit" class="btn btn-primary">checkout</button>
     </form>
-</x-app-layout>
+</x-app-layout> --}}
