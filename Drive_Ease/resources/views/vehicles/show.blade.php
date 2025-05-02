@@ -21,7 +21,7 @@
                 <div class="mt-6 border-t pt-4">
                     <h3 class="text-lg font-semibold mb-2">Form Pemesanan</h3>
 
-                    <form action="{{ route('bookings.store', $vehicle->id) }}" method="POST" class="space-y-3">
+                    <form action="{{ route('user.bookings.store', $vehicle->id) }}" method="POST" class="space-y-3">
                         @csrf
                         <div>
                             <label class="block text-sm font-medium">Tanggal Mulai</label>
