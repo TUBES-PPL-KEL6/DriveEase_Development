@@ -128,11 +128,12 @@ Route::post('/notifications/markAsRead', [NotificationController::class, 'markAs
 // ===========================
 // ⭐ Ulasan / Review
 // ===========================
-Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
+// ⭐ Ulasan / Review
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+
 
 
 // 🔐 Auth routes
