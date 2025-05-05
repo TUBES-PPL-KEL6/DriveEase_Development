@@ -133,11 +133,15 @@
                             @if ($review->user_id === auth()->id())
                                 <div class="flex gap-2 text-xs">
                                     <a href="{{ request()->url() }}?edit=true" class="text-blue-600 hover:underline">Edit</a>
-                                    <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin hapus ulasan?')">
+                                    <form id="delete-review-form-{{ $review->id }}" action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:underline">Hapus</button>
                                     </form>
+
+                                    <button type="button"
+                                        onclick="confirmDelete({{ $review->id }})"
+                                        dusk="btn-hapus-review"
+                                        class="text-red-600 hover:underline">Hapus</button>
                                 </div>
                             @endif
                         </div>
@@ -153,3 +157,25 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(reviewId) {
+        Swal.fire({
+            title: 'Yakin hapus ulasan?',
+            text: "Data tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e3342f',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-review-form-' + reviewId).submit();
+            }
+        });
+    }
+</script>
+@endpush
