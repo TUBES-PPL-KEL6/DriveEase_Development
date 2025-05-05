@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>DriveEase</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
     <nav class="bg-white shadow-md p-4 flex justify-between items-center">
@@ -33,5 +34,6 @@
     <main class="max-w-6xl mx-auto p-6">
         @yield('content')
     </main>
+    @stack('scripts')
 </body>
 </html>

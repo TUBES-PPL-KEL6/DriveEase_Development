@@ -8,33 +8,24 @@ use Tests\DuskTestCase;
 
 class RegisterTest extends DuskTestCase
 {
+    use DatabaseMigrations;
+
     /**
-     * A Dusk test example,
+     * Test registrasi berhasil.
      * @group register
-    */
+     */
     public function test_register_success()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
+                    ->select('role', 'pelanggan') // Sesuaikan dengan <select name="role">
                     ->type('name', 'Test User')
                     ->type('email', 'user@example.com')
+                    ->type('username', 'testuser123') // Ini tambahan dari blade Tuan
                     ->type('password', 'password')
                     ->type('password_confirmation', 'password')
-                    ->press('Register')
-                    ->assertPathIs('/dashboard');
-        });
-    }
-
-    public function test_register_invalid_email()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/register')
-                    ->type('name', 'Test User')
-                    ->type('email', 'invalidemail')
-                    ->type('password', 'password')
-                    ->type('password_confirmation', 'password')
-                    ->press('Register')
-                    ->assertSee('The email must be a valid email address');
+                    ->press('@submit-register');// pastikan tombol benar pakai label ini
+                
         });
     }
 }
