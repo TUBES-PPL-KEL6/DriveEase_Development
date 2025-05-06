@@ -21,9 +21,13 @@ return new class extends Migration
             // $table->foreignId('payment_id')->constrained('payments');
             // $table->foreignId('review_id')->constrained('reviews');
 <<<<<<< HEAD
+<<<<<<< HEAD
             $table->string('side_note')->nullable();
 =======
 >>>>>>> main
+=======
+            $table->string('side_note')->nullable(); // <- dipertahankan
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
             $table->string('status');
             $table->timestamps();
         });

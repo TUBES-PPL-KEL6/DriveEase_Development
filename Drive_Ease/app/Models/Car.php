@@ -22,7 +22,10 @@ class Car extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 
     public function reviews()
     {
@@ -33,6 +36,9 @@ class Car extends Model
     {
         return round($this->reviews()->avg('rating'), 1); // dibulatkan 1 angka di belakang koma
     }
+<<<<<<< HEAD
 
 >>>>>>> main
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 }

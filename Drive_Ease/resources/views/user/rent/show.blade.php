@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <h2 class="text-2xl font-bold text-gray-800">Detail Sewa</h2>
     </x-slot>
 
@@ -291,6 +292,8 @@
     </div>
 </x-app-layout>
 =======
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
         <div class="flex justify-between items-center">
             <h2 class="text-2xl font-bold text-gray-800">Detail Sewa</h2>
         </div>
@@ -309,22 +312,35 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
+<<<<<<< HEAD
                     Kembali
+=======
+                    Kembali ke Riwayat Sewa
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                 </a>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm">
                 <div class="p-8">
+<<<<<<< HEAD
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <!-- Car Image Section -->
                         <div class="lg:col-span-1">
                             <div class="aspect-w-16 aspect-h-12">
                                 <img src="https://placehold.co/400x300" alt="{{ $rent->car->name }}"
+=======
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Car Image Section -->
+                        <div class="lg:col-span-1">
+                            <div class="aspect-w-16 aspect-h-12">
+                                <img src="{{ $rent->car->image_url ?? 'https://placehold.co/400x300' }}" alt="{{ $rent->car->name }}"
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                                     class="w-full h-full object-cover rounded-lg shadow-md">
                             </div>
 
                             <!-- Status Badge - Prominent for customers -->
                             <div class="mt-4">
+<<<<<<< HEAD
                                 <div
                                     class="w-full text-center p-3 rounded-lg
                                     @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
@@ -334,6 +350,77 @@
                                     <span class="ml-2 font-semibold">{{ ucfirst($rent->status) }}</span>
                                 </div>
                             </div>
+=======
+                                <div class="w-full text-center p-3 rounded-lg
+                                    @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
+                                    @elseif($rent->status === 'konfirmasi') bg-green-100 text-green-800
+                                    @elseif($rent->status === 'berjalan') bg-blue-100 text-blue-800
+                                    @elseif($rent->status === 'selesai') bg-gray-100 text-gray-800
+                                    @elseif($rent->status === 'batal' || $rent->status === 'tolak') bg-red-100 text-red-800 
+                                    @endif">
+                                    <span class="text-sm font-medium">Status:</span>
+                                    <span class="ml-2 font-semibold">
+                                        @if ($rent->status === 'menunggu')
+                                            Menunggu Konfirmasi
+                                        @elseif ($rent->status === 'konfirmasi')
+                                            Terkonfirmasi
+                                        @elseif ($rent->status === 'berjalan')
+                                            Berjalan
+                                        @elseif ($rent->status === 'selesai')
+                                            Selesai
+                                        @elseif ($rent->status === 'batal')
+                                            Dibatalkan
+                                        @elseif ($rent->status === 'tolak')
+                                            Ditolak
+                                        @else
+                                            {{ ucfirst($rent->status) }}
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-6 space-y-3">
+                                @if ($rent->status === 'menunggu' || $rent->status === 'konfirmasi')
+                                    <button type="button"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
+                                        data-bs-toggle="modal" data-bs-target="#cancelRentModal">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Batalkan Sewa
+                                    </button>
+                                @endif
+                                @if ($rent->status === 'batal')
+                                    <button type="button"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-600 rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
+                                        data-bs-toggle="modal" data-bs-target="#editRentModal">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                        Konfirmasi Ulang
+                                    </button>
+                                @endif
+                            </div>
+
+                            <!-- Side Note -->
+                            @if (!empty($rent->side_note))
+                                <div class="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-5 h-5 text-blue-400 mt-0.5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
+                                        </svg>
+                                        <span class="text-sm text-blue-900">
+                                            <strong>Catatan:</strong> {{ $rent->side_note }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                         </div>
 
                         <!-- Rental Details Section -->
@@ -386,8 +473,12 @@
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Email</p>
+<<<<<<< HEAD
                                         <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->email }}
                                         </p>
+=======
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->email }}</p>
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                                     </div>
                                 </div>
                             </div>
@@ -410,11 +501,33 @@
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Plat Nomor</p>
+<<<<<<< HEAD
                                         <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
+=======
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rental Policy Notice -->
+                            @php
+                                $now = \Carbon\Carbon::now();
+                                $startDate = \Carbon\Carbon::parse($rent->start_date);
+                                $diffInHours = $now->diffInHours($startDate, false);
+                                $lastChangeDate = $startDate->copy()->subDay();
+                            @endphp
+                            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg">
+                                <p class="font-semibold">Perhatian:</p>
+                                <p>Penyewaan tidak dapat diubah dalam waktu 24 jam sebelum tanggal mulai.</p>
+                                <p class="mt-1 text-sm">Batas terakhir untuk melakukan perubahan adalah: 
+                                    <span class="font-semibold">{{ $lastChangeDate->format('d M Y H:i') }}</span>
+                                </p>
+                            </div>
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                         </div>
                     </div>
                 </div>
@@ -422,6 +535,100 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    @if ($diffInHours >= 24)
+        <!-- Cancel Modal -->
+        <div class="modal fade" id="cancelRentModal" tabindex="-1" aria-labelledby="cancelRentModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelRentModalLabel">Konfirmasi Pembatalan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('rents.reject', $rent->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin membatalkan penyewaan ini?</p>
+                            <div class="mb-3 mt-4">
+                                <label for="side_note" class="block text-sm font-medium text-gray-700">
+                                    Catatan (opsional)
+                                </label>
+                                <textarea name="side_note" id="side_note" rows="3"
+                                    class="form-control border text-dark w-full rounded-md mt-1"
+                                    placeholder="Tulis alasan pembatalan atau catatan tambahan..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editRentModal" tabindex="-1" aria-labelledby="editRentModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editRentModalLabel">Konfirmasi Ulang</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('rents.reConfirm') }}" method="POST" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="rent_id" value="{{ $rent->id }}">
+                        <div class="modal-body space-y-4">
+                            <div>
+                                <label for="car_id" class="block text-sm font-medium text-gray-700">Mobil</label>
+                                <select name="car_id" id="car_id"
+                                    class="form-select w-full mt-1 rounded-md border-gray-300" required>
+                                    @foreach (\App\Models\Car::all() as $car)
+                                        <option value="{{ $car->id }}" @if ($car->id == $rent->car_id) selected @endif>
+                                            {{ $car->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="start_date" class="block text-sm font-medium text-gray-700">
+                                    Tanggal Mulai
+                                </label>
+                                <input type="date" name="start_date" id="start_date"
+                                    class="form-control text-dark border w-full rounded-md mt-1"
+                                    value="{{ \Carbon\Carbon::parse($rent->start_date)->format('Y-m-d') }}" required>
+                            </div>
+                            <div>
+                                <label for="end_date" class="block text-sm font-medium text-gray-700">
+                                    Tanggal Selesai
+                                </label>
+                                <input type="date" name="end_date" id="end_date"
+                                    class="form-control text-dark border w-full rounded-md mt-1"
+                                    value="{{ \Carbon\Carbon::parse($rent->end_date)->format('Y-m-d') }}" required>
+                            </div>
+                            <div>
+                                <label for="side_note_edit" class="block text-sm font-medium text-gray-700">
+                                    Catatan (opsional)
+                                </label>
+                                <textarea name="side_note" id="side_note_edit" rows="3"
+                                    class="form-control border text-dark w-full rounded-md mt-1"
+                                    placeholder="Tulis catatan perubahan atau permintaan tambahan..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     <!-- Notifications -->
     @if (session('success'))
         <div class="fixed bottom-4 right-4 z-50">
@@ -444,5 +651,9 @@
             </div>
         </div>
     @endif
+<<<<<<< HEAD
 </x-app-layout>
 >>>>>>> main
+=======
+</x-app-layout>
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
