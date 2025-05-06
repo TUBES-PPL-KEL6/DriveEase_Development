@@ -14,8 +14,8 @@
                             <div class="flex flex-col lg:flex-row gap-8">
                                 <!-- Car Image -->
                                 <div class="w-full lg:w-64 h-48 lg:h-40">
-                                    <img src="https://placehold.co/300x200" alt="{{ $rent->car->name }}"
-                                        class="w-full h-full object-cover rounded-lg">
+                                    <img src="{{ $rent->car->image_url ?? 'https://placehold.co/300x200' }}"
+                                        alt="{{ $rent->car->name }}" class="w-full h-full object-cover rounded-lg">
                                 </div>
 
                                 <!-- Rental Info -->
@@ -24,8 +24,7 @@
                                         <!-- Header -->
                                         <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
                                             <h2 class="text-xl font-bold text-gray-900">{{ $rent->car->name }}</h2>
-                                            <span
-                                                class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
+                                            <span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
                                                 @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
                                                 @elseif($rent->status === 'konfirmasi') bg-green-100 text-green-800
                                                 @elseif($rent->status === 'tolak') bg-red-100 text-red-800 @endif">

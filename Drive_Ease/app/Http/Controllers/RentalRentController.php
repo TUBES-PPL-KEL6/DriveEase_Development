@@ -22,11 +22,14 @@ class RentalRentController extends Controller
         return view('rental.rent.show', compact('rent'));
     }
 
-    public function confirmRent($id)
+    public function confirmRent(Request $request, $id)
     {
         try {
             $rent = Rent::find($id);
             $rent->status = 'konfirmasi';
+            if ($request->side_note) {
+                $rent->side_note = $request->side_note;
+            }
             $rent->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengkonfirmasi sewa: ' . $e->getMessage());
@@ -35,7 +38,7 @@ class RentalRentController extends Controller
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
                 'title' => 'Penyewaan Dikonfirmasi',
-                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dikonfirmasi oleh pemilik rental',
+                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dikonfirmasi oleh pemilik rental. ' . $rent->side_note,
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
@@ -44,11 +47,14 @@ class RentalRentController extends Controller
         }
     }
 
-    public function rejectRent($id)
+    public function rejectRent(Request $request, $id)
     {
         try {
             $rent = Rent::find($id);
-            $rent->status = 'tolak';
+            $rent->status = 'batal';
+            if ($request->side_note) {
+                $rent->side_note = $request->side_note;
+            }
             $rent->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menolak sewa: ' . $e->getMessage());
@@ -56,14 +62,14 @@ class RentalRentController extends Controller
             // push notification to customer
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
-                'title' => 'Penyewaan Ditolak',
-                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah ditolak oleh pemilik rental',
+                'title' => 'Penyewaan Dibatalkan',
+                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental. ' . $rent->side_note,
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
             ]);
 
-            return redirect()->back()->with('success', 'Sewa berhasil ditolak');
+            return redirect()->back()->with('success', 'Sewa berhasil dibatalkan');
         }
     }
 }

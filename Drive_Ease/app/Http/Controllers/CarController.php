@@ -14,6 +14,7 @@ class CarController extends Controller
      */
     public function index()
     {
+        //
         // Kalau kamu mau buat halaman daftar semua mobil (opsional)
         $cars = Car::all();
         return view('cars.index', compact('cars'));
@@ -24,6 +25,7 @@ class CarController extends Controller
      */
     public function create()
     {
+        //
         // Kalau mau form tambah mobil baru (opsional)
         return view('cars.create');
     }
@@ -33,6 +35,7 @@ class CarController extends Controller
      */
     public function store(StoreCarRequest $request)
     {
+        //
         // Simpan mobil baru ke database
         Car::create($request->validated());
 
@@ -44,6 +47,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+        //
         // Tampilkan detail satu mobil
         return view('cars.show', compact('car'));
     }
@@ -53,6 +57,7 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
+        //
         // Tampilkan form edit mobil
         return view('cars.edit', compact('car'));
     }
@@ -62,6 +67,7 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
+        //
         // Update data mobil
         $car->update($request->validated());
 
@@ -73,6 +79,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        //
+    }
         // Hapus data mobil
         $car->delete();
 
@@ -89,5 +97,4 @@ class CarController extends Controller
 
         return view('cars.review', compact('cars', 'userId'));
     }
-
 }
