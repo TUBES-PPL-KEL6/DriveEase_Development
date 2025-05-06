@@ -69,6 +69,41 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
 });
 
+
+// ===========================
+// 🚘 Rental Routes
+// ===========================
+Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
+    Route::get('/dashboard', fn () => view('dashboard.rental'))->name('dashboard');
+
+    // Kendaraan milik rental
+    Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/vehicles/create', [RentalVehicleController::class, 'create'])->name('vehicles.create');
+    Route::post('/vehicles', [RentalVehicleController::class, 'store'])->name('vehicles.store');
+    Route::get('/vehicles/{id}/edit', [RentalVehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::put('/vehicles/{id}', [RentalVehicleController::class, 'update'])->name('vehicles.update');
+    Route::delete('/vehicles/{id}', [RentalVehicleController::class, 'destroy'])->name('vehicles.destroy');
+
+    // Pemesanan dari pelanggan
+    Route::get('/rents', [RentalRentController::class, 'index'])->name('rents.index');
+    Route::get('/rents/{id}', [RentalRentController::class, 'show'])->name('rents.show');
+    Route::post('/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rents.confirm');
+    Route::post('/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rents.reject');
+});
+
+
+// ===========================
+// 🛠️ Admin Routes
+// ===========================
+Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+
+    // Lihat histori pembayaran
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
+});
+
+require __DIR__.'/auth.php';
+
 // ===========================
 // 🚘 Rental Routes
 // ===========================
