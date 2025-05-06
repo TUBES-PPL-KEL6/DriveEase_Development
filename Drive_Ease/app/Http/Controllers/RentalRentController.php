@@ -63,7 +63,7 @@ class RentalRentController extends Controller
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
                 'title' => 'Penyewaan Dibatalkan',
-                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental.' . $rent->side_note,
+                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental. ' . $rent->side_note,
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
