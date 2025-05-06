@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('username')->unique();
+    Schema::table('vehicles', function (Blueprint $table) {
+        $table->string('image_path')->nullable()->after('available');
     });
 }
-
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+    public function down()
+{
+    Schema::table('vehicles', function (Blueprint $table) {
+        $table->dropColumn('image_path');
+    });
+}
 };

@@ -31,7 +31,7 @@ class BookingController extends Controller
         $bookings = Booking::where('user_id', auth()->id())->with('vehicle')->latest()->get();
         return view('bookings.mine', compact('bookings'));
     }
-
+  
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);
@@ -63,4 +63,3 @@ class BookingController extends Controller
         return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
     }
 }
-
