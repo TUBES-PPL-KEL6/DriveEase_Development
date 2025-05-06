@@ -107,7 +107,6 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 });
 
 require __DIR__.'/auth.php';
-=======
 // ===========================
 // 🚘 Rental Routes
 // ===========================
