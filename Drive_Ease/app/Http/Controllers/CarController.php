@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
+<<<<<<< HEAD
+=======
+use Illuminate\Http\Request;
+>>>>>>> main
 
 class CarController extends Controller
 {
@@ -13,7 +17,13 @@ class CarController extends Controller
      */
     public function index()
     {
+<<<<<<< HEAD
         //
+=======
+        // Kalau kamu mau buat halaman daftar semua mobil (opsional)
+        $cars = Car::all();
+        return view('cars.index', compact('cars'));
+>>>>>>> main
     }
 
     /**
@@ -21,7 +31,12 @@ class CarController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD
         //
+=======
+        // Kalau mau form tambah mobil baru (opsional)
+        return view('cars.create');
+>>>>>>> main
     }
 
     /**
@@ -29,7 +44,14 @@ class CarController extends Controller
      */
     public function store(StoreCarRequest $request)
     {
+<<<<<<< HEAD
         //
+=======
+        // Simpan mobil baru ke database
+        Car::create($request->validated());
+
+        return redirect()->route('cars.index')->with('success', 'Mobil berhasil ditambahkan.');
+>>>>>>> main
     }
 
     /**
@@ -37,7 +59,12 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+<<<<<<< HEAD
         //
+=======
+        // Tampilkan detail satu mobil
+        return view('cars.show', compact('car'));
+>>>>>>> main
     }
 
     /**
@@ -45,7 +72,12 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
+<<<<<<< HEAD
         //
+=======
+        // Tampilkan form edit mobil
+        return view('cars.edit', compact('car'));
+>>>>>>> main
     }
 
     /**
@@ -53,7 +85,14 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
+<<<<<<< HEAD
         //
+=======
+        // Update data mobil
+        $car->update($request->validated());
+
+        return redirect()->route('cars.index')->with('success', 'Mobil berhasil diperbarui.');
+>>>>>>> main
     }
 
     /**
@@ -61,6 +100,26 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+<<<<<<< HEAD
         //
     }
+=======
+        // Hapus data mobil
+        $car->delete();
+
+        return redirect()->route('cars.index')->with('success', 'Mobil berhasil dihapus.');
+    }
+
+    /**
+     * Show all cars for review purpose (Custom Method)
+     */
+    public function reviewPage()
+    {
+        $userId = auth()->id();
+        $cars = \App\Models\Car::with('reviews.user')->get();
+
+        return view('cars.review', compact('cars', 'userId'));
+    }
+
+>>>>>>> main
 }

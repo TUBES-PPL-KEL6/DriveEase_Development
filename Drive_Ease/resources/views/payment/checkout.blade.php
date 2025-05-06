@@ -40,10 +40,17 @@
 
             <div class="mb-3 d-flex flex-column">
                 <label for="price" class="form-label">Harga</label>
+<<<<<<< HEAD
                 <input type="number" name="price" placeholder="Harga" step="0.01" required class="form-input">
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
+=======
+                <input type="number" name="price" placeholder="Harga" step="0.01" required class="form-input" dusk='harga-input'>
+            </div>
+
+            <button type="submit" class="btn btn-primary" dusk="checkout-submit-button">Submit</button>
+>>>>>>> main
         </form>
 
     </div>

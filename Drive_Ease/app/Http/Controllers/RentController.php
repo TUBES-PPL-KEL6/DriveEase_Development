@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Rent;
 use App\Http\Requests\StoreRentRequest;
 use App\Http\Requests\UpdateRentRequest;
+<<<<<<< HEAD
 use App\Models\Notification;
 use Illuminate\Http\Request;
+=======
+>>>>>>> main
 
 class RentController extends Controller
 {
@@ -67,6 +70,7 @@ class RentController extends Controller
     {
         //
     }
+<<<<<<< HEAD
 
     public function reConfirm(Request $request)
     {
@@ -127,3 +131,6 @@ class RentController extends Controller
         }
     }
 }
+=======
+}
+>>>>>>> main
