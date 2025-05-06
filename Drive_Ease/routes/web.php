@@ -27,7 +27,6 @@ Route::get('/', function () {
     return view('landing');
 });
 
-
 // Redirect ke dashboard sesuai role
 Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
@@ -41,7 +40,6 @@ Route::get('/redirect', function () {
     };
 })->middleware('auth')->name('dashboard.redirect');
 
-
 // ===========================
 // 🔧 Pengaturan Profil
 // ===========================
@@ -51,13 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 // ===========================
 // 🚗 Umum: Kendaraan & Pencarian
 // ===========================
 Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
 Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles.show');
-
 
 // ===========================
 // 👤 Pelanggan Routes
@@ -107,6 +103,7 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 });
 
 require __DIR__.'/auth.php';
+
 // ===========================
 // 🚘 Rental Routes
 // ===========================
@@ -127,7 +124,6 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
     Route::post('/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rents.confirm');
     Route::post('/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rents.reject');
 });
-
 
 // ===========================
 // 🛠️ Admin Routes
@@ -151,7 +147,6 @@ Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])
 Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
 Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
 
-
 // ===========================
 // 🔔 Notifikasi
 // ===========================
@@ -160,17 +155,14 @@ Route::get('/notifications/count', [NotificationController::class, 'countNotific
 Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
 Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
-
 // ===========================
 // ⭐ Ulasan / Review
 // ===========================
-
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
-
 
 // 🔐 Auth routes
 require __DIR__ . '/auth.php';

@@ -31,5 +31,4 @@ class Car extends Model
     {
         return round($this->reviews()->avg('rating'), 1); // dibulatkan 1 angka di belakang koma
     }
-
 }
