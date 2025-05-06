@@ -7,7 +7,6 @@ use App\Models\PaymentHistory;
 use App\Models\Rent;
 use Illuminate\Http\Request;
 
-
 class PaymentHistoryController extends Controller
 {
     public function create()
@@ -25,14 +24,15 @@ class PaymentHistoryController extends Controller
 
         PaymentHistory::create($request->only(['username', 'car', 'price']));
 
-        // store  rent data
+        // store rent data
         $rent = Rent::create([
             'customer_id' => auth()->user()->id,
             'car_id' => $request->car,
-            'start_date' => now(),
+            'start_date' => now()->addDays(2),
             'end_date' => now()->addDays(7),
             'total_price' => $request->price,
             'status' => 'menunggu',
+            'side_note' => 'Sewa berhasil dibuat pada ' . now()->format('d M Y, H:i'),
         ]);
 
         // push notification to rental owner
