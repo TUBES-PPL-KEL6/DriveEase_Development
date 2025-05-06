@@ -63,7 +63,11 @@
 
                                 <!-- Action Button -->
                                 <div class="mt-6 lg:mt-0 flex lg:flex-col justify-end">
+<<<<<<< Updated upstream
                                     <a href="{{ route('rental.rents.show', $rent->id) }}"
+=======
+                                    <a href="{{ route('rents.show', $rent->id) }}" dusk="lihat-detail-button"
+>>>>>>> Stashed changes
                                         class="w-full lg:w-40 inline-flex items-center justify-center p-2 rounded-lg
                                         bg-blue-600 text-white font-medium hover:bg-blue-700 
                                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 

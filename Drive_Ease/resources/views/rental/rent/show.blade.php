@@ -47,6 +47,7 @@
                                 </span>
                             </div>
 
+<<<<<<< Updated upstream
                             <!-- Customer Info -->
                             <div class="bg-gray-50 rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold text-gray-900">Informasi Penyewa</h3>
@@ -54,6 +55,36 @@
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Nama Lengkap</p>
                                         <p class="text-base font-medium text-gray-900">{{ $rent->customer->name }}</p>
+=======
+                        @if ($diffInHours >= 24)
+                            <div class="flex flex-col gap-2 mt-2">
+                                @if ($rent->status === 'menunggu')
+                                    <button type="button" dusk="konfirmasi-sewa-button"
+                                        class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-green-600 rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition"
+                                        data-bs-toggle="modal" data-bs-target="#confirmRentModal">
+                                        Konfirmasi Sewa
+                                    </button>
+                                @endif
+                                @if ($rent->status !== 'batal')
+                                    <button type="button" dusk="batalkan-sewa-button"
+                                        class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-red-600 rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
+                                        data-bs-toggle="modal" data-bs-target="#rejectRentModal">
+                                        Batalkan Sewa
+                                    </button>
+                                @endif
+                            </div>
+                        @endif
+
+                        <!-- Confirm Modal -->
+                        <div class="modal fade" id="confirmRentModal" tabindex="-1"
+                            aria-labelledby="confirmRentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmRentModalLabel">Konfirmasi Penyewaan</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+>>>>>>> Stashed changes
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Email</p>
@@ -100,6 +131,7 @@
                                     <form action="{{ route('rental.rents.confirm', $rent->id) }}" method="POST"
                                         class="flex-1">
                                         @csrf
+<<<<<<< Updated upstream
                                         <button type="submit"
                                             class="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg
                                             bg-green-600 text-white font-medium hover:bg-green-700 
@@ -112,11 +144,29 @@
                                             </svg>
                                             Konfirmasi Sewa
                                         </button>
+=======
+                                        <div class="modal-body">
+                                            <p>Apakah Anda yakin ingin mengkonfirmasi penyewaan ini?</p>
+                                            <div class="mb-3 mt-4">
+                                                <label for="side_note_confirm"
+                                                    class="block text-sm font-medium text-gray-700">Catatan
+                                                    (opsional)</label>
+                                                <textarea name="side_note" id="side_note_confirm" rows="3"
+                                                    class="form-control border text-dark w-full rounded-md mt-1" placeholder="Tulis catatan tambahan..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success" dusk="konfirmasi-sewa-confirm-button">Ya, Konfirmasi</button> 
+                                        </div>
+>>>>>>> Stashed changes
                                     </form>
 
                                     <form action="{{ route('rental.rents.reject', $rent->id) }}" method="POST"
                                         class="flex-1">
                                         @csrf
+<<<<<<< Updated upstream
                                         <button type="submit"
                                             class="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg
                                             bg-red-600 text-white font-medium hover:bg-red-700 
@@ -129,6 +179,24 @@
                                             </svg>
                                             Tolak Sewa
                                         </button>
+=======
+                                        <div class="modal-body">
+                                            <p>Apakah Anda yakin ingin menolak penyewaan ini?</p>
+                                            <div class="mb-3 mt-4">
+                                                <label for="side_note_reject"
+                                                    class="block text-sm font-medium text-gray-700">Catatan
+                                                    (opsional)</label>
+                                                <textarea name="side_note" id="side_note_reject" rows="3"
+                                                    class="form-control border text-dark w-full rounded-md mt-1" dusk="side-note-reject"
+                                                    placeholder="Tulis alasan penolakan atau catatan tambahan..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal" dusk="batalkan-sewa-cancel-button">Batal</button> 
+                                            <button type="submit" class="btn btn-danger" dusk="batalkan-sewa-confirm-button">Ya, Batalkan</button>
+                                        </div>
+>>>>>>> Stashed changes
                                     </form>
                                 </div>
                             @endif

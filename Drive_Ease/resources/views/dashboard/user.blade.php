@@ -9,4 +9,33 @@
             Cari Kendaraan
         </a>
     </div>
+<<<<<<< Updated upstream
 @endsection
+=======
+@endif
+
+
+<h1>Dashboard Pelanggan</h1>
+<p>Selamat datang, {{ auth()->user()->name }}</p>
+
+<form method="POST" action="{{ route('logout') }}" style="margin-top: 20px;">
+    @csrf
+    <button type="submit">Logout</button>
+</form>
+
+<form method="POST" action="{{ route('checkout') }}" style="margin-top: 20px;">
+    @csrf
+    <button type="submit">checkout</button>
+</form> --}}
+
+<x-app-layout>
+    <x-slot name="header">
+        <h1>Dashboard Pelanggan</h1>
+    </x-slot>
+
+    <form method="GET" action="{{ route('checkout') }}" style="margin-top: 20px;">
+        @csrf
+        <button type="submit" class="btn btn-primary">checkout</button>
+    </form>
+</x-app-layout>
+>>>>>>> Stashed changes
