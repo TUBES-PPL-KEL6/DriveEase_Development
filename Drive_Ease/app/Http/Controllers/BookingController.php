@@ -23,7 +23,7 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
+        return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
     }
 
     public function myBookings()
@@ -31,5 +31,35 @@ class BookingController extends Controller
         $bookings = Booking::where('user_id', auth()->id())->with('vehicle')->latest()->get();
         return view('bookings.mine', compact('bookings'));
     }
+  
+    public function approve($id)
+    {
+        $booking = Booking::findOrFail($id);
+    
+        // Cegah jika status sudah approved atau cancelled
+        if (in_array($booking->status, ['approved', 'cancelled'])) {
+            return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
+        }
+    
+        // Ganti status menjadi approved
+        $booking->status = 'approved';
+        $booking->save();
+    
+        return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+    }
+    
+    public function cancel($id)
+    {
+        $booking = Booking::findOrFail($id);
+    
+        // Cegah jika status sudah approved atau cancelled
+        if (in_array($booking->status, ['approved', 'cancelled'])) {
+            return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
+        }
+    
+        $booking->status = 'cancelled';
+        $booking->save();
+    
+        return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
+    }
 }
-

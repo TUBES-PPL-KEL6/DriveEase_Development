@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentHistory extends Model
 {
-    protected $table = 'payment_history'; // Your table name
-    protected $fillable = ['username', 'car', 'price'];
+    protected $table = 'bookings'; // Your table name
+    protected $fillable = ['id', 'user_id', 'vehicle_id', 'start_date', 'end_date', 'status'];
 }
