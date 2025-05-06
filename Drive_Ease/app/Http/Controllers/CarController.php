@@ -6,9 +6,13 @@ use App\Models\Car;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 use Illuminate\Http\Request;
 >>>>>>> main
+=======
+use Illuminate\Http\Request;
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 
 class CarController extends Controller
 {
@@ -18,12 +22,19 @@ class CarController extends Controller
     public function index()
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
         // Kalau kamu mau buat halaman daftar semua mobil (opsional)
         $cars = Car::all();
         return view('cars.index', compact('cars'));
 >>>>>>> main
+=======
+        //
+        // Kalau kamu mau buat halaman daftar semua mobil (opsional)
+        $cars = Car::all();
+        return view('cars.index', compact('cars'));
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -32,11 +43,17 @@ class CarController extends Controller
     public function create()
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
         // Kalau mau form tambah mobil baru (opsional)
         return view('cars.create');
 >>>>>>> main
+=======
+        //
+        // Kalau mau form tambah mobil baru (opsional)
+        return view('cars.create');
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -45,13 +62,20 @@ class CarController extends Controller
     public function store(StoreCarRequest $request)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
+=======
+        //
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
         // Simpan mobil baru ke database
         Car::create($request->validated());
 
         return redirect()->route('cars.index')->with('success', 'Mobil berhasil ditambahkan.');
+<<<<<<< HEAD
 >>>>>>> main
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -60,11 +84,17 @@ class CarController extends Controller
     public function show(Car $car)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
         // Tampilkan detail satu mobil
         return view('cars.show', compact('car'));
 >>>>>>> main
+=======
+        //
+        // Tampilkan detail satu mobil
+        return view('cars.show', compact('car'));
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -73,11 +103,17 @@ class CarController extends Controller
     public function edit(Car $car)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
         // Tampilkan form edit mobil
         return view('cars.edit', compact('car'));
 >>>>>>> main
+=======
+        //
+        // Tampilkan form edit mobil
+        return view('cars.edit', compact('car'));
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -86,13 +122,20 @@ class CarController extends Controller
     public function update(UpdateCarRequest $request, Car $car)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
 =======
+=======
+        //
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
         // Update data mobil
         $car->update($request->validated());
 
         return redirect()->route('cars.index')->with('success', 'Mobil berhasil diperbarui.');
+<<<<<<< HEAD
 >>>>>>> main
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
     }
 
     /**
@@ -101,9 +144,14 @@ class CarController extends Controller
     public function destroy(Car $car)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         //
     }
 =======
+=======
+        //
+    }
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
         // Hapus data mobil
         $car->delete();
 
@@ -120,6 +168,9 @@ class CarController extends Controller
 
         return view('cars.review', compact('cars', 'userId'));
     }
+<<<<<<< HEAD
 
 >>>>>>> main
+=======
+>>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 }
