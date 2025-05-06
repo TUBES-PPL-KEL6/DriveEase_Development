@@ -1,7 +1,23 @@
+<<<<<<< HEAD
 {{-- @if (session('success'))
     <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
         {{ session('success') }}
+=======
+@extends('layouts.app')
+
+@section('content')
+    <h1 class="text-2xl font-bold mb-4">Dashboard Pelanggan</h1>
+
+    <div class="bg-white shadow p-4 rounded-md">
+        <p class="text-gray-700">Selamat datang, {{ auth()->user()->name }}!</p>
+        <a href="{{ route('vehicles.index') }}" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Cari Kendaraan
+        </a>
+>>>>>>> main
     </div>
+<<<<<<< Updated upstream
+@endsection
+=======
 @endif
 
 
@@ -23,8 +39,16 @@
         <h1>Dashboard Pelanggan</h1>
     </x-slot>
 
+<<<<<<< HEAD
     <form method="POST" action="{{ route('checkout') }}" style="margin-top: 20px;">
+=======
+    <form method="GET" action="{{ route('checkout') }}" style="margin-top: 20px;">
+>>>>>>> main
         @csrf
         <button type="submit" class="btn btn-primary">checkout</button>
     </form>
 </x-app-layout>
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> main

@@ -1,4 +1,5 @@
 <script>
+<<<<<<< HEAD
     @if (auth()->check())
         document.addEventListener('DOMContentLoaded', function() {
             const countNotification = async () => {
@@ -12,6 +13,19 @@
             }, 5000);
         });
     @endif
+=======
+    document.addEventListener('DOMContentLoaded', function() {
+        const countNotification = async () => {
+            const response = await fetch('{{ route('notifications.count') }}');
+            const data = await response.json();
+            document.getElementById('notification-count').innerHTML = data;
+        }
+        countNotification();
+        setInterval(function() {
+            countNotification();
+        }, 5000);
+    });
+>>>>>>> main
 
     function fetchNotifications() {
         fetch('{{ route('notifications.fetch') }}')
@@ -110,7 +124,11 @@
                         <x-slot name="trigger">
                             <button
                                 class="p-2 rounded-full flex items-center justify-center hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+<<<<<<< HEAD
                                 onclick="fetchNotifications()">
+=======
+                                onclick="fetchNotifications()" dusk="notification-button">
+>>>>>>> main
                                 <span class="sr-only">View notifications</span>
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"

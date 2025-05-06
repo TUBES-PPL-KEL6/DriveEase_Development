@@ -29,11 +29,18 @@ class PaymentHistoryController extends Controller
         $rent = Rent::create([
             'customer_id' => auth()->user()->id,
             'car_id' => $request->car,
+<<<<<<< HEAD
             'start_date' => now()->addDays(2),
             'end_date' => now()->addDays(7),
             'total_price' => $request->price,
             'status' => 'menunggu',
             'side_note' => 'Sewa berhasil dibuat pada ' . now()->format('d M Y, H:i'),
+=======
+            'start_date' => now(),
+            'end_date' => now()->addDays(7),
+            'total_price' => $request->price,
+            'status' => 'menunggu',
+>>>>>>> main
         ]);
 
         // push notification to rental owner

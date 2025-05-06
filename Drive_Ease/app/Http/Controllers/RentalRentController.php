@@ -22,14 +22,21 @@ class RentalRentController extends Controller
         return view('rental.rent.show', compact('rent'));
     }
 
+<<<<<<< HEAD
     public function confirmRent(Request $request, $id)
+=======
+    public function confirmRent($id)
+>>>>>>> main
     {
         try {
             $rent = Rent::find($id);
             $rent->status = 'konfirmasi';
+<<<<<<< HEAD
             if ($request->side_note) {
                 $rent->side_note = $request->side_note;
             }
+=======
+>>>>>>> main
             $rent->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengkonfirmasi sewa: ' . $e->getMessage());
@@ -38,7 +45,11 @@ class RentalRentController extends Controller
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
                 'title' => 'Penyewaan Dikonfirmasi',
+<<<<<<< HEAD
                 'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dikonfirmasi oleh pemilik rental. ' . $rent->side_note,
+=======
+                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dikonfirmasi oleh pemilik rental',
+>>>>>>> main
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
@@ -47,6 +58,7 @@ class RentalRentController extends Controller
         }
     }
 
+<<<<<<< HEAD
     public function rejectRent(Request $request, $id)
     {
         try {
@@ -55,6 +67,13 @@ class RentalRentController extends Controller
             if ($request->side_note) {
                 $rent->side_note = $request->side_note;
             }
+=======
+    public function rejectRent($id)
+    {
+        try {
+            $rent = Rent::find($id);
+            $rent->status = 'tolak';
+>>>>>>> main
             $rent->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menolak sewa: ' . $e->getMessage());
@@ -62,14 +81,23 @@ class RentalRentController extends Controller
             // push notification to customer
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
+<<<<<<< HEAD
                 'title' => 'Penyewaan Dibatalkan',
                 'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental.' . $rent->side_note,
+=======
+                'title' => 'Penyewaan Ditolak',
+                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah ditolak oleh pemilik rental',
+>>>>>>> main
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
             ]);
 
+<<<<<<< HEAD
             return redirect()->back()->with('success', 'Sewa berhasil dibatalkan');
+=======
+            return redirect()->back()->with('success', 'Sewa berhasil ditolak');
+>>>>>>> main
         }
     }
 }
