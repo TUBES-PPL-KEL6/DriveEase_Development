@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             // $table->foreignId('payment_id')->constrained('payments');
             // $table->foreignId('review_id')->constrained('reviews');
-            $table->string('side_note')->nullable();
+            $table->string('side_note')->nullable(); // <- dipertahankan
             $table->string('status');
             $table->timestamps();
         });

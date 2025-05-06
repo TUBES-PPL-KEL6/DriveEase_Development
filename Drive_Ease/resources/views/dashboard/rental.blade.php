@@ -5,14 +5,15 @@
         </h2>
     </x-slot>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Dashboard Rental</h5>
-                    </div>
-                </div>
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <p class="mb-4">Halo, {{ auth()->user()->name }}! Kelola kendaraanmu di bawah ini.</p>
+
+                <a href="{{ route('rental.vehicles.index') }}"
+                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Kelola Kendaraan
+                </a>
             </div>
         </div>
     </div>

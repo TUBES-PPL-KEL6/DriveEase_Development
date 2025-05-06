@@ -10,7 +10,7 @@
             <div class="space-y-6">
                 @forelse ($rents as $rent)
                     <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-                        <div class="p-4">
+                        <div class="p-6">
                             <div class="flex flex-col lg:flex-row gap-8">
                                 <!-- Car Image -->
                                 <div class="w-full lg:w-64 h-48 lg:h-40">
@@ -24,8 +24,7 @@
                                         <!-- Header -->
                                         <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
                                             <h2 class="text-xl font-bold text-gray-900">{{ $rent->car->name }}</h2>
-                                            <span
-                                                class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
+                                            <span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
                                                 @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
                                                 @elseif($rent->status === 'konfirmasi') bg-green-100 text-green-800
                                                 @elseif($rent->status === 'tolak') bg-red-100 text-red-800 @endif">
