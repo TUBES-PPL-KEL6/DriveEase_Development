@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,15 +11,14 @@
                 <p class="mb-4">Halo, {{ auth()->user()->name }}! Kelola kendaraanmu di bawah ini.</p>
 
                 <a href="{{ route('rental.vehicles.index') }}"
-                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Kelola Kendaraan
                 </a>
             </div>
         </div>
     </div>
 </x-app-layout>
-<<<<<<< HEAD
-=======
+
 @extends('layouts.app')
 
 @section('content')
@@ -32,13 +27,8 @@
     <div class="bg-white p-6 rounded shadow">
         <p class="mb-4">Halo, {{ auth()->user()->name }}! Kelola kendaraanmu di bawah ini.</p>
 
-        <a href="{{ route('rental.vehicles.index') }}"
-           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <a href="{{ route('rental.vehicles.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Kelola Kendaraan
         </a>
     </div>
 @endsection
-
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
