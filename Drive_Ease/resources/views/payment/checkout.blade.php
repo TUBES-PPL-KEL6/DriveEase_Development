@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.app')
+@section('content')
     <x-slot name="header">
         <h1>Checkout Pemesanan</h1>
     </x-slot>
@@ -47,4 +48,4 @@
         </form>
 
     </div>
-</x-app-layout>
+@endsection
