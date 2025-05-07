@@ -33,13 +33,8 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-smooth-scrolling',
         ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
             return $items->merge([
-<<<<<<< Updated upstream
                 '--disable-gpu',
                 '--headless=new',
-=======
-                // '--disable-gpu',
-                // '--headless=new',
->>>>>>> Stashed changes
             ]);
         })->all());
 

@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     BookingController,
@@ -18,7 +17,6 @@ use App\Http\Controllers\{
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
-use Illuminate\Support\Facades\Auth;
 
 // ===========================
 // 🔐 Akses Umum
@@ -34,7 +32,7 @@ Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
-    $role = Auth::user()->role;
+    $role = auth()->user()->role;
     return match ($role) {
         'admin' => redirect()->route('admin.dashboard'),
         'rental' => redirect()->route('rental.dashboard'),
@@ -65,45 +63,12 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
     Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
-
+    Route::post('/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
+    Route::post('/rents/{id}/confirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
-    //checkout
-    Route::get('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-    Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
-    Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
-    Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
-    // Route::get('/payment/checkout', [PaymentHistoryController::class, 'create'])->name('payment.checkout');
-
-    // Rental
-    Route::get('/rental/dashboard', fn() => view('dashboard.rental'))->name('rental.dashboard');
-
-    // Admin
-    Route::get('/admin/dashboard', fn() => view('dashboard.admin'))->name('admin.dashboard');
-
-    // Admin view payment_history
-    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->middleware('auth')->name('payment.index');
-
-    // Pelanggan
-    Route::get('/user/rents', [RentController::class, 'index'])->name('rents.index');
-    Route::get('/user/rents/{id}', [RentController::class, 'show'])->name('rents.show');
-    Route::post('/user/rents', [RentController::class, 'store'])->name('rents.store');
-    Route::post('/user/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
-    Route::post('/user/rents/reConfirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
-
-    // Rental
-    Route::get('/rental/rents', [RentalRentController::class, 'index'])->name('rental.rents.index');
-    Route::get('/rental/rents/{id}', [RentalRentController::class, 'show'])->name('rental.rents.show');
-    Route::post('/rental/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rental.rents.confirm');
-    Route::post('/rental/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rental.rents.reject');
-    // Route::post('/rental/rents', [RentController::class, 'store'])->name('rents.store');
-
-    Route::get('/notifications/fetch', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
-    Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
-    Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
-    Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 });
 
 
@@ -111,7 +76,7 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 // 🚘 Rental Routes
 // ===========================
 Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.rental'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
 
     // Kendaraan milik rental
     Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
@@ -133,13 +98,13 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // 🛠️ Admin Routes
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // ===========================
 // 🚘 Rental Routes

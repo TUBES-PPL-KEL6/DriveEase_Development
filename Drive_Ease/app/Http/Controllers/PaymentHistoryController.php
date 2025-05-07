@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\PaymentHistory;
 use App\Models\Rent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentHistoryController extends Controller
 {
@@ -22,30 +23,18 @@ class PaymentHistoryController extends Controller
             'price' => 'required|numeric',
         ]);
 
-        PaymentHistory::create($request->only(['username', 'car', 'price']));
+        // Yang benar mana payment history, rents atau bookings??
+        // PaymentHistory::create($request->only(['username', 'car', 'price']));
 
         // store rent data
         $rent = Rent::create([
-            'customer_id' => auth()->user()->id,
+            'customer_id' => Auth::user()->id,
             'car_id' => $request->car,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
             'start_date' => now()->addDays(2),
             'end_date' => now()->addDays(7),
             'total_price' => $request->price,
             'status' => 'menunggu',
             'side_note' => 'Sewa berhasil dibuat pada ' . now()->format('d M Y, H:i'),
-<<<<<<< HEAD
-=======
-            'start_date' => now(),
-            'end_date' => now()->addDays(7),
-            'total_price' => $request->price,
-            'status' => 'menunggu',
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
         ]);
 
         // push notification to rental owner

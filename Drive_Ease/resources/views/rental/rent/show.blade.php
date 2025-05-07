@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 {{-- Reminder --}}
 @php
     $now = \Carbon\Carbon::now();
@@ -10,44 +6,6 @@
     $diffInHours = $now->diffInHours($startDate, false);
 @endphp
 
-<<<<<<< HEAD
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-2xl font-bold text-gray-800">Detail Sewa</h2>
-    </x-slot>
-
-    <div class="py-8 px-4 sm:px-8">
-        <div class="">
-            <a href="{{ route('rental.rents.index') }}"
-                class="inline-flex items-center mb-6 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                Kembali ke Daftar Sewa
-            </a>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Left Column: Car, Status, Actions, Side Note -->
-                <div class="space-y-6">
-                    <!-- Top Card: Car Name, Status, Actions -->
-                    <div class="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
-                        <div class="flex items-center justify-between gap-4 flex-wrap">
-                            <div class="flex items-center gap-3">
-                                <span
-                                    class=" h-80 w-full object-fill bg-white rounded-xl shadow-md flex items-center justify-center overflow-hidden">
-                                    <img src="{{ $rent->car->image_url ?? 'https://placehold.co/1000x500' }}"
-                                        alt="{{ $rent->car->name }}" class="object-cover rounded-md w-full h-full">
-                                </span>
-                            </div>
-                        </div>
-                        <p class="text-xl font-semibold text-gray-900">{{ $rent->car->name }}</p>
-
-                        @if ($diffInHours >= 24)
-                            <div class="flex flex-col gap-2 mt-2">
-                                @if ($rent->status === 'menunggu')
-                                    <button type="button"
-=======
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -78,7 +36,8 @@
                         <!-- Car Image Section -->
                         <div class="lg:col-span-1">
                             <div class="aspect-w-16 aspect-h-12">
-                                <img src="{{ $rent->car->image_url ?? 'https://placehold.co/400x300' }}" alt="{{ $rent->car->name }}"
+                                <img src="{{ $rent->car->image_url ?? 'https://placehold.co/400x300' }}"
+                                    alt="{{ $rent->car->name }}"
                                     class="w-full h-full object-cover rounded-lg shadow-md">
                             </div>
                         </div>
@@ -98,7 +57,6 @@
                                 </span>
                             </div>
 
-<<<<<<< Updated upstream
                             <!-- Customer Info -->
                             <div class="bg-gray-50 rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold text-gray-900">Informasi Penyewa</h3>
@@ -106,47 +64,6 @@
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Nama Lengkap</p>
                                         <p class="text-base font-medium text-gray-900">{{ $rent->customer->name }}</p>
-=======
-                        @if ($diffInHours >= 24)
-                            <div class="flex flex-col gap-2 mt-2">
-                                @if ($rent->status === 'menunggu')
-                                    <button type="button" dusk="konfirmasi-sewa-button"
->>>>>>> main
-                                        class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-green-600 rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition"
-                                        data-bs-toggle="modal" data-bs-target="#confirmRentModal">
-                                        Konfirmasi Sewa
-                                    </button>
-                                @endif
-                                @if ($rent->status !== 'batal')
-<<<<<<< HEAD
-                                    <button type="button"
-=======
-                                    <button type="button" dusk="batalkan-sewa-button"
->>>>>>> main
-                                        class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-red-600 rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
-                                        data-bs-toggle="modal" data-bs-target="#rejectRentModal">
-                                        Batalkan Sewa
-                                    </button>
-                                @endif
-                            </div>
-                        @endif
-
-                        <!-- Confirm Modal -->
-                        <div class="modal fade" id="confirmRentModal" tabindex="-1"
-                            aria-labelledby="confirmRentModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmRentModalLabel">Konfirmasi Penyewaan</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-<<<<<<< HEAD
-                                    </div>
-                                    <form action="{{ route('rental.rents.confirm', $rent->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-=======
->>>>>>> Stashed changes
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Email</p>
@@ -187,239 +104,6 @@
                                 </div>
                             </div>
 
-<<<<<<< HEAD
-                            <!-- Action Buttons -->
-                            @if ($rent->status === 'menunggu')
-                                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                                    <form action="{{ route('rental.rents.confirm', $rent->id) }}" method="POST"
-                                        class="flex-1">
-                                        @csrf
-<<<<<<< Updated upstream
-                                        <button type="submit"
-                                            class="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg
-                                            bg-green-600 text-white font-medium hover:bg-green-700 
-                                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 
-                                            transition-all duration-200">
-                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            Konfirmasi Sewa
-                                        </button>
-=======
->>>>>>> main
-                                        <div class="modal-body">
-                                            <p>Apakah Anda yakin ingin mengkonfirmasi penyewaan ini?</p>
-                                            <div class="mb-3 mt-4">
-                                                <label for="side_note_confirm"
-                                                    class="block text-sm font-medium text-gray-700">Catatan
-                                                    (opsional)</label>
-                                                <textarea name="side_note" id="side_note_confirm" rows="3"
-                                                    class="form-control border text-dark w-full rounded-md mt-1" placeholder="Tulis catatan tambahan..."></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Batal</button>
-<<<<<<< HEAD
-                                            <button type="submit" class="btn btn-success">Ya, Konfirmasi</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Reject Modal -->
-                        <div class="modal fade" id="rejectRentModal" tabindex="-1"
-                            aria-labelledby="rejectRentModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="rejectRentModalLabel">Konfirmasi Penolakan</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <form action="{{ route('rental.rents.reject', $rent->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-=======
-                                            <button type="submit" class="btn btn-success" dusk="konfirmasi-sewa-confirm-button">Ya, Konfirmasi</button> 
-                                        </div>
->>>>>>> Stashed changes
-                                    </form>
-
-                                    <form action="{{ route('rental.rents.reject', $rent->id) }}" method="POST"
-                                        class="flex-1">
-                                        @csrf
-<<<<<<< Updated upstream
-                                        <button type="submit"
-                                            class="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg
-                                            bg-red-600 text-white font-medium hover:bg-red-700 
-                                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 
-                                            transition-all duration-200">
-                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                            Tolak Sewa
-                                        </button>
-=======
->>>>>>> main
-                                        <div class="modal-body">
-                                            <p>Apakah Anda yakin ingin menolak penyewaan ini?</p>
-                                            <div class="mb-3 mt-4">
-                                                <label for="side_note_reject"
-                                                    class="block text-sm font-medium text-gray-700">Catatan
-                                                    (opsional)</label>
-                                                <textarea name="side_note" id="side_note_reject" rows="3"
-<<<<<<< HEAD
-                                                    class="form-control border text-dark w-full rounded-md mt-1"
-=======
-                                                    class="form-control border text-dark w-full rounded-md mt-1" dusk="side-note-reject"
->>>>>>> main
-                                                    placeholder="Tulis alasan penolakan atau catatan tambahan..."></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-<<<<<<< HEAD
-                                                data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="bg-white shadow border-l-4 border-gray-400 p-4 rounded-lg">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-3-3v6m9 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span class="text-sm text-gray-900">
-                                <strong>Status Sewa:</strong>
-                                <span class="font-semibold">
-                                    @if ($rent->status === 'menunggu')
-                                        <span class="text-yellow-600">Menunggu Konfirmasi</span>
-                                    @elseif ($rent->status === 'konfirmasi')
-                                        <span class="text-blue-600">Terkonfirmasi</span>
-                                    @elseif ($rent->status === 'batal')
-                                        <span class="text-red-600">Dibatalkan</span>
-                                    @else
-                                        <span class="text-gray-600">{{ ucfirst($rent->status) }}</span>
-                                    @endif
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <!-- Side Note -->
-                    @if (!empty($rent->side_note))
-                        <div class="bg-white shadow border-l-4 border-blue-400 p-4 rounded-lg">
-                            <div class="flex items-start gap-2">
-                                <svg class="w-5 h-5 text-blue-400 mt-0.5" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
-                                </svg>
-                                <span class="text-sm text-blue-900"><strong>Catatan:</strong>
-                                    {{ $rent->side_note }}</span>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <!-- Right Column: Rental Details, Owner Info, Car Specs -->
-                <div class="space-y-6">
-                    <!-- Rental Details -->
-                    <div class="bg-white rounded-xl shadow p-6 space-y-2">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Detail Penyewaan</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">Tanggal Mulai</p>
-                                <p class="text-base font-medium text-gray-900">
-                                    {{ \Carbon\Carbon::parse($rent->start_date)->format('d M Y') }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Tanggal Selesai</p>
-                                <p class="text-base font-medium text-gray-900">
-                                    {{ \Carbon\Carbon::parse($rent->end_date)->format('d M Y') }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Durasi</p>
-                                <p class="text-base font-medium text-gray-900">
-                                    {{ \Carbon\Carbon::parse($rent->start_date)->diffInDays($rent->end_date) }} hari
-                                </p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Total Biaya</p>
-                                <p class="text-lg font-semibold text-green-600">Rp
-                                    {{ number_format($rent->total_price, 0, ',', '.') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Rental Customer Info -->
-                    <div class="bg-white rounded-xl shadow p-6 space-y-2">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Informasi Penyewa</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">Nama Penyewa</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->customer->name }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Email</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->customer->email }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Car Details -->
-                    <div class="bg-white rounded-xl shadow p-6 space-y-2">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Spesifikasi Kendaraan</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-gray-500">Merek</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->car->brand }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Model</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->car->model }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Tahun</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->car->year }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Plat Nomor</p>
-                                <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    @php
-                        $now = \Carbon\Carbon::now();
-                        $startDate = \Carbon\Carbon::parse($rent->start_date);
-                        $diffInHours = $now->diffInHours($startDate, false);
-                        $lastChangeDate = $startDate->copy()->subDay();
-                    @endphp
-                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
-                        <p class="font-semibold">Perhatian:</p>
-                        <p>Penyewaan tidak dapat diubah dalam waktu 24 jam sebelum tanggal mulai.</p>
-                        <p class="mt-1 text-sm">Batas terakhir untuk melakukan perubahan adalah: <span
-                                class="font-semibold">{{ $lastChangeDate->format('d M Y H:i') }}</span></p>
-=======
-                                                data-bs-dismiss="modal" dusk="batalkan-sewa-cancel-button">Batal</button> 
-                                            <button type="submit" class="btn btn-danger" dusk="batalkan-sewa-confirm-button">Ya, Batalkan</button>
-                                        </div>
->>>>>>> Stashed changes
-                                    </form>
-                                </div>
-                            @endif
-                        </div>
->>>>>>> main
-=======
                             <!-- Car Details -->
                             <div class="bg-gray-50 rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold text-gray-900">Spesifikasi Kendaraan</h3>
@@ -438,7 +122,8 @@
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Plat Nomor</p>
-                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}</p>
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -470,36 +155,39 @@
                             </div>
 
                             <!-- Action Buttons -->
-                            @if ($diffInHours >= 24 && $rent->status === 'menunggu')
+                            @if ($diffInHours >= 24)
                                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                                    <button type="button"
-                                        class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 
+                                    @if ($rent->status === 'menunggu')
+                                        <button type="button"
+                                            class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 
                                         text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
                                         focus:ring-green-500 transition-all duration-200"
-                                        data-bs-toggle="modal" data-bs-target="#confirmRentModal">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Konfirmasi Sewa
-                                    </button>
-                                    <button type="button"
-                                        class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-red-600 rounded-lg font-semibold 
+                                            data-bs-toggle="modal" data-bs-target="#confirmRentModal">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Konfirmasi Sewa
+                                        </button>
+                                    @endif
+                                    @if ($rent->status !== 'batal')
+                                        <button type="button"
+                                            class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-red-600 rounded-lg font-semibold 
                                         text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
                                         focus:ring-red-500 transition-all duration-200"
-                                        data-bs-toggle="modal" data-bs-target="#rejectRentModal">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                        Batalkan Sewa
-                                    </button>
+                                            data-bs-toggle="modal" data-bs-target="#rejectRentModal">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                            Batalkan Sewa
+                                        </button>
+                                    @endif
                                 </div>
                             @endif
                         </div>
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
                     </div>
                 </div>
             </div>
@@ -507,31 +195,27 @@
     </div>
 
     <!-- Confirm Modal -->
-    <div class="modal fade" id="confirmRentModal" tabindex="-1"
-        aria-labelledby="confirmRentModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmRentModal" tabindex="-1" aria-labelledby="confirmRentModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmRentModalLabel">Konfirmasi Penyewaan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('rental.rents.confirm', $rent->id) }}" method="POST"
-                    class="d-inline">
+                <form action="{{ route('rental.rents.confirm', $rent->id) }}" method="POST" class="d-inline">
                     @csrf
                     <div class="modal-body">
                         <p>Apakah Anda yakin ingin mengkonfirmasi penyewaan ini?</p>
                         <div class="mb-3 mt-4">
-                            <label for="side_note_confirm"
-                                class="block text-sm font-medium text-gray-700">Catatan
+                            <label for="side_note_confirm" class="block text-sm font-medium text-gray-700">Catatan
                                 (opsional)</label>
                             <textarea name="side_note" id="side_note_confirm" rows="3"
                                 class="form-control border text-dark w-full rounded-md mt-1" placeholder="Tulis catatan tambahan..."></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Ya, Konfirmasi</button>
                     </div>
                 </form>
@@ -540,23 +224,20 @@
     </div>
 
     <!-- Reject Modal -->
-    <div class="modal fade" id="rejectRentModal" tabindex="-1"
-        aria-labelledby="rejectRentModalLabel" aria-hidden="true">
+    <div class="modal fade" id="rejectRentModal" tabindex="-1" aria-labelledby="rejectRentModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rejectRentModalLabel">Konfirmasi Penolakan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('rental.rents.reject', $rent->id) }}" method="POST"
-                    class="d-inline">
+                <form action="{{ route('rental.rents.reject', $rent->id) }}" method="POST" class="d-inline">
                     @csrf
                     <div class="modal-body">
                         <p>Apakah Anda yakin ingin menolak penyewaan ini?</p>
                         <div class="mb-3 mt-4">
-                            <label for="side_note_reject"
-                                class="block text-sm font-medium text-gray-700">Catatan
+                            <label for="side_note_reject" class="block text-sm font-medium text-gray-700">Catatan
                                 (opsional)</label>
                             <textarea name="side_note" id="side_note_reject" rows="3"
                                 class="form-control border text-dark w-full rounded-md mt-1"
@@ -564,8 +245,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-danger">Ya, Batalkan</button>
                     </div>
                 </form>
@@ -595,12 +275,4 @@
             </div>
         </div>
     @endif
-<<<<<<< HEAD
-<<<<<<< HEAD
 </x-app-layout>
-=======
-</x-app-layout>
->>>>>>> main
-=======
-</x-app-layout>
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
