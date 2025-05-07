@@ -45,60 +45,7 @@
         </main>
     </div>
 
-    <script>
-        @if (auth()->check())
-        document.addEventListener('DOMContentLoaded', function () {
-            const countNotification = async () => {
-                const response = await fetch('{{ route('notifications.count') }}');
-                const data = await response.json();
-                document.getElementById('notification-count').innerHTML = data;
-            }
-            countNotification();
-            setInterval(countNotification, 5000);
-        });
-        @endif
 
-        function fetchNotifications() {
-            fetch('{{ route('notifications.fetch') }}')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('notifications-container');
-                    container.innerHTML = '';
-                    if (data.length === 0) {
-                        container.innerHTML = '<div class="text-center text-sm font-bold">Tidak ada notifikasi</div>';
-                    } else {
-                        data.forEach(notification => {
-                            container.innerHTML += `
-                                <div class="card">
-                                    <div class="card-body d-flex justify-content-between gap-4">
-                                        <div>
-                                            <h5 class="card-title text-sm font-bold">${notification.title}</h5>
-                                            <p class="card-text text-xs">${notification.message}</p>
-                                        </div>
-                                        <div class="d-flex flex-column gap-2">
-                                            <a href="${notification.link}" class="btn btn-outline-primary btn-xs text-xs">Lihat</a>
-                                            <button class="btn btn-outline-success btn-xs text-xs"
-                                                onclick="markAsRead(${notification.id})">Sudah Baca</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-                        });
-                    }
-                });
-        }
-
-        function markAsRead(id) {
-            fetch('{{ route('notifications.markAsRead') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ id })
-            }).then(response => response.json())
-            .then(data => console.log(data));
-        }
-    </script>
 </body>
 
 </html>

@@ -28,7 +28,7 @@ Route::get('/', function () {
 });
 
 // Redirect ke dashboard sesuai role
-Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
@@ -59,10 +59,12 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 // 👤 Pelanggan Routes
 // ===========================
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.user'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
     Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
+    Route::post('/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
+    Route::post('/rents/{id}/confirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
@@ -74,7 +76,7 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 // 🚘 Rental Routes
 // ===========================
 Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.rental'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
 
     // Kendaraan milik rental
     Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
@@ -96,19 +98,19 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // 🛠️ Admin Routes
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // ===========================
 // 🚘 Rental Routes
 // ===========================
 Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.rental'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
 
     // Kendaraan milik rental
     Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
@@ -129,7 +131,7 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // 🛠️ Admin Routes
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
