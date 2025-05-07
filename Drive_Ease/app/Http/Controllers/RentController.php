@@ -5,16 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Rent;
 use App\Http\Requests\StoreRentRequest;
 use App\Http\Requests\UpdateRentRequest;
-<<<<<<< HEAD
-<<<<<<< HEAD
 use App\Models\Notification;
 use Illuminate\Http\Request;
-=======
->>>>>>> main
-=======
-use App\Models\Notification;
-use Illuminate\Http\Request;
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
+use Illuminate\Support\Facades\Auth;
 
 class RentController extends Controller
 {
@@ -23,7 +16,7 @@ class RentController extends Controller
      */
     public function index()
     {
-        $rents = Rent::where('customer_id', auth()->user()->id)->get();
+        $rents = Rent::where('customer_id', Auth::user()->id)->get();
         return view('user.rent.index', compact('rents'));
     }
 
@@ -75,10 +68,6 @@ class RentController extends Controller
     {
         //
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 
     public function reConfirm(Request $request)
     {
@@ -139,9 +128,3 @@ class RentController extends Controller
         }
     }
 }
-<<<<<<< HEAD
-=======
-}
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6

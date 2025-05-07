@@ -1,17 +1,6 @@
 <?php
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-use App\Http\Controllers\PaymentHistoryController;
-use App\Http\Controllers\checkoutController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RentController;
-use App\Http\Controllers\RentalRentController;
-=======
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     BookingController,
@@ -29,31 +18,23 @@ use App\Http\Controllers\{
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
+use Illuminate\Support\Facades\Auth;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 // ===========================
 // 🔐 Akses Umum
 // ===========================
 
 // Halaman awal redirect ke login
-<<<<<<< HEAD
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 Route::get('/', function () {
     return view('landing');
 });
 
 // Redirect ke dashboard sesuai role
-Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
-    $role = auth()->user()->role;
+    $role = Auth::user()->role;
     return match ($role) {
         'admin' => redirect()->route('admin.dashboard'),
         'rental' => redirect()->route('rental.dashboard'),
@@ -80,19 +61,15 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 // 👤 Pelanggan Routes
 // ===========================
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.user'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
     Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
+
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
-=======
     //checkout
     Route::get('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
@@ -127,19 +104,13 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
     Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
     Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-<<<<<<< HEAD
-});
-
-
-=======
->>>>>>> Stashed changes
 });
 
 // ===========================
 // 🚘 Rental Routes
 // ===========================
 Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.rental'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
 
     // Kendaraan milik rental
     Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
@@ -160,7 +131,7 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // 🛠️ Admin Routes
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
@@ -196,8 +167,4 @@ Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('revi
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 
 // 🔐 Auth routes
-<<<<<<< HEAD
->>>>>>> main
-=======
->>>>>>> a12a50e6f22bd2accec52c882319b39038630ff6
 require __DIR__ . '/auth.php';
