@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto">
             <!-- Back Button -->
             <div class="mb-6">
-                <a href="{{ route('rents.index') }}"
+                <a href="{{ route('user.rents.index') }}"
                     class="inline-flex items-center px-4 py-2 bg-white rounded-lg border border-gray-300 
                     text-sm font-medium text-gray-700 hover:bg-gray-50 
                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
@@ -28,19 +28,20 @@
                         <!-- Car Image Section -->
                         <div class="lg:col-span-1">
                             <div class="aspect-w-16 aspect-h-12">
-                                <img src="{{ $rent->car->image_url ?? 'https://placehold.co/400x300' }}" alt="{{ $rent->car->name }}"
+                                <img src="{{ $rent->car->image_url ?? 'https://placehold.co/400x300' }}"
+                                    alt="{{ $rent->car->name }}"
                                     class="w-full h-full object-cover rounded-lg shadow-md">
                             </div>
 
                             <!-- Status Badge - Prominent for customers -->
                             <div class="mt-4">
-                                <div class="w-full text-center p-3 rounded-lg
+                                <div
+                                    class="w-full text-center p-3 rounded-lg
                                     @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
                                     @elseif($rent->status === 'konfirmasi') bg-green-100 text-green-800
                                     @elseif($rent->status === 'berjalan') bg-blue-100 text-blue-800
                                     @elseif($rent->status === 'selesai') bg-gray-100 text-gray-800
-                                    @elseif($rent->status === 'batal' || $rent->status === 'tolak') bg-red-100 text-red-800 
-                                    @endif">
+                                    @elseif($rent->status === 'batal' || $rent->status === 'tolak') bg-red-100 text-red-800 @endif">
                                     <span class="text-sm font-medium">Status:</span>
                                     <span class="ml-2 font-semibold">
                                         @if ($rent->status === 'menunggu')
@@ -68,8 +69,9 @@
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
                                         data-bs-toggle="modal" data-bs-target="#cancelRentModal">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                         Batalkan Sewa
@@ -79,7 +81,8 @@
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-600 rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
                                         data-bs-toggle="modal" data-bs-target="#editRentModal">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
@@ -151,11 +154,13 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Nama Rental</p>
-                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->name }}</p>
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->name }}
+                                        </p>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Email</p>
-                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->email }}</p>
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->owner->email }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +183,8 @@
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-500">Plat Nomor</p>
-                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}</p>
+                                        <p class="text-base font-medium text-gray-900">{{ $rent->car->license_plate }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +199,7 @@
                             <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg">
                                 <p class="font-semibold">Perhatian:</p>
                                 <p>Penyewaan tidak dapat diubah dalam waktu 24 jam sebelum tanggal mulai.</p>
-                                <p class="mt-1 text-sm">Batas terakhir untuk melakukan perubahan adalah: 
+                                <p class="mt-1 text-sm">Batas terakhir untuk melakukan perubahan adalah:
                                     <span class="font-semibold">{{ $lastChangeDate->format('d M Y H:i') }}</span>
                                 </p>
                             </div>
@@ -212,9 +218,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="cancelRentModalLabel">Konfirmasi Pembatalan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('rents.reject', $rent->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('user.rents.reject', $rent->id) }}" method="POST" class="d-inline">
                         @csrf
                         <div class="modal-body">
                             <p>Apakah Anda yakin ingin membatalkan penyewaan ini?</p>
@@ -243,18 +250,19 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editRentModalLabel">Konfirmasi Ulang</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('rents.reConfirm') }}" method="POST" class="d-inline">
+                    <form action="{{ route('user.rents.reConfirm', $rent->id) }}" method="POST" class="d-inline">
                         @csrf
-                        <input type="hidden" name="rent_id" value="{{ $rent->id }}">
                         <div class="modal-body space-y-4">
                             <div>
                                 <label for="car_id" class="block text-sm font-medium text-gray-700">Mobil</label>
                                 <select name="car_id" id="car_id"
                                     class="form-select w-full mt-1 rounded-md border-gray-300" required>
                                     @foreach (\App\Models\Car::all() as $car)
-                                        <option value="{{ $car->id }}" @if ($car->id == $rent->car_id) selected @endif>
+                                        <option value="{{ $car->id }}"
+                                            @if ($car->id == $rent->car_id) selected @endif>
                                             {{ $car->name }}
                                         </option>
                                     @endforeach

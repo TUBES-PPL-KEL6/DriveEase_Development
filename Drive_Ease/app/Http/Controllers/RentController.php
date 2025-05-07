@@ -68,10 +68,10 @@ class RentController extends Controller
         //
     }
 
-    public function reConfirm(Request $request)
+    public function reConfirm(Request $request, $id)
     {
         try {
-            $rent = Rent::find($request->rent_id);
+            $rent = Rent::find($id);
             if (!$rent) {
                 return redirect()->back()->with('error', 'Data sewa tidak ditemukan.');
             }
