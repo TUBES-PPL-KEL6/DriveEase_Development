@@ -7,7 +7,6 @@ use App\Http\Requests\StoreRentRequest;
 use App\Http\Requests\UpdateRentRequest;
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RentController extends Controller
 {
@@ -16,7 +15,7 @@ class RentController extends Controller
      */
     public function index()
     {
-        $rents = Rent::where('customer_id', Auth::user()->id)->get();
+        $rents = Rent::where('customer_id', auth()->user()->id)->get();
         return view('user.rent.index', compact('rents'));
     }
 
@@ -69,10 +68,10 @@ class RentController extends Controller
         //
     }
 
-    public function reConfirm(Request $request)
+    public function reConfirm(Request $request, $id)
     {
         try {
-            $rent = Rent::find($request->rent_id);
+            $rent = Rent::find($id);
             if (!$rent) {
                 return redirect()->back()->with('error', 'Data sewa tidak ditemukan.');
             }

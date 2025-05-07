@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use App\Models\Rent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RentalRentController extends Controller
 {
     public function index()
     {
         $rents = Rent::whereHas('car', function ($query) {
-            $query->where('owner_id', Auth::user()->id);
+            $query->where('owner_id', auth()->user()->id);
         })->get();
         return view('rental.rent.index', compact('rents'));
     }
@@ -28,11 +27,9 @@ class RentalRentController extends Controller
         try {
             $rent = Rent::find($id);
             $rent->status = 'konfirmasi';
-
             if ($request->side_note) {
                 $rent->side_note = $request->side_note;
             }
-
             $rent->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengkonfirmasi sewa: ' . $e->getMessage());
@@ -65,16 +62,12 @@ class RentalRentController extends Controller
             // push notification to customer
             $notification = Notification::create([
                 'user_id' => $rent->customer->id,
-
-                'title' => 'Penyewaan Dibatalkan',
-                'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental.' . $rent->side_note,
                 'title' => 'Penyewaan Dibatalkan',
                 'message' => 'Penyewaan ' . $rent->car->name . ' Anda telah dibatalkan oleh pemilik rental. ' . $rent->side_note,
                 'type' => 'rent',
                 'status' => 'unread',
                 'link' => '/user/rents/' . $rent->id,
             ]);
-
 
             return redirect()->back()->with('success', 'Sewa berhasil dibatalkan');
         }
