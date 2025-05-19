@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     RentalRentController,
     RentalVehicleController,
     ReviewController,
-    VehicleController
+    VehicleController,
+    DriverController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -69,6 +70,10 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
+    Route::get('/my-bookings/{id}', [BookingController::class, 'myBookingsShow'])->name('bookings.mine.show');
+
+    // Booking Driver
+    Route::post('/drivers/available', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
 });
 
 
