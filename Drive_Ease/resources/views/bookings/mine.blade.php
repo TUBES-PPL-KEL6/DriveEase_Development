@@ -47,6 +47,7 @@
                                                     {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}
                                                 </p>
                                             </div>
+
                                             @if ($booking->driver)
                                                 <div class="space-y-1">
                                                     <p class="text-sm text-gray-500">Driver</p>
