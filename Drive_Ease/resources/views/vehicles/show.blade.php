@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto bg-white shadow rounded p-6">
+<div class="max-w-4xl mx-auto bg-dark shadow rounded p-6">
     {{-- Gambar dan Info Kendaraan --}}
     @if($vehicle->image_path)
         <img src="{{ asset('storage/' . $vehicle->image_path) }}" alt="{{ $vehicle->name }}"
@@ -47,11 +47,11 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium">Tanggal Mulai</label>
-                        <input type="date" name="start_date" class="border rounded px-3 py-2 w-full" required>
+                        <input type="date" name="start_date" class="bg-dark border rounded px-3 py-2 w-full" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium">Tanggal Selesai</label>
-                        <input type="date" name="end_date" class="border rounded px-3 py-2 w-full" required>
+                        <input type="date" name="end_date" class="bg-dark border rounded px-3 py-2 w-full" required>
                     </div>
                     <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                         Pesan Sekarang
@@ -79,7 +79,7 @@
                     <input type="hidden" name="vehicle_id" value="{{ $vehicle->id }}">
                     <div>
                         <label class="block text-sm font-medium">Rating</label>
-                        <select name="rating" class="border rounded px-2 py-1 w-full">
+                        <select name="rating" class="bg-dark border rounded px-2 py-1 w-full">
                             @for ($i = 1; $i <= 5; $i++)
                                 <option value="{{ $i }}">{{ $i }} ⭐</option>
                             @endfor
@@ -87,7 +87,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium">Komentar</label>
-                        <textarea name="comment" rows="3" class="border rounded w-full px-2 py-1" required></textarea>
+                        <textarea name="comment" rows="3" class="bg-dark border rounded w-full px-2 py-1" required></textarea>
                     </div>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kirim Ulasan</button>
                 </form>
