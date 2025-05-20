@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @livewire('admin.user-list')
+    <h1 class="text-xl font-semibold mb-4">Daftar Pengguna</h1>
+    @livewire('admin.user-table')
 @endsection
+
