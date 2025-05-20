@@ -22,8 +22,8 @@
                             stroke="orange" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.234 6.869h7.215c.969 0 1.371 1.24.588 1.81l-5.838 4.245
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 2.234 6.869c.3.921-.755 1.688-1.538 1.118L12 18.347l-5.838 4.245c-.783.57-1.838-.197-1.538-1.118l2.234-6.869
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -5.838-4.245c-.783-.57-.38-1.81.588-1.81h7.215l2.234-6.869z" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2.234 6.869c.3.921-.755 1.688-1.538 1.118L12 18.347l-5.838 4.245c-.783.57-1.838-.197-1.538-1.118l2.234-6.869
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -5.838-4.245c-.783-.57-.38-1.81.588-1.81h7.215l2.234-6.869z" />
                         </svg>
                     @endfor
                     <span class="text-sm text-gray-600 ml-2">({{ number_format($vehicle->average_rating, 1) }})</span>
@@ -265,7 +265,7 @@
         startDate.addEventListener('change', updateDrivers);
         endDate.addEventListener('change', updateDrivers);
 
-        // Select Driver
+        // Memilih Driver
         function selectDriver(driverId) {
             driverSelect.value = driverId;
             closeDriverModal();
@@ -294,16 +294,16 @@
                     driverContainer.classList.remove('hidden');
                     driverSelect.innerHTML = '';
 
-                    // Add default "no driver" option
+                    // Menambahkan opsi default "tidak ada driver"
                     const defaultOption = document.createElement('option');
                     defaultOption.value = '';
                     defaultOption.textContent = '-- Tidak Menggunakan Driver --';
                     driverSelect.appendChild(defaultOption);
 
-                    // Ensure data is an array
+                    // Pastikan data adalah array
                     const drivers = Array.isArray(data) ? data : [];
 
-                    // Add driver options to select
+                    // Menambahkan opsi driver ke pilihan
                     drivers.forEach(driver => {
                         const option = document.createElement('option');
                         option.value = driver.id;
@@ -311,7 +311,7 @@
                         driverSelect.appendChild(option);
                     });
 
-                    // Update driver profile content to show all drivers
+                    // Memperbarui konten profil driver
                     const driverProfileContent = document.getElementById('driver-profile-content');
                     if (drivers.length > 0) {
                         driverProfileContent.innerHTML = drivers.map(driver => `
