@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.app')
+@section('content')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard Rental') }}
@@ -11,10 +12,10 @@
                 <p class="mb-4">Halo, {{ auth()->user()->name }}! Kelola kendaraanmu di bawah ini.</p>
 
                 <a href="{{ route('rental.vehicles.index') }}"
-                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Kelola Kendaraan
                 </a>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

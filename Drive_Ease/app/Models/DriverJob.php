@@ -8,6 +8,7 @@ class DriverJob extends Model
 {
     protected $guarded = ['id'];
 
+    // Relasi dengan model Driver
     public function driver()
     {
         return $this->belongsTo(Driver::class, 'driver_id');
