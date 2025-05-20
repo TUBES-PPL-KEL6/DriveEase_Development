@@ -40,6 +40,7 @@
                         @csrf
                         <button type="submit"
                                 class="inline bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+
                             Checkout
                         </button>
                     </form>
@@ -100,6 +101,7 @@
                         </tr>
                 </tbody>
                 </table>
+
             </div>
         </div>
     </div>
