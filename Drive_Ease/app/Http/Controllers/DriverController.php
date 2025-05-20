@@ -14,6 +14,7 @@ class DriverController extends Controller
             $start_date = $request->start_date;
             $end_date = $request->end_date;
 
+            // Mengambil driver yang tidak memiliki job pada rentang tanggal yang dipilih
             $driver = Driver::whereDoesntHave('jobs', function ($query) use ($start_date, $end_date) {
                 $query->where(function ($q) use ($start_date, $end_date) {
                     $q->whereBetween('start_date', [$start_date, $end_date])

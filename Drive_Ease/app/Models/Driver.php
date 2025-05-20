@@ -8,6 +8,7 @@ class Driver extends Model
 {
     protected $guarded = ['id'];
 
+    // Relasi dengan model DriverJob
     public function jobs()
     {
         return $this->hasMany(DriverJob::class);
