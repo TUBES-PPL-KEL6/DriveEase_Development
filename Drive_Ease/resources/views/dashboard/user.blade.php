@@ -46,6 +46,7 @@
                 </div>
 
                 <br> <br>
+                <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold">Status Pembayaran</span></h3>
                 
                 <table class="table border-0">
                 <thead style="background-color: #00ffae; font-weight: bold;">
@@ -69,6 +70,7 @@
                 </table>
 
                 <br>
+                <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold">Riwayat Rental</span></h3>
 
                 <table class="table border-0">
                 <thead style="background-color: #00ffae; font-weight: bold;">
