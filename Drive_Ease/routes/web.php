@@ -11,8 +11,9 @@ use App\Http\Controllers\{
     RentController,
     RentalRentController,
     RentalVehicleController,
+    RentalDriverController,
     ReviewController,
-    VehicleController
+    VehicleController,
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -91,6 +92,14 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
     Route::get('/rents/{id}', [RentalRentController::class, 'show'])->name('rents.show');
     Route::post('/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rents.confirm');
     Route::post('/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rents.reject');
+
+    // ✅ Driver Management
+    Route::get('/drivers', [RentalDriverController::class, 'index'])->name('drivers.index');
+    Route::get('/drivers/create', [RentalDriverController::class, 'create'])->name('drivers.create');
+    Route::post('/drivers', [RentalDriverController::class, 'store'])->name('drivers.store');
+    Route::get('/drivers/{driver}/schedule', [RentalDriverController::class, 'scheduleForm'])->name('drivers.schedule.form');
+    Route::post('/drivers/{driver}/schedule', [RentalDriverController::class, 'schedule'])->name('drivers.schedule');
+    Route::delete('/drivers/inactive', [RentalDriverController::class, 'destroyInactive'])->name('drivers.destroyInactive');
 });
 
 
