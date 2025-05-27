@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email')->nullable();
             $table->string('photo')->nullable();
+            $table->foreignId('rental_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
