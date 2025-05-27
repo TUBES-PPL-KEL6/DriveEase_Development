@@ -23,6 +23,7 @@ use App\Livewire\Admin\PaymentReportTable;
 // 🔐 Akses Umum
 // ===========================
 
+
 // Halaman awal redirect ke login
 Route::get('/', function () {
     return view('landing');
