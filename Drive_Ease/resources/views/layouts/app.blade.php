@@ -17,7 +17,6 @@
     <!-- Optional SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    {{-- Script for pooling notification --}}
     @auth
         <script>
             document.addEventListener('DOMContentLoaded', function() {
