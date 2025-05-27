@@ -75,16 +75,10 @@
     @endauth
     @livewireStyles
 
-    <style>
-            nav {
-            background-color: #0d1117 !important;
-        }
-    </style>
-
 </head>
 
 <!-- <body class="font-sans antialiased bg-gray-100"> -->
-<body class="font-sans antialiased bg-black text-white">
+<body class="font-sans antialiased bg-white text-black">
 
     <div class="min-h-screen">
 
