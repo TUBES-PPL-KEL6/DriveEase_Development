@@ -74,6 +74,7 @@
         </script>
     @endauth
     @livewireStyles
+
     <style>
             nav {
             background-color: #0d1117 !important;
