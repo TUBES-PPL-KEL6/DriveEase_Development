@@ -7,7 +7,6 @@ use App\Models\Vehicle;
 use App\Models\Driver;
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -18,19 +17,14 @@ class BookingController extends Controller
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
             'driver_id' => 'nullable',
-            'side_note' => 'nullable',
         ]);
-
-        // return dd($vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))));
 
         $booking = Booking::create([
             'user_id' => auth()->id(),
             'vehicle_id' => $vehicle->id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'status' => 'menunggu',
-            'total_price' => $vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))),
-            'side_note' => $request->side_note,
+            'status' => 'pending',
         ]);
 
         // Jika ada driver yang dipilih, maka update driver_id
@@ -57,7 +51,7 @@ class BookingController extends Controller
             'message' => 'Pemesanan baru untuk ' . $vehicle->name,
             'type' => 'rent',
             'status' => 'unread',
-            'link' => '/rental/bookings/' . $booking->id,
+            'link' => '/rental/rents/' . $booking->id,
         ]);
 
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
@@ -78,68 +72,6 @@ class BookingController extends Controller
         'bookings' => $bookings,
         'vehicles' => $vehicles,
     ]);
-    }
-
-    public function myBookingsShow($id)
-    {
-        $booking = Booking::findOrFail($id);
-        return view('bookings.show', compact('booking'));
-    }
-
-    public function reConfirm(Request $request, $id)
-    {
-        try {
-            $booking = Booking::find($id);
-            if (!$booking) {
-                return redirect()->back()->with('error', 'Data sewa tidak ditemukan.');
-            }
-            if ($request->has('start_date')) {
-                $booking->start_date = $request->start_date;
-            }
-            if ($request->has('end_date')) {
-                $booking->end_date = $request->end_date;
-            }
-            $booking->status = 'menunggu';
-            $booking->side_note = $request->side_note;
-            $booking->save();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mengajukan ulang konfirmasi: ' . $e->getMessage());
-        } finally {
-            // push notification to rental owner
-            $notification = Notification::create([
-                'user_id' => $booking->vehicle->rental_id,
-                'title' => 'Permintaan Konfirmasi Ulang',
-                'message' => 'Pelanggan mengajukan ulang konfirmasi untuk penyewaan ' . $booking->vehicle->name . '. ' . $booking->side_note,
-                'type' => 'rent',
-                'status' => 'unread',
-                'link' => '/rental/bookings/' . $booking->id,
-            ]);
-            return redirect()->back()->with('success', 'Permintaan konfirmasi ulang berhasil diajukan');
-        }
-    }
-
-    public function cancel(Request $request, $id)
-    {
-        try {
-            $booking = Booking::find($id);
-            $booking->status = 'batal';
-            $booking->side_note = $request->side_note;
-            $booking->save();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal menolak sewa: ' . $e->getMessage());
-        } finally {
-            // push notification to rental owner
-            $notification = Notification::create([
-                'user_id' => $booking->vehicle->rental_id,
-                'title' => 'Pemesanan Dibatalkan',
-                'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan oleh penyewa. ' . $booking->side_note,
-                'type' => 'rent',
-                'status' => 'unread',
-                'link' => '/rental/bookings/' . $booking->id,
-            ]);
-
-            return redirect()->back()->with('success', 'Pemesanan berhasil dibatalkan');
-        }
     }
 
     public function approve($id)

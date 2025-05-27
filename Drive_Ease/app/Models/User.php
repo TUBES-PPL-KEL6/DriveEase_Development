@@ -25,19 +25,16 @@ class User extends Authenticatable
     ];
 
     public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+{
+    return $this->hasMany(Booking::class);
+}
 
-    public function vehicles()
-    {
-        return $this->hasMany(Vehicle::class, 'rental_id');
-    }
+public function vehicles()
+{
+    return $this->hasMany(Vehicle::class, 'rental_id');
+}
 
-    public function drivers()
-    {
-        return $this->hasMany(Driver::class);
-    }
+    
 
     /**
      * The attributes that should be hidden for serialization.
