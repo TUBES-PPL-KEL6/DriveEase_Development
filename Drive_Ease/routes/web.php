@@ -137,7 +137,7 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
-    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('admin.payment.index');
 
     // Approve dan Reject Status
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
@@ -151,6 +151,7 @@ Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name(
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
 Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
+
 
 // ===========================
 // 🔔 Notifikasi
