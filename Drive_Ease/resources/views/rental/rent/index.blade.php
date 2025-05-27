@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-800">Daftar Sewa</h1>
@@ -10,14 +8,14 @@
     <div class="py-8 px-4 md:px-8">
         <div class="max-w-7xl mx-auto">
             <div class="space-y-6">
-                @forelse ($bookings as $booking)
+                @forelse ($rents as $rent)
                     <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
                         <div class="p-6">
                             <div class="flex flex-col lg:flex-row gap-8">
                                 <!-- Car Image -->
                                 <div class="w-full lg:w-64 h-48 lg:h-40">
-                                    <img src="{{ $booking->vehicle->image_path ?? 'https://placehold.co/300x200' }}"
-                                        alt="{{ $booking->vehicle->name }}" class="w-full h-full object-cover rounded-lg">
+                                    <img src="{{ $rent->car->image_url ?? 'https://placehold.co/300x200' }}"
+                                        alt="{{ $rent->car->name }}" class="w-full h-full object-cover rounded-lg">
                                 </div>
 
                                 <!-- Rental Info -->
@@ -25,14 +23,12 @@
                                     <div class="flex flex-col gap-6">
                                         <!-- Header -->
                                         <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
-                                            <h2 class="text-xl font-bold text-gray-900">{{ $booking->vehicle->name }}
-                                            </h2>
-                                            <span
-                                                class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
-                                                @if ($booking->status === 'menunggu') bg-yellow-100 text-yellow-800
-                                                @elseif($booking->status === 'konfirmasi') bg-green-100 text-green-800
-                                                @elseif($booking->status === 'tolak') bg-red-100 text-red-800 @endif">
-                                                {{ ucfirst($booking->status) }}
+                                            <h2 class="text-xl font-bold text-gray-900">{{ $rent->car->name }}</h2>
+                                            <span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
+                                                @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
+                                                @elseif($rent->status === 'konfirmasi') bg-green-100 text-green-800
+                                                @elseif($rent->status === 'tolak') bg-red-100 text-red-800 @endif">
+                                                {{ ucfirst($rent->status) }}
                                             </span>
                                         </div>
 
@@ -41,24 +37,24 @@
                                             <div class="space-y-1">
                                                 <p class="text-sm text-gray-500">Tanggal Mulai</p>
                                                 <p class="text-base font-medium">
-                                                    {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}
+                                                    {{ \Carbon\Carbon::parse($rent->start_date)->format('d M Y') }}
                                                 </p>
                                             </div>
                                             <div class="space-y-1">
                                                 <p class="text-sm text-gray-500">Tanggal Selesai</p>
                                                 <p class="text-base font-medium">
-                                                    {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}
+                                                    {{ \Carbon\Carbon::parse($rent->end_date)->format('d M Y') }}
                                                 </p>
                                             </div>
                                             <div class="space-y-1">
                                                 <p class="text-sm text-gray-500">Total Biaya</p>
                                                 <p class="text-lg font-semibold text-green-600">
-                                                    Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                    Rp {{ number_format($rent->total_price, 0, ',', '.') }}
                                                 </p>
                                             </div>
                                             <div class="space-y-1">
                                                 <p class="text-sm text-gray-500">Penyewa</p>
-                                                <p class="text-base font-medium">{{ ucfirst($booking->user->name) }}</p>
+                                                <p class="text-base font-medium">{{ $rent->customer->name }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -66,13 +62,14 @@
 
                                 <!-- Action Button -->
                                 <div class="mt-6 lg:mt-0 flex lg:flex-col justify-end">
-                                    <a href="{{ route('rental.bookings.show', $booking->id) }}"
+                                    <a href="{{ route('rental.rents.show', $rent->id) }}"
                                         class="w-full lg:w-40 inline-flex items-center justify-center p-2 rounded-lg
                                         bg-blue-600 text-white font-medium hover:bg-blue-700 
                                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
                                         transition-all duration-200">
                                         <span>Lihat Detail</span>
-                                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 5l7 7-7 7" />
                                         </svg>
@@ -102,4 +99,4 @@
             </div>
         </div>
     </div>
-@endsection
+</x-app-layout>
