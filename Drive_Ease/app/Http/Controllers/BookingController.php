@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\Driver;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -17,14 +18,19 @@ class BookingController extends Controller
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
             'driver_id' => 'nullable',
+            'side_note' => 'nullable',
         ]);
+
+        // return dd($vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))));
 
         $booking = Booking::create([
             'user_id' => auth()->id(),
             'vehicle_id' => $vehicle->id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'status' => 'pending',
+            'status' => 'menunggu',
+            'total_price' => $vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))),
+            'side_note' => $request->side_note,
         ]);
 
         // Jika ada driver yang dipilih, maka update driver_id
@@ -51,7 +57,7 @@ class BookingController extends Controller
             'message' => 'Pemesanan baru untuk ' . $vehicle->name,
             'type' => 'rent',
             'status' => 'unread',
-            'link' => '/rental/rents/' . $booking->id,
+            'link' => '/rental/bookings/' . $booking->id,
         ]);
 
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
@@ -100,7 +106,31 @@ class BookingController extends Controller
             return redirect()->back()->with('success', 'Permintaan konfirmasi ulang berhasil diajukan');
         }
     }
-  
+
+    public function cancel(Request $request, $id)
+    {
+        try {
+            $booking = Booking::find($id);
+            $booking->status = 'batal';
+            $booking->side_note = $request->side_note;
+            $booking->save();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menolak sewa: ' . $e->getMessage());
+        } finally {
+            // push notification to rental owner
+            $notification = Notification::create([
+                'user_id' => $booking->vehicle->rental_id,
+                'title' => 'Pemesanan Dibatalkan',
+                'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan oleh penyewa. ' . $booking->side_note,
+                'type' => 'rent',
+                'status' => 'unread',
+                'link' => '/rental/bookings/' . $booking->id,
+            ]);
+
+            return redirect()->back()->with('success', 'Pemesanan berhasil dibatalkan');
+        }
+    }
+
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);
@@ -127,26 +157,28 @@ class BookingController extends Controller
         return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
     }
 
-    public function Booking_Dashboard(Request $request)
-    {
-        // Ambil bookings user yang login
-        $bookings = Booking::where('user_id', auth()->id())
-            ->with('vehicle')
-            ->latest()
-            ->get();
+    // public function cancel($id)
+    // {
+    //     $booking = Booking::findOrFail($id);
 
-        // Ambil kendaraan yang tersedia dengan filter
-        $vehicles = Vehicle::query()
-            ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
-            ->when($request->category, fn($q) => $q->where('category', $request->category))
-            ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
-            ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
-            ->where('available', true)
-            ->get();
+    //     // Cegah jika status sudah approved atau cancelled
+    //     if (in_array($booking->status, ['approved', 'cancelled'])) {
+    //         return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
+    //     }
 
-        return view('dashboard.user', [
-            'bookings' => $bookings,
-            'vehicles' => $vehicles,
-        ]);
-    }
+    //     $booking->status = 'cancelled';
+    //     $booking->save();
+
+    //     // push notification to vehicle owner
+    //     $notification = Notification::create([
+    //         'user_id' => $booking->vehicle->rental_id,
+    //         'title' => 'Pemesanan Dibatalkan',
+    //         'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan.',
+    //         'type' => 'rent',
+    //         'status' => 'unread',
+    //         'link' => '/rental/rents',
+    //     ]);
+
+    //     return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
+    // }
 }
