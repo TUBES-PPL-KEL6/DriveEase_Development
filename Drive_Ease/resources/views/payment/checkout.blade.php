@@ -28,9 +28,7 @@
     <div class="mb-3">
         <label for="vehicles" class="form-label">Mobil</label>
         <select name="vehicles" id="vehicles" class="form-select" placeholder="Pilih Mobil">
-            @foreach ($vehicles as $vehicle)
-                <option value="{{ $vehicle->id }}">{{ $vehicle->name }}</option>
-            @endforeach
+
         </select>
     </div>
 
