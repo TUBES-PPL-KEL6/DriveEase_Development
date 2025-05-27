@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('styles') {{-- Ini adalah tempat yang benar untuk CSS kustom Anda --}}
+@section('styles')
     <style>
         /* CSS Umum untuk tabel */
         table, th, td {
@@ -9,13 +9,12 @@
         table {
             border-collapse: collapse;
         }
-
-
     </style>
 @endsection
 
 @section('content')
 
+<body>
     <x-slot name="header">
         <h2 class="font-semibold text-xl leading-tight">
             Dashboard Pelanggan
@@ -46,52 +45,65 @@
                     </form>
                 </div>
 
-                <br> <br>
-                <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold">Status Pembayaran</span></h3>
                 
-                <table class="table border-0">
+                <br> 
+                <h2><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold text-2xl">Status pembayaran terakhir</span></h2>
+                @if($bookings->count())
+                <table border="1" class="table border-0" style="margin-top: 10px;">
                 <thead style="background-color: #00ffae; font-weight: bold;">
-                    <tr>
-                        <th>ID</th>
-                        <th>Mobil</th>
-                        <th>Harga</th>
-                        <th>Tanggal Mulai</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody class="text-white">
                         <tr>
-                            <td>ID</td>
-                            <td>kendaraan</td>
-                            <td>harga</td>
-                            <td>tanggal mulai</td>
-                            <td>pending</td>
+                            <th>Nama Kendaraan</th>
+                            <th>Tanggal Mulai</th>
+                            <th>Tanggal Selesai</th>
+                            <th>Status</th>
                         </tr>
-                </tbody>
+                    </thead>
+                    <tbody class="text-white">
+                        <tr>
+                            <td>{{ $bookings[0]->vehicle->name }}</td>
+                            <td>{{ $bookings[0]->start_date }}</td>
+                            <td>{{ $bookings[0]->end_date }}</td>
+                            <td><strong>{{ ucfirst($bookings[0]->status) }}</strong></td>
+                        </tr>
+                    </tbody>
                 </table>
+                @endif
 
                 <br>
-                <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold">Riwayat Rental</span></h3>
+                <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold text-2xl">Riwayat Rental</span></h3>
+               @if($bookings->count())
+    <table class="table border-0" style="margin-top: 10px;">
+        <thead style="background-color: #00ffae; font-weight: bold;">
+            <tr>
+                <th>Nama Kendaraan</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody class="text-white">
+            @foreach($bookings as $booking)
+                <tr>
+                    <td>{{ $booking->vehicle->name }}</td>
+                    <td>{{ $booking->start_date }}</td>
+                    <td>{{ $booking->end_date }}</td>
+                    <td><strong>{{ ucfirst($booking->status) }}</strong></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @endif
+    </div>
 
-                <table class="table border-0">
-                <thead style="background-color: #00ffae; font-weight: bold;">
-                    <tr>
-                        <th>ID</th>
-                        <th>Mobil</th>
-                        <th>Harga</th>
-                        <th>Tanggal Mulai</th>
-                        <th>Tanggal Akhir</th>
-                    </tr>
-                </thead>
-                <tbody class="text-white">
-                        <tr>
-                            <td>ID</td>
-                            <td>kendaraan</td>
-                            <td>harga</td>
-                            <td>tanggal mulai</td>
-                            <td>tanggal akhir</td>
-                        </tr>
-
+            <br>
+            <h2><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold text-2xl">Rekomendasi kendaraan yang lain</span></h2>          
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($vehicles as $vehicle)
+            <div class="bg-dark shadow rounded overflow-hidden" style="margin-top: 10px;">
+                @if($vehicle->image_path)
+                    <img src="{{ asset('storage/' . $vehicle->image_path) }}" alt="{{ $vehicle->name }}"
+                         class="w-full h-40 object-cover">
+                @endif
                         <tr>
                             <td>ID</td>
                             <td>kendaraan</td>
@@ -101,10 +113,10 @@
                         </tr>
                 </tbody>
                 </table>
-
             </div>
-        </div>
+            @endforeach
     </div>
+</body>
 
 @endsection
 
