@@ -74,6 +74,7 @@
         </script>
     @endauth
 
+
     <style>
             nav {
             background-color: #0d1117 !important;
@@ -90,6 +91,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
             <div class="container">
             <a class="navbar-brand" href="" style="text-align: left;">🚗 DriveEase</a>
+
             <div class="space-x-4 flex items-center">
                 @auth
                     <div class="dropdown">
@@ -109,8 +111,10 @@
                         </ul>
                     </div>
                     @if (auth()->user()->role === 'pelanggan')
+
                         <a href="{{ route('user.dashboard') }}" class="text-sm hover:text-[#00ffae]">Dashboard</a>
                         <a href="{{ route('vehicles.index') }}" class="text-sm hover:text-[#00ffae]">Cari Kendaraan</a>
+
                     @elseif(auth()->user()->role === 'rental')
                         <a href="{{ route('rental.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard Rental</a>
                     @elseif(auth()->user()->role === 'admin')
@@ -125,7 +129,9 @@
                     <a href="{{ route('register') }}" class="text-sm hover:text-blue-600">Register</a>
                 @endauth
             </div>
+
         </div>
+
         </nav>
 
         <!-- Header -->

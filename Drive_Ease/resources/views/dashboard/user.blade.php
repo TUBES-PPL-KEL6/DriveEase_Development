@@ -39,6 +39,7 @@
                         @csrf
                         <button type="submit"
                                 class="inline bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+
                             Checkout
                         </button>
                     </form>
@@ -103,14 +104,15 @@
                     <img src="{{ asset('storage/' . $vehicle->image_path) }}" alt="{{ $vehicle->name }}"
                          class="w-full h-40 object-cover">
                 @endif
-
-                <div class="bg-dark p-4">
-                    <h3 class="text-lg font-semibold">{{ $vehicle->name }}</h3>
-                    <p class="text-sm text-gray-500">{{ $vehicle->location }} - {{ $vehicle->category }}</p>
-                    <p class="text-blue-600 font-bold mt-1">Rp{{ number_format($vehicle->price_per_day) }}/hari</p>
-                    <a href="{{ route('vehicles.show', $vehicle->id) }}"
-                       class="inline-block mt-3 text-blue-500 hover:underline text-sm">Lihat Detail</a>
-                </div>
+                        <tr>
+                            <td>ID</td>
+                            <td>kendaraan</td>
+                            <td>harga</td>
+                            <td>tanggal mulai</td>
+                            <td>tanggal akhir</td>
+                        </tr>
+                </tbody>
+                </table>
             </div>
             @endforeach
     </div>
