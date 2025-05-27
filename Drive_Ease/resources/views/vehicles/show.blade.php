@@ -63,9 +63,7 @@
                 <h3 class="text-lg font-semibold">Deskripsi</h3>
                 <p class="text-gray-700">{{ $vehicle->description }}</p>
             </div>
-
             {{-- Form Pemesanan --}}
-
             @if (auth()->user()->role === 'pelanggan')
                 <div class="mt-6 border-t pt-4">
                     <h3 class="text-lg font-semibold mb-2">Form Pemesanan</h3>
