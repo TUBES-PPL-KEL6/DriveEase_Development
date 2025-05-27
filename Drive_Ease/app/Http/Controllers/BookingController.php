@@ -4,22 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Vehicle;
-use App\Models\Driver;
-use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
     public function store(Request $request, Vehicle $vehicle)
     {
-
         $request->validate([
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
-            'driver_id' => 'nullable',
         ]);
 
-        $booking = Booking::create([
+        Booking::create([
             'user_id' => auth()->id(),
             'vehicle_id' => $vehicle->id,
             'start_date' => $request->start_date,
@@ -27,37 +23,10 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
-        // Jika ada driver yang dipilih, maka update driver_id
-        if ($request->driver_id) {
-            $booking->driver_id = $request->driver_id;
-            $booking->save();
-        }
-
-        // Mencatat jadwal kerja driver
-        if ($request->driver_id) {
-            $driver = Driver::findOrFail($request->driver_id);
-            $driver->jobs()->create([
-                'driver_id' => $request->driver_id,
-                'booking_id' => $booking->id,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-            ]);
-        }
-
-        // push notification to vehicle owner
-        $notification = Notification::create([
-            'user_id' => $vehicle->rental_id,
-            'title' => 'Pemesanan Baru',
-            'message' => 'Pemesanan baru untuk ' . $vehicle->name,
-            'type' => 'rent',
-            'status' => 'unread',
-            'link' => '/rental/rents/' . $booking->id,
-        ]);
-
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
     }
 
-    public function myBookings()
+    public function myBookings(Request $request)
     {
         $bookings = Booking::where('user_id', auth()->id())->with('vehicle')->latest()->get();
         
@@ -74,68 +43,36 @@ class BookingController extends Controller
     ]);
     }
 
-    public function myBookingsShow($id)
-    {
-        $booking = Booking::findOrFail($id);
-        return view('bookings.show', compact('booking'));
-    }
 
-    public function reConfirm(Request $request, $id)
-    {
-        try {
-            $booking = Booking::find($id);
-            if (!$booking) {
-                return redirect()->back()->with('error', 'Data sewa tidak ditemukan.');
-            }
-            if ($request->has('start_date')) {
-                $booking->start_date = $request->start_date;
-            }
-            if ($request->has('end_date')) {
-                $booking->end_date = $request->end_date;
-            }
-            $booking->status = 'menunggu';
-            $booking->side_note = $request->side_note;
-            $booking->save();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mengajukan ulang konfirmasi: ' . $e->getMessage());
-        } finally {
-            // push notification to rental owner
-            $notification = Notification::create([
-                'user_id' => $booking->vehicle->rental_id,
-                'title' => 'Permintaan Konfirmasi Ulang',
-                'message' => 'Pelanggan mengajukan ulang konfirmasi untuk penyewaan ' . $booking->vehicle->name . '. ' . $booking->side_note,
-                'type' => 'rent',
-                'status' => 'unread',
-                'link' => '/rental/bookings/' . $booking->id,
-            ]);
-            return redirect()->back()->with('success', 'Permintaan konfirmasi ulang berhasil diajukan');
-        }
-    }
-  
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);
-
+    
         // Cegah jika status sudah approved atau cancelled
         if (in_array($booking->status, ['approved', 'cancelled'])) {
             return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
         }
-
+    
         // Ganti status menjadi approved
         $booking->status = 'approved';
         $booking->save();
-
-        // push notification to customer
-        $notification = Notification::create([
-            'user_id' => $booking->user_id,
-            'title' => 'Pemesanan Disetujui',
-            'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah disetujui.',
-            'type' => 'rent',
-            'status' => 'unread',
-            'link' => '/user/my-bookings',
-        ]);
-
+    
         return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+    }
+    
+    public function cancel($id)
+    {
+        $booking = Booking::findOrFail($id);
+    
+        // Cegah jika status sudah approved atau cancelled
+        if (in_array($booking->status, ['approved', 'cancelled'])) {
+            return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
+        }
+    
+        $booking->status = 'cancelled';
+        $booking->save();
+    
+        return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
     }
 
 public function Booking_Dashboard(Request $request)
@@ -159,4 +96,6 @@ public function Booking_Dashboard(Request $request)
         'bookings' => $bookings,
         'vehicles' => $vehicles,
     ]);
+}
+
 }

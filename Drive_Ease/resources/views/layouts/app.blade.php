@@ -73,14 +73,29 @@
             }
         </script>
     @endauth
+
+    @livewireStyles
+
+
+
+    <style>
+            nav {
+            background-color: #0d1117 !important;
+        }
+    </style>
+
 </head>
 
-<body class="font-sans antialiased bg-gray-100">
+<!-- <body class="font-sans antialiased bg-gray-100"> -->
+<body class="font-sans antialiased bg-black text-white">
+
     <div class="min-h-screen">
 
         <!-- Navbar dinamis -->
-        <nav class="bg-white shadow-md p-4 flex justify-between items-center">
-            <div class="font-bold text-xl text-blue-600">DriveEase</div>
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
+            <div class="container">
+            <a class="navbar-brand" href="" style="text-align: left;">🚗 DriveEase</a>
+
             <div class="space-x-4 flex items-center">
                 @auth
                     <div class="dropdown">
@@ -100,8 +115,10 @@
                         </ul>
                     </div>
                     @if (auth()->user()->role === 'pelanggan')
-                        <a href="{{ route('user.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard</a>
-                        <a href="{{ route('vehicles.index') }}" class="text-sm hover:text-blue-600">Cari Kendaraan</a>
+
+                        <a href="{{ route('user.dashboard') }}" class="text-sm hover:text-[#00ffae]">Dashboard</a>
+                        <a href="{{ route('vehicles.index') }}" class="text-sm hover:text-[#00ffae]">Cari Kendaraan</a>
+
                     @elseif(auth()->user()->role === 'rental')
                         <a href="{{ route('rental.dashboard') }}" class="text-sm hover:text-blue-600">Dashboard Rental</a>
                     @elseif(auth()->user()->role === 'admin')
@@ -116,6 +133,9 @@
                     <a href="{{ route('register') }}" class="text-sm hover:text-blue-600">Register</a>
                 @endauth
             </div>
+
+        </div>
+
         </nav>
 
         <!-- Header -->
@@ -128,9 +148,10 @@
         @endisset
 
         <!-- Content -->
-        <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            @yield('content')
-        </main>
+<main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    @yield('content') {{-- ✅ Sesuai dengan penggunaan @section di view --}}
+</main>
+
 
     </div>
 
@@ -138,6 +159,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>

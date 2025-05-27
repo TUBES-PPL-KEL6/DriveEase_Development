@@ -12,7 +12,6 @@ class Booking extends Model
         'vehicle_id',
         'start_date',
         'end_date',
-        'driver_id',
         'status',
     ];
 
@@ -21,12 +20,8 @@ class Booking extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
-    public function user()
+        public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function driver()
-    {
-        return $this->belongsTo(Driver::class);
     }
 }
