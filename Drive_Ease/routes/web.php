@@ -65,10 +65,13 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
     Route::post('/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
     Route::post('/rents/{id}/confirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard.user');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
+    Route::get('/bookings/history', [BookingController::class, 'myBookings']);
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
 });
 
 
