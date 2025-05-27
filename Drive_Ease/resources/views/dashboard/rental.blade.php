@@ -1,4 +1,17 @@
 @extends('layouts.app')
+
+@section('styles')
+    <style>
+        /* CSS Umum untuk tabel */
+        table, th, td {
+            border: none !important;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+@endsection
+
 @section('content')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">

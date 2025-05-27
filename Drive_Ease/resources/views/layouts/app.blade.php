@@ -75,12 +75,16 @@
         </script>
     @endauth
 
+    @livewireStyles
+
+
 
     <style>
             nav {
             background-color: #0d1117 !important;
         }
     </style>
+
 </head>
 
 <!-- <body class="font-sans antialiased bg-gray-100"> -->
@@ -156,6 +160,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>
