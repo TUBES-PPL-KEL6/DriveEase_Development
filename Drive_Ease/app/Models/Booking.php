@@ -13,6 +13,8 @@ class Booking extends Model
         'start_date',
         'end_date',
         'driver_id',
+        'total_price',
+        'side_note',
         'status',
     ];
 
