@@ -17,6 +17,7 @@ use App\Http\Controllers\{
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
+use App\Livewire\Admin\PaymentReportTable;
 
 // ===========================
 // 🔐 Akses Umum
@@ -105,7 +106,13 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
+    Route::get('/admin/payment-report', PaymentReportTable::class)->name('admin.payment.report');
+    
+    Route::get('/admin/transaction-report', \App\Livewire\Admin\TransactionReportTable::class)
+    ->middleware(['auth', IsAdmin::class])
+    ->name('admin.transaction.report');
 });
+
 
 require __DIR__ . '/auth.php';
 
