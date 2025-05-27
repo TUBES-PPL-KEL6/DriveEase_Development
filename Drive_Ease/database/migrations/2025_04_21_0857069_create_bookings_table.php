@@ -17,10 +17,8 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('side_note')->nullable();
-            $table->integer('total_price');
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
-            $table->enum('status', ['menunggu', 'konfirmasi', 'berjalan', 'selesai', 'batal'])->default('menunggu');
+            $table->enum('status', ['pending', 'approved', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }
