@@ -62,7 +62,7 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
 
-    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard.user');
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
