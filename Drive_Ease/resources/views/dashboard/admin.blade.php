@@ -1,9 +1,11 @@
-
 @extends('layouts.app')
 
+
 @section('content')
-    <h1>Selamat datang di dashboard</h1>
+    <h1 class="text-xl font-semibold mb-4">Daftar Pengguna</h1>
+    @livewire('admin.user-table')
 @endsection
+
 
 <h1>Dashboard Admin</h1>
 <p>Selamat datang, {{ auth()->user()->name }}</p>
@@ -35,3 +37,4 @@
         <button type="submit" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">check all payment history</button>
     </form>
 @endsection
+
