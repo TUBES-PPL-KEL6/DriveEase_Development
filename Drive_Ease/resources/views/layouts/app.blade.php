@@ -17,6 +17,7 @@
     <!-- Optional SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    {{-- Script for pooling notification --}}
     @auth
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -148,10 +149,10 @@
         @endisset
 
         <!-- Content -->
-<main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    @yield('content') {{-- ✅ Sesuai dengan penggunaan @section di view --}}
-</main>
 
+<main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    @yield('content')
+</main>
 
     </div>
 

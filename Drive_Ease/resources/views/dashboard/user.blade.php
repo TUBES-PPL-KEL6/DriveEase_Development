@@ -31,14 +31,14 @@
                 {{-- Ubah kelas div di bawah ini ke 'container-buttons' --}}
                 <div class="container-buttons">
                     <a href="{{ route('vehicles.index') }}"
-                       class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Cari Kendaraan
                     </a>
 
                     <form method="POST" action="{{ route('checkout') }}" class="inline-block">
                         @csrf
-                        <button type="submit"
-                                class="inline bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+
+                        <button type="submit" class="inline bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
 
                             Checkout
                         </button>
@@ -119,3 +119,4 @@
 </body>
 
 @endsection
+
