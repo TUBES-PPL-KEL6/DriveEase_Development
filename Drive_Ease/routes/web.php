@@ -8,8 +8,6 @@ use App\Http\Controllers\{
     NotificationController,
     PaymentHistoryController,
     ProfileController,
-    RentController,
-    RentalRentController,
     RentalVehicleController,
     ReviewController,
     VehicleController,
@@ -61,10 +59,6 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 // 👤 Pelanggan Routes
 // ===========================
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
-    // Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
-    // Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
-    Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
@@ -75,6 +69,8 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 
     // Booking Driver
     Route::post('/drivers/available/{vehicle}', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
+    Route::get('/bookings/history', [BookingController::class, 'myBookings']);
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
 });
 
 
@@ -130,7 +126,7 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
-    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('admin.payment.index');
 
     // Approve dan Reject Status
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
@@ -145,6 +141,7 @@ Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])
 Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
 Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
 
+
 // ===========================
 // 🔔 Notifikasi
 // ===========================
@@ -156,7 +153,6 @@ Route::post('/notifications/markAsRead', [NotificationController::class, 'markAs
 // ===========================
 // ⭐ Ulasan / Review
 // ===========================
-Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');

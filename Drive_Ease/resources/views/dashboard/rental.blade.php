@@ -1,4 +1,17 @@
 @extends('layouts.app')
+
+@section('styles')
+    <style>
+        /* CSS Umum untuk tabel */
+        table, th, td {
+            border: none !important;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+@endsection
+
 @section('content')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,7 +25,7 @@
                 <p class="mb-4">Halo, {{ auth()->user()->name }}! Kelola kendaraanmu di bawah ini.</p>
 
                 <a href="{{ route('rental.vehicles.index') }}"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Kelola Kendaraan
                 </a>
             </div>
