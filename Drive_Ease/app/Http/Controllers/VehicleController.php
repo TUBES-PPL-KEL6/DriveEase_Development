@@ -33,7 +33,9 @@ class VehicleController extends Controller
         return view('vehicles.show', compact('vehicle', 'userId'));
     }
 
-
-
-
+    // public function show($id)
+    // {
+    //     $vehicle = Vehicle::with('reviews.user')->findOrFail($id);
+    //     return view('vehicles.show', compact('vehicle'));
+    // }
 }

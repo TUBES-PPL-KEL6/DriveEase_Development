@@ -57,23 +57,50 @@ class BookingController extends Controller
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
     }
 
-    public function myBookings(Request $request)
+    public function myBookings()
     {
         $bookings = Booking::where('user_id', auth()->id())->with('vehicle')->latest()->get();
-
-        $vehicles = Vehicle::query()
-            ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
-            ->when($request->category, fn($q) => $q->where('category', $request->category))
-            ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
-            ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
-            ->where('available', true)
-            ->get();
-        return view('bookings.mine', [
-            'bookings' => $bookings,
-            'vehicles' => $vehicles,
-        ]);
+        return view('bookings.mine', compact('bookings'));
     }
 
+    public function myBookingsShow($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return view('bookings.show', compact('booking'));
+    }
+
+    public function reConfirm(Request $request, $id)
+    {
+        try {
+            $booking = Booking::find($id);
+            if (!$booking) {
+                return redirect()->back()->with('error', 'Data sewa tidak ditemukan.');
+            }
+            if ($request->has('start_date')) {
+                $booking->start_date = $request->start_date;
+            }
+            if ($request->has('end_date')) {
+                $booking->end_date = $request->end_date;
+            }
+            $booking->status = 'menunggu';
+            $booking->side_note = $request->side_note;
+            $booking->save();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengajukan ulang konfirmasi: ' . $e->getMessage());
+        } finally {
+            // push notification to rental owner
+            $notification = Notification::create([
+                'user_id' => $booking->vehicle->rental_id,
+                'title' => 'Permintaan Konfirmasi Ulang',
+                'message' => 'Pelanggan mengajukan ulang konfirmasi untuk penyewaan ' . $booking->vehicle->name . '. ' . $booking->side_note,
+                'type' => 'rent',
+                'status' => 'unread',
+                'link' => '/rental/bookings/' . $booking->id,
+            ]);
+            return redirect()->back()->with('success', 'Permintaan konfirmasi ulang berhasil diajukan');
+        }
+    }
+  
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);

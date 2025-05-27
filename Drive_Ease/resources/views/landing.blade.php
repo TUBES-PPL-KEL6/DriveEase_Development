@@ -91,7 +91,7 @@
 
 {{-- Hero --}}
 <section class="text-white d-flex align-items-center justify-center text-center"
-    style="background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('/imafges/hero-car.png') no-repeat right center / contain; background-color: #0f2027; height: 100vh;">
+    style="background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('/images/hero-car.png') no-repeat right center / contain; background-color: #0f2027; height: 100vh;">
     <div class="container">
         <h1 class="display-4 fw-bold">Selamat Datang di <span style="color:#00ffae; text-shadow: 0 0 10px rgba(0,255,174,0.6);">DriveEase</span></h1>
         <p class="lead">Sewa kendaraan tanpa ribet, cukup dari genggamanmu.</p>
