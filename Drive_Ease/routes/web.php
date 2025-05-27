@@ -21,15 +21,11 @@ use App\Http\Middleware\IsPelanggan;
 // ===========================
 // 🔐 Akses Umum
 // ===========================
+Route::get('/', fn() => view('landing'));
 
-// Halaman awal redirect ke login
-Route::get('/', function () {
-    return view('landing');
-});
-
-// Redirect ke dashboard sesuai role
 Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
-    ->middleware(['auth', 'verified'])->name('dashboard');
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::get('/redirect', function () {
     $role = auth()->user()->role;
@@ -56,90 +52,50 @@ Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.ind
 Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles.show');
 
 // ===========================
-// 👤 Pelanggan Routes
+// 👤 Pelanggan
 // ===========================
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
+
+    // Pemesanan
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
     Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
     Route::post('/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
     Route::post('/rents/{id}/confirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
-    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard.user');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
     Route::get('/bookings/history', [BookingController::class, 'myBookings']);
-    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
 });
 
-
 // ===========================
-// 🚘 Rental Routes
+// 🚘 Rental
 // ===========================
 Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\RentalDashboardController::class, 'index'])->name('dashboard');
 
-    // Kendaraan milik rental
-    Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
-    Route::get('/vehicles/create', [RentalVehicleController::class, 'create'])->name('vehicles.create');
-    Route::post('/vehicles', [RentalVehicleController::class, 'store'])->name('vehicles.store');
-    Route::get('/vehicles/{id}/edit', [RentalVehicleController::class, 'edit'])->name('vehicles.edit');
-    Route::put('/vehicles/{id}', [RentalVehicleController::class, 'update'])->name('vehicles.update');
-    Route::delete('/vehicles/{id}', [RentalVehicleController::class, 'destroy'])->name('vehicles.destroy');
+    // Kendaraan
+    Route::resource('vehicles', RentalVehicleController::class)->except(['show']);
 
-    // Pemesanan dari pelanggan
+    // Pemesanan
     Route::get('/rents', [RentalRentController::class, 'index'])->name('rents.index');
     Route::get('/rents/{id}', [RentalRentController::class, 'show'])->name('rents.show');
     Route::post('/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rents.confirm');
     Route::post('/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rents.reject');
 });
 
-
 // ===========================
-// 🛠️ Admin Routes
+// 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
-    // Lihat histori pembayaran
+    // Histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
-});
 
-require __DIR__ . '/auth.php';
-
-// ===========================
-// 🚘 Rental Routes
-// ===========================
-Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.rental'))->name('dashboard');
-
-    // Kendaraan milik rental
-    Route::get('/vehicles', [RentalVehicleController::class, 'index'])->name('vehicles.index');
-    Route::get('/vehicles/create', [RentalVehicleController::class, 'create'])->name('vehicles.create');
-    Route::post('/vehicles', [RentalVehicleController::class, 'store'])->name('vehicles.store');
-    Route::get('/vehicles/{id}/edit', [RentalVehicleController::class, 'edit'])->name('vehicles.edit');
-    Route::put('/vehicles/{id}', [RentalVehicleController::class, 'update'])->name('vehicles.update');
-    Route::delete('/vehicles/{id}', [RentalVehicleController::class, 'destroy'])->name('vehicles.destroy');
-
-    // Pemesanan dari pelanggan
-    Route::get('/rents', [RentalRentController::class, 'index'])->name('rents.index');
-    Route::get('/rents/{id}', [RentalRentController::class, 'show'])->name('rents.show');
-    Route::post('/rents/{id}/confirm', [RentalRentController::class, 'confirmRent'])->name('rents.confirm');
-    Route::post('/rents/{id}/reject', [RentalRentController::class, 'rejectRent'])->name('rents.reject');
-});
-
-// ===========================
-// 🛠️ Admin Routes
-// ===========================
-Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
-
-    // Lihat histori pembayaran
-    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('admin.payment.index');
-
-    // Approve dan Reject Status
+    // Approve dan Cancel Booking
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
     Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 });
@@ -149,26 +105,27 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // ===========================
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
-Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
-Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
 
+Route::prefix('payment-history')->name('payment_history.')->group(function () {
+    Route::get('/create', [PaymentHistoryController::class, 'create'])->name('create');
+    Route::post('/store', [PaymentHistoryController::class, 'store'])->name('store');
+});
 
 // ===========================
 // 🔔 Notifikasi
 // ===========================
-Route::get('/notifications/fetch', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
-Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
-Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
-Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::prefix('notifications')->name('notifications.')->group(function () {
+    Route::get('/fetch', [NotificationController::class, 'fetchNotifications'])->name('fetch');
+    Route::get('/count', [NotificationController::class, 'countNotification'])->name('count');
+    Route::post('/store', [NotificationController::class, 'store'])->name('store');
+    Route::post('/markAsRead', [NotificationController::class, 'markAsRead'])->name('markAsRead');
+});
 
 // ===========================
-// ⭐ Ulasan / Review
+// ⭐ Review
 // ===========================
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
-Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
-Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
-Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
 
-// 🔐 Auth routes
+// 🔐 Auth
 require __DIR__ . '/auth.php';

@@ -32,6 +32,7 @@ class User extends Authenticatable
 public function vehicles()
 {
     return $this->hasMany(Vehicle::class, 'rental_id');
+    return $this->hasMany(\App\Models\Vehicle::class);
 }
 
     
