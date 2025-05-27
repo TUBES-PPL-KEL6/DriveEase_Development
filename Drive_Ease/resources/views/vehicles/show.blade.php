@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-4xl mx-auto bg-white shadow rounded p-6">
+    <div class="max-w-4xl mx-auto bg-dark shadow rounded p-6">
         {{-- Gambar dan Info Kendaraan --}}
         @if ($vehicle->image_path)
             <img src="{{ asset('storage/' . $vehicle->image_path) }}" alt="{{ $vehicle->name }}"
@@ -22,8 +22,35 @@
                             stroke="orange" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.234 6.869h7.215c.969 0 1.371 1.24.588 1.81l-5.838 4.245
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 2.234 6.869c.3.921-.755 1.688-1.538 1.118L12 18.347l-5.838 4.245c-.783.57-1.838-.197-1.538-1.118l2.234-6.869
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -5.838-4.245c-.783-.57-.38-1.81.588-1.81h7.215l2.234-6.869z" />
+                                                                             2.234 6.869c.3.921-.755 1.688-1.538 1.118L12 18.347l-5.838 4.245c-.783.57-1.838-.197-1.538-1.118l2.234-6.869
+                                                                             -5.838-4.245c-.783-.57-.38-1.81.588-1.81h7.215l2.234-6.869z" />
+                        </svg>
+                    @endfor
+                    <span class="text-sm text-gray-600 ml-2">({{ number_format($vehicle->average_rating, 1) }})</span>
+                </div>
+            @else
+                <p class="text-gray-400 italic">Belum ada rating</p>
+            @endif
+        </div>
+
+        {{-- Deskripsi --}}
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold">Deskripsi</h3>
+            <p class="text-gray-700">{{ $vehicle->description }}</p>
+        </div>
+
+        {{-- Rating Rata-rata --}}
+        <div class="mt-2">
+            @if ($vehicle->average_rating)
+                <div class="flex items-center gap-1 text-yellow-500">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            fill="{{ $i <= round($vehicle->average_rating) ? 'orange' : 'none' }}" viewBox="0 0 24 24"
+                            stroke="orange" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.234 6.869h7.215c.969 0 1.371 1.24.588 1.81l-5.838 4.245
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2.234 6.869c.3.921-.755 1.688-1.538 1.118L12 18.347l-5.838 4.245c-.783.57-1.838-.197-1.538-1.118l2.234-6.869
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -5.838-4.245c-.783-.57-.38-1.81.588-1.81h7.215l2.234-6.869z" />
                         </svg>
                     @endfor
                     <span class="text-sm text-gray-600 ml-2">({{ number_format($vehicle->average_rating, 1) }})</span>
@@ -49,18 +76,18 @@
                         <div>
                             <label class="block text-sm font-medium">Tanggal Mulai</label>
                             <input type="date" name="start_date" id="start_date" value=""
-                                class="border rounded px-3 py-2 w-full" required onload="this.value=''">
+                                class="bg-dark border rounded px-3 py-2 w-full" required onload="this.value=''">
                         </div>
                         <div>
                             <label class="block text-sm font-medium">Tanggal Selesai</label>
                             <input type="date" name="end_date" id="end_date" value=""
-                                class="border rounded px-3 py-2 w-full" required onload="this.value=''">
+                                class="bg-dark border rounded px-3 py-2 w-full" required onload="this.value=''">
                         </div>
 
                         <div class="block text-sm font-medium space-y-2" id="driver-container">
                             <label class="block text-sm font-medium">Driver Tersedia</label>
                             <div class="flex gap-2">
-                                <select name="driver_id" class="border rounded px-3 py-2 w-full" id="driver-select">
+                                <select name="driver_id" class="bg-dark border rounded px-3 py-2 w-full" id="driver-select">
                                     <option value="" selected>-- Tidak Menggunakan Driver --</option>
                                 </select>
                                 <button type="button"
@@ -76,14 +103,14 @@
                                 <!-- Driver Modal -->
                                 <div id="driverModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50">
                                     <div class="flex items-center justify-center min-h-screen px-4">
-                                        <div class="relative bg-white rounded-lg shadow-lg w-full max-w-2xl">
+                                        <div class="relative bg-dark rounded-lg shadow-lg w-full max-w-2xl">
                                             <!-- Modal header -->
                                             <div class="flex items-start justify-between p-4 border-b">
-                                                <h3 class="text-xl font-semibold text-gray-900">
+                                                <h3 class="text-xl font-semibold text-white">
                                                     Profil Driver
                                                 </h3>
                                                 <button type="button" onclick="closeDriverModal()"
-                                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
+                                                    class="text-white bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
                                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                         fill="none" viewBox="0 0 14 14">
                                                         <path stroke="currentColor" stroke-linecap="round"
@@ -95,7 +122,7 @@
                                             </div>
                                             <!-- Modal body -->
                                             <div
-                                                class="bg-gray-100 p-6 space-y-6 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                                                class="bg-dark p-6 space-y-6 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="driver-profile-content">
                                                 </div>
                                             </div>
@@ -315,15 +342,15 @@
                     const driverProfileContent = document.getElementById('driver-profile-content');
                     if (drivers.length > 0) {
                         driverProfileContent.innerHTML = drivers.map(driver => `
-                            <div class="bg-white rounded-lg border border-gray-200 p-4 cursor-pointer hover:shadow-lg" onclick="selectDriver(${driver.id})">
+                            <div class="bg-dark rounded-lg border border-gray-200 p-4 cursor-pointer hover:shadow-lg hover:shadow-gray-400" onclick="selectDriver(${driver.id})">
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-shrink-0">
                                         <img class="h-12 w-12 rounded-full object-cover" src="${driver.photo || 'https://i.ytimg.com/vi/J6NBjUlKzr4/mqdefault.jpg'}" alt="${driver.name}">
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="text-lg font-semibold">${driver.name}</h4>
-                                        <p class="text-gray-600">${driver.phone_number || 'No phone number'}</p>
-                                        <p class="text-sm text-gray-500">${driver.email || 'No email'}</p>
+                                        <p class="text-white">${driver.phone_number || 'No phone number'}</p>
+                                        <p class="text-sm text-white">${driver.email || 'No email'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -339,6 +366,25 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(reviewId) {
+            Swal.fire({
+                title: 'Yakin hapus ulasan?',
+                text: "Data tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e3342f',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-review-form-' + reviewId).submit();
+                }
+            });
         }
     </script>
 @endpush
