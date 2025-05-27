@@ -65,6 +65,7 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     // Route::get('/rents/{id}', [RentController::class, 'show'])->name('rents.show');
     Route::post('/rents', [RentController::class, 'store'])->name('rents.store');
 
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard.user');
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
