@@ -10,91 +10,72 @@ use Illuminate\Http\Request;
 class CarController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan daftar semua mobil.
      */
     public function index()
     {
-        //
-        // Kalau kamu mau buat halaman daftar semua mobil (opsional)
         $cars = Car::all();
         return view('cars.index', compact('cars'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form untuk membuat mobil baru.
      */
     public function create()
     {
-        //
-        // Kalau mau form tambah mobil baru (opsional)
         return view('cars.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan mobil baru ke database.
      */
     public function store(StoreCarRequest $request)
     {
-        //
-        // Simpan mobil baru ke database
         Car::create($request->validated());
-
         return redirect()->route('cars.index')->with('success', 'Mobil berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail dari mobil tertentu.
      */
     public function show(Car $car)
     {
-        //
-        // Tampilkan detail satu mobil
         return view('cars.show', compact('car'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form untuk edit data mobil.
      */
     public function edit(Car $car)
     {
-        //
-        // Tampilkan form edit mobil
         return view('cars.edit', compact('car'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update data mobil di database.
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
-        //
-        // Update data mobil
         $car->update($request->validated());
-
         return redirect()->route('cars.index')->with('success', 'Mobil berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Hapus data mobil dari database.
      */
     public function destroy(Car $car)
     {
-        //
-    }
-        // Hapus data mobil
         $car->delete();
-
         return redirect()->route('cars.index')->with('success', 'Mobil berhasil dihapus.');
     }
 
     /**
-     * Show all cars for review purpose (Custom Method)
+     * Tampilkan semua mobil dan ulasannya untuk keperluan review.
      */
     public function reviewPage()
     {
         $userId = auth()->id();
-        $cars = \App\Models\Car::with('reviews.user')->get();
-
+        $cars = Car::with('reviews.user')->get();
         return view('cars.review', compact('cars', 'userId'));
     }
 }
