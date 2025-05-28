@@ -29,10 +29,15 @@ class User extends Authenticatable
     return $this->hasMany(Booking::class);
 }
 
+public function rents()
+{
+    return $this->hasMany(\App\Models\Booking::class, 'user_id');
+}
+
+
 public function vehicles()
 {
     return $this->hasMany(Vehicle::class, 'rental_id');
-    return $this->hasMany(\App\Models\Vehicle::class);
 }
 
     

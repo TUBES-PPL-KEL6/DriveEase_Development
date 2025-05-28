@@ -9,7 +9,7 @@ class RentalVehicleController extends Controller
 {
     public function index()
     {
-        $vehicles = auth()->user()->vehicles;
+        $vehicles = auth()->user()->vehicles()->paginate(10);
         return view('rental.vehicles.index', compact('vehicles'));
     }
 
