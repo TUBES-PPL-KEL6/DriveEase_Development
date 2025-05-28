@@ -75,12 +75,12 @@
                         @csrf
                         <div>
                             <label class="block text-sm font-medium">Tanggal Mulai</label>
-                            <input type="date" name="start_date" id="start_date" value=""
+                            <input type="date" name="start_date" id="start_date" value="" min="{{ \Carbon\Carbon::now()->addDays(2)->format('Y-m-d') }}"
                                 class="bg-dark border rounded px-3 py-2 w-full" required onload="this.value=''">
                         </div>
                         <div>
                             <label class="block text-sm font-medium">Tanggal Selesai</label>
-                            <input type="date" name="end_date" id="end_date" value=""
+                            <input type="date" name="end_date" id="end_date" value="" min="{{ \Carbon\Carbon::now()->addDays(2)->format('Y-m-d') }}"
                                 class="bg-dark border rounded px-3 py-2 w-full" required onload="this.value=''">
                         </div>
 
