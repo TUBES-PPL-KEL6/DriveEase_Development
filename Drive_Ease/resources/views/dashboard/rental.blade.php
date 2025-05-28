@@ -29,6 +29,12 @@
                     Kelola Kendaraan
                 </a>
             </div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <a href="{{ route('rental.drivers.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Kelola Driver
+                </a>
+            </div>
         </div>
     </div>
 @endsection
