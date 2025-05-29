@@ -5,7 +5,7 @@
     <div class="max-w-2xl mx-auto">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-3xl font-bold text-gray-800">Edit Kendaraan</h2>
-            <a href="{{ route('rental.vehicles.index') }}" 
+            <a href="{{ route('rental.vehicles.index') }}"
                class="text-sm text-gray-600 hover:text-blue-600 hover:underline flex items-center">
                 <svg class="w-4 h-4 mr-1 rtl:ml-1 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali ke Daftar
@@ -21,7 +21,7 @@
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Kendaraan</label>
                 <input type="text" name="name" id="name" placeholder="Contoh: Avanza, Xpander, Brio"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm"
                        value="{{ old('name', $vehicle->name) }}" required>
                 @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
@@ -29,7 +29,7 @@
             <div>
                 <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kendaraan</label>
                 <input type="text" name="location" id="location" placeholder="Contoh: Jakarta Selatan, Bandung Kota"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm"
                        value="{{ old('location', $vehicle->location) }}" required>
                 @error('location') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
@@ -51,7 +51,7 @@
             <div>
                 <label for="price_per_day" class="block text-sm font-medium text-gray-700 mb-1">Harga per Hari (Rp)</label>
                 <input type="number" name="price_per_day" id="price_per_day" placeholder="Contoh: 350000"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm"
                        value="{{ old('price_per_day', $vehicle->price_per_day) }}" required min="0">
                 @error('price_per_day') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
@@ -71,7 +71,7 @@
                         <p class="text-xs text-gray-500 mt-1">Gambar saat ini. Pilih file baru untuk mengganti.</p>
                     </div>
                 @endif
-                <input type="file" name="image" id="image" 
+                <input type="file" name="image" id="image"
                        class="mt-1 block w-full text-sm text-gray-500
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-md file:border-0
@@ -80,7 +80,7 @@
                               hover:file:bg-blue-100">
                 @error('image') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
-            
+
             <div class="flex items-center pt-2">
                 <input type="checkbox" name="available" id="available" value="1" {{ old('available', $vehicle->available) ? 'checked' : '' }}
                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">

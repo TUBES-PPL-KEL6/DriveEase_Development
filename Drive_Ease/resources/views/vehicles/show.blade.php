@@ -4,7 +4,7 @@
 <div class="bg-gray-50 py-10 md:py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-6xl mx-auto">
         <div class="mb-8 flex justify-between items-center">
-            <a href="{{ url()->previous() }}" {{-- Mengarah ke halaman sebelumnya, atau bisa spesifik ke route index kendaraan --}}
+            <a href="{{ url()->previous() }}"
                 class="inline-flex items-center px-4 py-2 bg-white rounded-lg border border-gray-300 
                 text-sm font-medium text-gray-700 hover:bg-gray-100 
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
@@ -15,13 +15,6 @@
                 </svg>
                 Kembali
             </a>
-            {{-- Contoh Tombol Aksi Tambahan (misal: Bagikan, Simpan)
-            <div class="flex space-x-2 rtl:space-x-reverse">
-                <button type="button" class="p-2 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100 transition-colors">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path></svg>
-                </button>
-            </div>
-            --}}
         </div>
 
         <div class="bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
@@ -53,7 +46,7 @@
                                         </svg>
                                     @endfor
                                     </div>
-                                    <a href="#reviews-section-anchor" class="ml-2 rtl:mr-2 rtl:ml-0 text-sm text-gray-600 hover:text-blue-600 hover:underline">({{ number_format($vehicle->average_rating, 1) }} dari {{ $vehicle->reviews_count }} ulasan)</a>
+                                    <a href="#reviews-section-anchor" class="ml-2 rtl:mr-2 rtl:ml-0 text-sm text-gray-600 hover:text-blue-600 hover:underline">({{ number_format($vehicle->average_rating, 1) }} dari {{ $vehicle->reviews_count ?? 0 }} ulasan)</a>
                                 @else
                                     <p class="text-sm text-gray-500 italic">Belum ada rating</p>
                                 @endif
@@ -74,14 +67,13 @@
                                     <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                                     Plat Nomor: <span class="font-medium text-gray-700 ml-1 rtl:mr-1 rtl:ml-0">{{ $vehicle->license_plate ?? 'N/A' }}</span>
                                 </li>
-                                {{-- Tambah info kunci lain jika ada: transmisi, bahan bakar, kapasitas penumpang, dll. --}}
                             </ul>
                         </div>
                     </div>
 
                     <div class="mt-auto border-t border-gray-200 pt-6">
                         @auth
-                            @if(auth()->user()->role === 'pelanggan' || auth()->user()->role === 'customer') {{-- Sesuaikan role --}}
+                            @if(auth()->user()->role === 'pelanggan' || auth()->user()->role === 'customer')
                                 <h3 class="text-xl font-bold text-gray-800 mb-4">Sewa Kendaraan Ini</h3>
                                 <form action="{{ route('user.bookings.store', $vehicle->id) }}" method="POST" class="space-y-4">
                                     @csrf
@@ -89,16 +81,33 @@
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                                            <input type="date" name="start_date" id="start_date" min="{{ now()->format('Y-m-d') }}"
+                                            <input type="date" name="start_date" id="start_date"
                                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-30 sm:text-sm text-gray-900 py-2.5" required>
                                             @error('start_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                                         </div>
                                         <div>
                                             <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                                            <input type="date" name="end_date" id="end_date" min="{{ now()->addDay()->format('Y-m-d') }}"
+                                            <input type="date" name="end_date" id="end_date"
                                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-30 sm:text-sm text-gray-900 py-2.5" required>
                                             @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                                         </div>
+                                    </div>
+
+                                    {{-- Integrasi Pilihan Driver --}}
+                                    <div id="driver-selection-container" class="hidden"> {{-- Awalnya disembunyikan, tampil via JS --}}
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Driver (Opsional)</label>
+                                        <div class="flex items-center gap-2">
+                                            <select name="driver_id" id="driver-select" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-30 sm:text-sm text-gray-900 py-2.5">
+                                                <option value="">-- Tidak Menggunakan Driver --</option>
+                                            </select>
+                                            <button type="button" id="use-driver-button" onclick="openDriverModal()"
+                                                class="p-2.5 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Gunakan jasa driver pilihan untuk perjalanan yang lebih aman dan nyaman.</p>
                                     </div>
                                      <div>
                                         <label for="side_note_booking_final" class="block text-sm font-medium text-gray-700 mb-1">Catatan Tambahan (Opsional)</label>
@@ -112,7 +121,7 @@
                                         Pesan Sekarang
                                     </button>
                                 </form>
-                            @elseif(auth()->check() && auth()->id() === $vehicle->owner_id)
+                            @elseif(auth()->check() && isset($vehicle->owner_id) && auth()->id() === $vehicle->owner_id)
                                 <div class="text-center bg-indigo-50 p-6 rounded-lg">
                                      <p class="text-sm text-indigo-700">Anda adalah pemilik kendaraan ini.</p>
                                      <a href="{{ route('rental.vehicles.edit', $vehicle->id) }}" class="mt-2 inline-flex items-center px-4 py-2.5 border border-indigo-300 rounded-lg shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-indigo-100 transition">
@@ -144,13 +153,16 @@
             </div>
 
             <div class="lg:col-span-1 bg-white rounded-xl shadow-xl border border-gray-200 p-6 md:p-8" id="reviews-section-anchor">
-                <h3 class="text-2xl font-bold text-gray-800 mb-6">Ulasan Pengguna ({{$vehicle->reviews_count}})</h3>
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Ulasan Pengguna ({{$vehicle->reviews_count ?? 0}})</h3>
                 @auth
                     @php
                         $userReview = $vehicle->reviews()->where('user_id', auth()->id())->first();
-                        $completedRent = auth()->user()->rents()->where('vehicle_id', $vehicle->id)->where('status', 'selesai')->exists();
+                        // Asumsi: $completedRent didapat dari controller atau relasi yang valid
+                        // Untuk contoh ini, kita sederhanakan saja. Jika ada relasi `rents` di user model:
+                        $completedRent = auth()->user()->rents()->where('vehicle_id', $vehicle->id)->whereIn('status', ['selesai', 'completed'])->exists(); // Sesuaikan status
                         $canReview = $completedRent && !$userReview;
-                        $editMode = request()->query('edit_review') == optional($userReview)->id;
+                        $editModeQueryParam = request()->query('edit_review'); // String atau null
+                        $editMode = $userReview && $editModeQueryParam == $userReview->id;
                     @endphp
 
                     @if ($canReview && !$editMode)
@@ -209,7 +221,7 @@
                                     <button type="submit" class="inline-flex items-center px-6 py-2.5 border border-transparent rounded-lg shadow-md text-sm font-semibold text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition transform hover:scale-105">
                                         Update Ulasan
                                     </button>
-                                    <a href="{{ route('vehicles.show', $vehicle->id) }}#reviews-section-anchor" class="text-sm text-gray-600 hover:underline">Batal</a>
+                                    <a href="{{ route('vehicles.show', $vehicle->slug ?? $vehicle->id) }}#reviews-section-anchor" class="text-sm text-gray-600 hover:underline">Batal</a>
                                 </div>
                             </form>
                         </div>
@@ -239,16 +251,16 @@
                             <div class="prose prose-sm max-w-none text-gray-600 leading-relaxed">
                                 {!! nl2br(e($review->comment)) !!}
                             </div>
-                            @if (auth()->check() && $review->user_id === auth()->id() && !$editMode)
+                            @if (auth()->check() && $review->user_id === auth()->id() && !$editMode) {{-- Jangan tampilkan jika sedang edit review ini --}}
                                 <div class="mt-3 pt-3 border-t border-gray-100 text-xs flex items-center gap-4">
-                                    <a href="{{ route('vehicles.show', $vehicle->id) }}?edit_review={{ $review->id }}#reviews-section-anchor" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium hover:underline">
+                                    <a href="{{ route('vehicles.show', $vehicle->slug ?? $vehicle->id) }}?edit_review={{ $review->id }}#reviews-section-anchor" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium hover:underline">
                                         <svg class="w-3.5 h-3.5 mr-1 rtl:ml-1 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         Edit
                                     </a>
                                     <form id="delete-review-form-{{ $review->id }}" action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" onclick="confirmDeleteReview({{ $review->id }})" class="inline-flex items-center text-red-500 hover:text-red-600 font-medium hover:underline">
+                                        <button type="button" onclick="confirmDeleteReview('{{ $review->id }}')" class="inline-flex items-center text-red-500 hover:text-red-600 font-medium hover:underline">
                                             <svg class="w-3.5 h-3.5 mr-1 rtl:ml-1 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                             Hapus
                                         </button>
@@ -266,9 +278,10 @@
                         </div>
                     @endforelse
                     
-                    @if($vehicle->reviews_count > 5)
+                    @if(($vehicle->reviews_count ?? 0) > 5)
                     <div class="text-center mt-8">
-                        <a href="#" {{-- Ganti dengan route ke halaman semua ulasan --}}
+                         {{-- Ganti dengan route ke halaman semua ulasan, misal: {{ route('vehicles.reviews', $vehicle->slug ?? $vehicle->id) }} --}}
+                        <a href="#" 
                            class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition group">
                             Lihat semua {{ $vehicle->reviews_count }} ulasan 
                             <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1">&rarr;</span>
@@ -280,20 +293,45 @@
         </div>
     </div>
 </div>
+
+<div id="driverModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-75">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl">
+            <div class="flex items-start justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Profil Driver Tersedia
+                </h3>
+                <button type="button" onclick="closeDriverModal()"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="driver-profile-content">
+                    {{-- Konten driver akan diisi oleh JavaScript --}}
+                    <p class="text-gray-500 col-span-full text-center">Pilih tanggal mulai dan selesai untuk melihat driver yang tersedia.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
-@if(auth()->check())
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Fungsi Konfirmasi Hapus Ulasan (dari HEAD, sedikit modifikasi)
     function confirmDeleteReview(reviewId) {
         Swal.fire({
             title: 'Anda yakin?',
             text: "Ulasan yang dihapus tidak dapat dikembalikan!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33', // Merah untuk hapus
-            cancelButtonColor: '#6c757d', // Abu-abu untuk batal
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
             confirmButtonText: 'Ya, hapus ulasan!',
             cancelButtonText: 'Batal'
         }).then((result) => {
@@ -303,40 +341,192 @@
         });
     }
     
-    const startDateInputDetail = document.getElementById('start_date');
-    const endDateInputDetail = document.getElementById('end_date');
+    // Validasi Tanggal (dari HEAD, sedikit penyesuaian)
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    const driverSelectionContainer = document.getElementById('driver-selection-container');
 
-    if(startDateInputDetail && endDateInputDetail) {
+    if(startDateInput && endDateInput) {
         const today = "{{ now()->format('Y-m-d') }}";
         const tomorrow = "{{ now()->addDay()->format('Y-m-d') }}";
 
-        startDateInputDetail.min = today;
-        endDateInputDetail.min = startDateInputDetail.value ? startDateInputDetail.value : tomorrow;
+        startDateInput.min = today;
+        endDateInput.min = startDateInput.value ? (startDateInput.value > today ? startDateInput.value : today) : tomorrow;
 
 
-        startDateInputDetail.addEventListener('change', function() {
-            if (this.value) {
-                endDateInputDetail.min = this.value;
-                if (endDateInputDetail.value && endDateInputDetail.value < this.value) {
-                    endDateInputDetail.value = this.value; 
+        function updateEndDateMin() {
+            if (startDateInput.value) {
+                let nextDayOfStartDate = new Date(startDateInput.value);
+                nextDayOfStartDate.setDate(nextDayOfStartDate.getDate() + 1);
+                const minEndDate = nextDayOfStartDate.toISOString().split('T')[0];
+                
+                endDateInput.min = minEndDate;
+                if (endDateInput.value && endDateInput.value < minEndDate) {
+                    endDateInput.value = minEndDate; 
                 }
             } else {
-                endDateInputDetail.min = tomorrow;
+                endDateInput.min = tomorrow;
+            }
+            // Panggil updateDrivers setelah tanggal berubah
+            if (startDateInput.value && endDateInput.value) {
+                updateDrivers();
+                if (driverSelectionContainer) driverSelectionContainer.classList.remove('hidden');
+            } else {
+                 if (driverSelectionContainer) driverSelectionContainer.classList.add('hidden');
+            }
+        }
+
+        startDateInput.addEventListener('change', updateEndDateMin);
+        endDateInput.addEventListener('change', function() {
+             if (startDateInput.value && endDateInput.value) {
+                updateDrivers();
+                if (driverSelectionContainer) driverSelectionContainer.classList.remove('hidden');
+            } else {
+                if (driverSelectionContainer) driverSelectionContainer.classList.add('hidden');
             }
         });
         
-        if (startDateInputDetail.value && endDateInputDetail.value && endDateInputDetail.value < startDateInputDetail.value) {
-            endDateInputDetail.value = startDateInputDetail.value;
+        // Initial check
+        if (startDateInput.value) updateEndDateMin();
+    }
+
+    // Fungsi Modal Driver (dari a3b21da...)
+    function openDriverModal() {
+        const driverModal = document.getElementById('driverModal');
+        if(driverModal) {
+            driverModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Mencegah scroll background
+        }
+    }
+
+    function closeDriverModal() {
+        const driverModal = document.getElementById('driverModal');
+        if(driverModal) {
+            driverModal.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Kembalikan scroll background
+        }
+    }
+
+    // Event listener untuk menutup modal jika klik di luar area konten modal
+    const driverModalElement = document.getElementById('driverModal');
+    if (driverModalElement) {
+        driverModalElement.addEventListener('click', function(e) {
+            if (e.target === this) { // Jika target klik adalah elemen modal itu sendiri (area luar)
+                closeDriverModal();
+            }
+        });
+    }
+    
+
+    // Fungsi AJAX untuk mengambil Driver (dari a3b21da...)
+    const driverSelect = document.getElementById('driver-select');
+    
+    function selectDriver(driverId, driverName) {
+        if (driverSelect) {
+            // Cek jika opsi sudah ada
+            let existingOption = driverSelect.querySelector(`option[value="${driverId}"]`);
+            if (!existingOption) {
+                const option = document.createElement('option');
+                option.value = driverId;
+                option.textContent = driverName;
+                driverSelect.appendChild(option);
+            }
+            driverSelect.value = driverId; // Pilih driver yang diklik
+        }
+        closeDriverModal();
+    }
+
+    async function updateDrivers() {
+        const startDateValue = startDateInput.value;
+        const endDateValue = endDateInput.value;
+        const driverProfileContent = document.getElementById('driver-profile-content');
+
+        if (!startDateValue || !endDateValue || !driverProfileContent) {
+            if(driverProfileContent) driverProfileContent.innerHTML = '<p class="text-gray-500 col-span-full text-center">Mohon pilih tanggal mulai dan selesai terlebih dahulu.</p>';
+            if(driverSelect) driverSelect.innerHTML = '<option value="">-- Tidak Menggunakan Driver --</option>'; // Reset select
+            return;
+        }
+        
+        driverProfileContent.innerHTML = '<p class="text-gray-500 col-span-full text-center">Mencari driver...</p>';
+
+        try {
+            const response = await fetch("{{ route('user.drivers.available', ['vehicle' => $vehicle->id]) }}", { // Pastikan route ini ada dan menerima vehicle ID
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    start_date: startDateValue,
+                    end_date: endDateValue,
+                    vehicle_id: "{{ $vehicle->id }}" // Kirim juga vehicle_id jika diperlukan di backend
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const drivers = Array.isArray(data.drivers) ? data.drivers : (Array.isArray(data) ? data : []);
+
+
+            if (driverSelect) {
+                const currentSelectedDriver = driverSelect.value;
+                driverSelect.innerHTML = ''; // Kosongkan opsi yang ada
+                
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Tidak Menggunakan Driver --';
+                driverSelect.appendChild(defaultOption);
+
+                drivers.forEach(driver => {
+                    const option = document.createElement('option');
+                    option.value = driver.id;
+                    option.textContent = driver.name;
+                    driverSelect.appendChild(option);
+                });
+                // Kembalikan pilihan jika masih valid
+                if (drivers.find(d => d.id == currentSelectedDriver)) {
+                    driverSelect.value = currentSelectedDriver;
+                }
+            }
+
+            if (drivers.length > 0) {
+                driverProfileContent.innerHTML = drivers.map(driver => `
+                    <div class="bg-white rounded-lg border border-gray-300 p-4 cursor-pointer hover:shadow-lg hover:border-blue-500 transition-all" onclick="selectDriver('${driver.id}', '${driver.name}')">
+                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                            <div class="flex-shrink-0">
+                                <img class="h-12 w-12 rounded-full object-cover" src="${driver.photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(driver.name) + '&background=EBF4FF&color=007BFF&font-size=0.5'}" alt="${driver.name}">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-md font-semibold text-gray-800 truncate">${driver.name}</h4>
+                                <p class="text-sm text-gray-600 truncate">${driver.phone_number || 'No phone'}</p>
+                                {{-- <p class="text-xs text-gray-500 truncate">${driver.email || 'No email'}</p> --}}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                driverProfileContent.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="mt-2 text-sm text-gray-500">Tidak ada driver yang tersedia untuk tanggal yang dipilih.</p>
+                    </div>`;
+            }
+        } catch (error) {
+            console.error('Error fetching drivers:', error);
+            driverProfileContent.innerHTML = `<p class="text-red-500 col-span-full text-center">Gagal memuat driver. ${error.message}</p>`;
         }
     }
 </script>
-@endif
 @endpush
 
 @push('styles')
 <style>
     /* Menyembunyikan radio button asli untuk rating stars */
-    input[type="radio"].sr-only {
+    input[type="radio"].sr-only.peer {
         position: absolute;
         width: 1px;
         height: 1px;
@@ -348,8 +538,25 @@
         border-width: 0;
     }
     /* Styling untuk bintang interaktif di form review */
-    .flex-row-reverse label svg { /* Pastikan selector ini cukup spesifik */
+    .flex-row-reverse label svg {
         transition: color 0.2s ease-in-out;
+    }
+    /* Scrollbar styling (opsional, bisa disesuaikan) */
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: #a0aec0 #edf2f7; /* thumb track */
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 8px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: #edf2f7;
+        border-radius: 10px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: #a0aec0;
+        border-radius: 10px;
+        border: 2px solid #edf2f7;
     }
 </style>
 @endpush
