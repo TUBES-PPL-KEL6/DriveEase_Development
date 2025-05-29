@@ -74,10 +74,7 @@
             }
         </script>
     @endauth
-
     @livewireStyles
-
-
 
     <style>
         nav {
