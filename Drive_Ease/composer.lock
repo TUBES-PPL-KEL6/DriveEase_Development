@@ -4,11 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< Updated upstream
     "content-hash": "2d7c699645a9ac692d8aa75c74730bcc",
-=======
-    "content-hash": "1940ec5ece79a22c0af8670098d072ce",
->>>>>>> Stashed changes
+
     "packages": [
         {
             "name": "brick/math",
@@ -2011,8 +2008,7 @@
             "time": "2024-12-08T08:18:47+00:00"
         },
         {
-<<<<<<< Updated upstream
-=======
+
             "name": "livewire/livewire",
             "version": "v3.6.3",
             "source": {
@@ -2089,6 +2085,7 @@
             "time": "2025-04-12T22:26:52+00:00"
         },
         {
+
             "name": "midtrans/midtrans-php",
             "version": "2.6.2",
             "source": {
@@ -2150,7 +2147,7 @@
             "time": "2025-03-18T06:30:17+00:00"
         },
         {
->>>>>>> Stashed changes
+
             "name": "monolog/monolog",
             "version": "3.9.0",
             "source": {
