@@ -19,7 +19,7 @@ class VehicleController extends Controller
         ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
         ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
         ->where('available', true)
-        ->get();
+        ->paginate(9);  
 
     return view('vehicles.index', compact('vehicles'));
 }
