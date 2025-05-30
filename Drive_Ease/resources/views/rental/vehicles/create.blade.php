@@ -1,43 +1,94 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2 class="text-2xl font-bold mb-4">Tambah Kendaraan</h2>
+<div class="py-10 px-4 md:px-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">Tambah Kendaraan Baru</h2>
+            <a href="{{ route('rental.vehicles.index') }}" 
+               class="text-sm text-gray-600 hover:text-blue-600 hover:underline flex items-center">
+                <svg class="w-4 h-4 mr-1 rtl:ml-1 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Kembali ke Daftar
+            </a>
+        </div>
 
-    <form method="POST" action="{{ route('rental.vehicles.store') }}"
-          enctype="multipart/form-data"
-          class="bg-white p-6 rounded shadow space-y-4">
-        @csrf
+        <form method="POST" action="{{ route('rental.vehicles.store') }}"
+              enctype="multipart/form-data"
+              class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 space-y-6">
+            @csrf
 
-        <input type="text" name="name" placeholder="Nama Kendaraan"
-               class="w-full border p-2 rounded" required>
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Kendaraan</label>
+                <input type="text" name="name" id="name" placeholder="Contoh: Avanza, Xpander, Brio"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       value="{{ old('name') }}" required>
+                @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
 
-        <input type="text" name="location" placeholder="Lokasi"
-               class="w-full border p-2 rounded" required>
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kendaraan</label>
+                <input type="text" name="location" id="location" placeholder="Contoh: Jakarta Selatan, Bandung Kota"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       value="{{ old('location') }}" required>
+                @error('location') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
 
-        <select name="category" class="w-full border p-2 rounded">
-            <option value="">Pilih Kategori</option>
-            <option value="SUV">SUV</option>
-            <option value="MPV">MPV</option>
-            <option value="Sedan">Sedan</option>
-            <option value="Hatchback">Hatchback</option>
-        </select>
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                <select name="category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" required>
+                    <option value="" disabled {{ old('category') ? '' : 'selected' }}>Pilih Kategori</option>
+                    <option value="SUV" {{ old('category') == 'SUV' ? 'selected' : '' }}>SUV (Sport Utility Vehicle)</option>
+                    <option value="MPV" {{ old('category') == 'MPV' ? 'selected' : '' }}>MPV (Multi-Purpose Vehicle)</option>
+                    <option value="Sedan" {{ old('category') == 'Sedan' ? 'selected' : '' }}>Sedan</option>
+                    <option value="Hatchback" {{ old('category') == 'Hatchback' ? 'selected' : '' }}>Hatchback</option>
+                    <option value="LCGC" {{ old('category') == 'LCGC' ? 'selected' : '' }}>LCGC (Low Cost Green Car)</option>
+                    <option value="City Car" {{ old('category') == 'City Car' ? 'selected' : '' }}>City Car</option>
+                    <option value="Van" {{ old('category') == 'Van' ? 'selected' : '' }}>Van</option>
+                    <option value="Lainnya" {{ old('category') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
+                @error('category') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
 
-        <input type="number" name="price_per_day" placeholder="Harga per Hari"
-               class="w-full border p-2 rounded" required>
+            <div>
+                <label for="price_per_day" class="block text-sm font-medium text-gray-700 mb-1">Harga per Hari (Rp)</label>
+                <input type="number" name="price_per_day" id="price_per_day" placeholder="Contoh: 350000"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm" 
+                       value="{{ old('price_per_day') }}" required min="0">
+                @error('price_per_day') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
 
-        <textarea name="description" placeholder="Deskripsi Kendaraan"
-                  class="w-full border p-2 rounded"></textarea>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Kendaraan</label>
+                <textarea name="description" id="description" placeholder="Jelaskan kondisi, fitur unggulan, atau informasi tambahan lainnya..."
+                          rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">{{ old('description') }}</textarea>
+                @error('description') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
 
-        <label class="block">
-            <input type="checkbox" name="available" value="1" checked>
-            Tersedia
-        </label>
+            <div>
+                <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Kendaraan</label>
+                <input type="file" name="image" id="image" 
+                       class="mt-1 block w-full text-sm text-gray-500
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-md file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-blue-50 file:text-blue-700
+                              hover:file:bg-blue-100">
+                @error('image') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
+            
+            <div class="flex items-center pt-2">
+                <input type="checkbox" name="available" id="available" value="1" {{ old('available', 1) ? 'checked' : '' }}
+                       class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                <label for="available" class="ml-2 block text-sm text-gray-900">Tersedia untuk disewa</label>
+            </div>
 
-        <input type="file" name="image" class="w-full border p-2 rounded">
-
-        <button type="submit"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Simpan Kendaraan
-        </button>
-    </form>
+            <div class="pt-4">
+                <button type="submit"
+                        class="w-full inline-flex justify-center py-2.5 px-6 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+                    Simpan Kendaraan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
