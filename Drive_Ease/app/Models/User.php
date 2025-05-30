@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,16 +23,33 @@ class User extends Authenticatable
         'role',
     ];
 
+    /**
+     * Relasi: User memiliki banyak Booking
+     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
 
+    /**
+     * Relasi: User (sebagai pelanggan) memiliki banyak rents
+     */
+    public function rents()
+    {
+        return $this->hasMany(\App\Models\Booking::class, 'user_id');
+    }
+
+    /**
+     * Relasi: User (sebagai rental) memiliki banyak vehicles
+     */
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class, 'rental_id');
     }
 
+    /**
+     * Relasi: User memiliki banyak drivers (jika ada fitur supir)
+     */
     public function drivers()
     {
         return $this->hasMany(Driver::class);
@@ -50,7 +66,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -62,6 +78,7 @@ class User extends Authenticatable
         ];
     }
 
+    // Optional: jika kamu ingin aktifkan relasi review
     // public function reviews()
     // {
     //     return $this->hasMany(Review::class);
