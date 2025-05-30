@@ -30,7 +30,7 @@
                     @endif
                 </div>
 
-                <div class="lg:col-span-2 p-6 md:p-8 lg:overflow-y-auto lg:max-h-[550px] flex flex-col">
+                <div class="lg:col-span-2 p-6 md:p-8 flex flex-col">
                     <div class="space-y-5 flex-grow">
                         <div>
                             <span class="text-xs text-blue-600 font-semibold uppercase tracking-wider">{{ $vehicle->category }}</span>
@@ -144,6 +144,67 @@
             </div>
         </div>
 
+
+        <div class="bg-white rounded-xl shadow-xl border border-gray-200 p-6 md:p-8">
+        <div class="mt-8 border-t pt-4">
+            <h3 class="text-lg font-semibold mb-4">Ulasan Pengguna</h3>
+
+            @auth
+                @php
+                    $userReview = $vehicle->reviews->firstWhere('user_id', auth()->id());
+                    $editMode = request()->query('edit') === 'true';
+                @endphp
+
+                @if (!$userReview)
+                    {{-- Belum Ulasan: Form Baru --}}
+                    <form action="{{ route('reviews.store') }}" method="POST" class="space-y-3 mb-4">
+                        @csrf
+                        <input type="hidden" name="vehicle_id" value="{{ $vehicle->id }}">
+                        <div>
+                            <label class="block text-sm font-medium">Rating</label>
+                            <select name="rating" class="border rounded px-2 py-1 w-full">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}">{{ $i }} ⭐</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Komentar</label>
+                            <textarea name="comment" rows="3" class="border rounded w-full px-2 py-1" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kirim
+                            Ulasan</button>
+                    </form>
+                @elseif ($editMode)
+                    {{-- Edit Mode: Tampilkan Form --}}
+                    <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+                        <form action="{{ route('reviews.update', $userReview->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="vehicle_id" value="{{ $vehicle->id }}">
+                            <div class="mb-2">
+                                <label class="text-sm font-medium">Rating</label>
+                                <select name="rating" class="w-full border rounded px-2 py-1">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ $userReview->rating == $i ? 'selected' : '' }}>
+                                            {{ $i }} ⭐</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="text-sm font-medium">Komentar</label>
+                                <textarea name="comment" rows="3" class="w-full border rounded px-2 py-1">{{ $userReview->comment }}</textarea>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit"
+                                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+            @endauth
+        </div>
         <div class="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 bg-white rounded-xl shadow-xl border border-gray-200 p-6 md:p-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-5">Deskripsi Lengkap Kendaraan</h3>

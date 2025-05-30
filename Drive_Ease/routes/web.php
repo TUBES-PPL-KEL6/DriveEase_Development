@@ -2,42 +2,39 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    BookingController,       // Digunakan untuk pelanggan dan beberapa aksi admin
-    CarController,           // Mungkin untuk halaman review lama, bisa dievaluasi
+    BookingController,
+    CarController,
     CheckoutController,
     NotificationController,
     PaymentHistoryController,
     ProfileController,
-    RentalVehicleController, // Untuk manajemen kendaraan oleh rental
+    RentalVehicleController,
     ReviewController,
-    VehicleController,       // Untuk tampilan kendaraan publik
-    DriverController,        // Untuk manajemen driver oleh rental & ketersediaan untuk pelanggan
-    RentalBookingController, // Untuk manajemen booking oleh rental
-    RentalDashboardController, // Untuk dashboard rental
-    // RentController,          // Di-comment karena kita standarisasi ke BookingController
-    // RentalRentController,    // Di-comment karena kita standarisasi ke RentalBookingController
+    VehicleController,
+    DriverController,
+    RentalBookingController,
+    RentalRentController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
 use App\Livewire\Admin\PaymentReportTable;
-use App\Livewire\Admin\TransactionReportTable; // Pastikan namespace ini benar
 
 // ===========================
 // 🔐 Akses Umum
 // ===========================
-Route::get('/', fn() => view('landing'))->name('landing'); // Tambahkan name untuk referensi
+Route::get('/', fn() => view('landing'));
 
-Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Redirect ke dashboard sesuai role
+Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
     $role = auth()->user()->role;
     return match ($role) {
         'admin' => redirect()->route('admin.dashboard'),
         'rental' => redirect()->route('rental.dashboard'),
-        default => redirect()->route('user.dashboard'), // Pelanggan diarahkan ke user.dashboard
+        default => redirect()->route('user.dashboard'),
     };
 })->middleware('auth')->name('dashboard.redirect');
 
@@ -54,106 +51,94 @@ Route::middleware('auth')->group(function () {
 // 🚗 Umum: Kendaraan & Pencarian
 // ===========================
 Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
-// Pastikan VehicleController@show ada dan parameter sesuai (id atau model binding dengan slug)
-Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show'); // Menggunakan {vehicle} untuk model binding jika pakai slug
+Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles.show');
 
 // ===========================
 // 👤 Pelanggan
 // ===========================
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
-    // Dashboard pelanggan menampilkan daftar booking mereka
-    Route::get('/dashboard', [BookingController::class, 'myBookings'])->name('dashboard');
+    Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
 
-    // Booking oleh Pelanggan
+    // Pemesanan (Rents)
+    Route::get('/rents', [\App\Http\Controllers\RentController::class, 'index'])->name('rents.index');
+    Route::get('/rents/{id}', [\App\Http\Controllers\RentController::class, 'show'])->name('rents.show');
+    Route::post('/rents', [\App\Http\Controllers\RentController::class, 'store'])->name('rents.store');
+    Route::post('/rents/{id}/reject', [\App\Http\Controllers\RentController::class, 'rejectRent'])->name('rents.reject');
+    Route::post('/rents/{id}/confirm', [\App\Http\Controllers\RentController::class, 'reConfirm'])->name('rents.reConfirm');
+
+    // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
-    Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine'); // Alias untuk dashboard atau daftar booking
-    Route::get('/my-bookings/{booking}', [BookingController::class, 'myBookingsShow'])->name('bookings.show'); // {booking} untuk model binding
-    Route::post('/my-bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel'); // Aksi pembatalan oleh user
-    // Route::post('/my-bookings/{booking}/confirm', [BookingController::class, 'reConfirm'])->name('bookings.reConfirm'); // Re-confirm mungkin tidak umum untuk user
+    Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
+    Route::get('/my-bookings/{id}', [BookingController::class, 'myBookingsShow'])->name('bookings.show');
+    Route::post('/my-bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+    Route::post('/my-bookings/{id}/confirm', [BookingController::class, 'reConfirm'])->name('bookings.reConfirm');
 
-    // Cek Ketersediaan Driver
+    // Booking Driver
     Route::post('/drivers/available/{vehicle}', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
-
-    // Riwayat booking bisa jadi sama dengan myBookings
-    Route::get('/bookings/history', [BookingController::class, 'myBookings'])->name('bookings.history');
+    Route::get('/bookings/history', [BookingController::class, 'myBookings']);
 });
 
 // ===========================
 // 🚘 Rental
 // ===========================
 Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', [RentalDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\RentalDashboardController::class, 'index'])->name('dashboard');
 
-    // Manajemen Kendaraan oleh Rental
-    Route::resource('vehicles', RentalVehicleController::class)->except(['show']); // Rental tidak punya halaman show publik, itu di VehicleController
+    // Kendaraan
+    Route::resource('vehicles', RentalVehicleController::class)->except(['show']);
 
-    // Manajemen Booking yang Masuk ke Rental
+    // Pemesanan (Booking)
     Route::get('/bookings', [RentalBookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/{booking}', [RentalBookingController::class, 'show'])->name('bookings.show'); // {booking} untuk model binding
-    Route::post('/bookings/{booking}/confirm', [RentalBookingController::class, 'confirmBooking'])->name('bookings.confirm');
-    Route::post('/bookings/{booking}/reject', [RentalBookingController::class, 'rejectBooking'])->name('bookings.reject');
+    Route::get('/bookings/{id}', [RentalBookingController::class, 'show'])->name('bookings.show');
+    Route::post('/bookings/{id}/confirm', [RentalBookingController::class, 'confirmBooking'])->name('bookings.confirm');
+    Route::post('/bookings/{id}/reject', [RentalBookingController::class, 'rejectBooking'])->name('bookings.reject');
 
-    // Manajemen Driver oleh Rental
-    Route::resource('drivers', DriverController::class); // Ini sudah mencakup index, create, store, edit, update, destroy, show (jika ada)
+    // Driver Management
+    Route::resource('drivers', DriverController::class);
 });
 
 // ===========================
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard'); // Pastikan view ini ada
+    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
 
-    // Laporan (Livewire)
+    // Riwayat pembayaran
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
     Route::get('/payment-report', PaymentReportTable::class)->name('payment.report');
-    Route::get('/transaction-report', TransactionReportTable::class)->name('transaction.report');
+    Route::get('/transaction-report', \App\Livewire\Admin\TransactionReportTable::class)->name('transaction.report');
 
-    // Histori pembayaran (jika berbeda dari laporan)
-    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment-history.index');
-
-    // Approve dan Cancel/Reject Booking oleh Admin
-    Route::post('/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve'); // {booking} untuk model binding
-    // Menggunakan `reject` untuk konsistensi dengan Rental
-    Route::post('/bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject'); // Pastikan metode reject ada di BookingController untuk admin
+    // Approve dan Cancel Booking
+    Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
+    Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 });
 
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
-// Pastikan CheckoutController dan method-methodnya ada
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return'); // Kemana user diarahkan setelah pembayaran
+Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
-// Jika payment history bisa dibuat manual (misal oleh admin)
-Route::prefix('payment-history')->name('payment-history.')->group(function () { // Mengubah nama prefix agar konsisten
-    Route::get('/create', [PaymentHistoryController::class, 'create'])->name('create')->middleware(['auth', IsAdmin::class]); // Hanya admin
-    Route::post('/store', [PaymentHistoryController::class, 'store'])->name('store')->middleware(['auth', IsAdmin::class]);   // Hanya admin
+Route::prefix('payment-history')->name('payment_history.')->group(function () {
+    Route::get('/create', [PaymentHistoryController::class, 'create'])->name('create');
+    Route::post('/store', [PaymentHistoryController::class, 'store'])->name('store');
 });
 
 // ===========================
 // 🔔 Notifikasi
 // ===========================
-// Pastikan NotificationController dan method-methodnya ada
-Route::middleware('auth')->prefix('notifications')->name('notifications.')->group(function () {
+Route::prefix('notifications')->name('notifications.')->group(function () {
     Route::get('/fetch', [NotificationController::class, 'fetchNotifications'])->name('fetch');
     Route::get('/count', [NotificationController::class, 'countNotification'])->name('count');
-    Route::post('/store', [NotificationController::class, 'store'])->name('store'); // Kapan notif di-store?
+    Route::post('/store', [NotificationController::class, 'store'])->name('store');
     Route::post('/markAsRead', [NotificationController::class, 'markAsRead'])->name('markAsRead');
 });
 
 // ===========================
 // ⭐ Review
 // ===========================
-// Menggunakan rute individual untuk kejelasan, bisa juga resource dengan ->only()
-// Pastikan ReviewController dan method-methodnya ada
-Route::middleware('auth')->group(function () { // Review biasanya butuh auth
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit'); // {review} untuk model binding
-    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update'); // {review} untuk model binding
-    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy'); // {review} untuk model binding
-});
-
-// Hapus rute ini jika tidak digunakan atau sudah dicakup ReviewController
-// Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
+Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
+Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
 
 // 🔐 Auth
 require __DIR__ . '/auth.php';
