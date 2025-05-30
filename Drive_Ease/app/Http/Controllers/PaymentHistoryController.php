@@ -33,7 +33,7 @@ class PaymentHistoryController extends Controller
             'start_date' => now()->addDays(2),
             'end_date' => now()->addDays(7),
             'total_price' => $request->price,
-            'status' => 'menunggu',
+            'status' => 'menunggu konfirmasi',
             'side_note' => 'Sewa berhasil dibuat pada ' . now()->format('d M Y, H:i'),
         ]);
 

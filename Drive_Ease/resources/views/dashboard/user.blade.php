@@ -35,11 +35,10 @@
                         Cari Kendaraan
                     </a>
 
-                    <form method="POST" action="{{ route('checkout') }}" class="inline-block">
+                    <form method="POST" action="{{ route('index') }}" class="inline-block">
                         @csrf
                         <button type="submit"
                                 class="inline bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-
                             Checkout
                         </button>
                     </form>
@@ -48,26 +47,43 @@
                 
                 <br> 
                 <h2><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold text-2xl">Status pembayaran terakhir</span></h2>
-                @if($bookings->count())
-                <table border="1" class="table border-0" style="margin-top: 10px;">
-                <thead style="background-color: #00ffae; font-weight: bold;">
-                        <tr>
-                            <th>Nama Kendaraan</th>
-                            <th>Tanggal Mulai</th>
-                            <th>Tanggal Selesai</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-white">
-                        <tr>
-                            <td>{{ $bookings[0]->vehicle->name }}</td>
-                            <td>{{ $bookings[0]->start_date }}</td>
-                            <td>{{ $bookings[0]->end_date }}</td>
-                            <td><strong>{{ ucfirst($bookings[0]->status) }}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                @endif
+                
+
+
+
+@if($bookings->count())
+    <table border="1" class="table border-0" style="margin-top: 10px;">
+        <thead style="background-color: #00ffae; font-weight: bold;">
+            <tr>
+                <th>Nama Kendaraan</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody class="text-white">
+            @foreach($bookings as $booking)
+            @if(in_array($booking->status, ['menunggu konfirmasi', 'konfirmasi']))
+
+                <tr>
+                    <td>{{ $booking->vehicle->name }}</td>
+                    <td>{{ $booking->start_date }}</td>
+                    <td>{{ $booking->end_date }}</td>
+                    <td><strong>{{ ucfirst($booking->status) }}</strong></td>
+                </tr>
+                            @endif
+
+            @endforeach
+        </tbody>
+    </table>
+@else
+    <p>Tidak ada booking dengan status yang diminta.</p>
+@endif
+
+
+
+
+
 
                 <br>
                 <h3><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);" class="fw-bold text-2xl">Riwayat Rental</span></h3>

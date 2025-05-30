@@ -12,7 +12,14 @@ use App\Http\Controllers\{
     RentalRentController,
     RentalVehicleController,
     ReviewController,
+<<<<<<< Updated upstream
     VehicleController
+=======
+    VehicleController,
+    DriverController,
+    RentalBookingController,
+    MidtransController
+>>>>>>> Stashed changes
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -58,6 +65,7 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 // ===========================
 // 👤 Pelanggan Routes
 // ===========================
+<<<<<<< Updated upstream
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
@@ -66,12 +74,18 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::post('/rents/{id}/reject', [RentController::class, 'rejectRent'])->name('rents.reject');
     Route::post('/rents/{id}/confirm', [RentController::class, 'reConfirm'])->name('rents.reConfirm');
     Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard.user');
+=======
+    Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
+>>>>>>> Stashed changes
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.mine');
     Route::get('/bookings/history', [BookingController::class, 'myBookings']);
     Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
+
+    // Dashboard
+    Route::get('/payment-status', [BookingController::class, 'PaymentStatus'])->name('payment.status')->middleware('auth');
 });
 
 
@@ -133,7 +147,7 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // ===========================
 // 🛠️ Admin Routes
 // ===========================
-Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Lihat histori pembayaran
@@ -147,27 +161,38 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
-Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
-Route::get('/payment-history/create', [PaymentHistoryController::class, 'create'])->name('payment_history.create');
-Route::post('/payment-history/store', [PaymentHistoryController::class, 'store'])->name('payment_history.store');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+    Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
+    Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
+    Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
+    Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+    Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
+    Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+    Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
 
 // ===========================
 // 🔔 Notifikasi
 // ===========================
-Route::get('/notifications/fetch', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
-Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
-Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
-Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::get('/notifications/fetch', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
+    Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
+    Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
+    Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 // ===========================
 // ⭐ Ulasan / Review
 // ===========================
+<<<<<<< Updated upstream
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+=======
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+>>>>>>> Stashed changes
 
 // 🔐 Auth routes
 require __DIR__ . '/auth.php';
