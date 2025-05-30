@@ -23,6 +23,7 @@
                                     <div class="flex flex-col gap-6">
                                         <!-- Header -->
                                         <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
+<<<<<<< Updated upstream:Drive_Ease/resources/views/rental/rent/index.blade.php
                                             <h2 class="text-xl font-bold text-gray-900">{{ $rent->car->name }}</h2>
                                             <span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
                                                 @if ($rent->status === 'menunggu') bg-yellow-100 text-yellow-800
@@ -30,6 +31,24 @@
                                                 @elseif($rent->status === 'tolak') bg-red-100 text-red-800 @endif">
                                                 {{ ucfirst($rent->status) }}
                                             </span>
+=======
+                                            <h2 class="text-xl font-bold text-white">{{ $booking->vehicle->name }}
+                                            </h2>
+                                                <span
+                                                    class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
+                                                    @if ($booking->status === 'menunggu konfirmasi' || $booking->status === 'menunggu pembayaran')
+                                                        bg-yellow-900 text-yellow-200
+                                                    @elseif($booking->status === 'konfirmasi')
+                                                        bg-green-900 text-green-200
+                                                    @elseif($booking->status === 'batal')
+                                                        bg-red-900 text-red-200
+                                                    @else
+                                                        bg-gray-700 text-white
+                                                    @endif
+                                                ">
+                                                    {{ ucfirst($booking->status) }}
+                                                </span>
+>>>>>>> Stashed changes:Drive_Ease/resources/views/rental/booking/index.blade.php
                                         </div>
 
                                         <!-- Details Grid -->

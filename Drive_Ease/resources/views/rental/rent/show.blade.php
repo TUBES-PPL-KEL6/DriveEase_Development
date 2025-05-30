@@ -46,6 +46,7 @@
                         <div class="lg:col-span-2 space-y-8">
                             <!-- Header with Status -->
                             <div class="space-y-4">
+<<<<<<< Updated upstream:Drive_Ease/resources/views/rental/rent/show.blade.php
                                 <h1 class="text-3xl font-bold text-gray-900">{{ $rent->car->name }}</h1>
                                 <span
                                     class="inline-flex px-4 py-2 rounded-full text-sm font-medium
@@ -55,6 +56,26 @@
                                     @else bg-gray-100 text-gray-800 @endif">
                                     {{ ucfirst($rent->status) }}
                                 </span>
+=======
+                                <h1 class="text-3xl font-bold text-gray-100">{{ $booking->vehicle->name }}</h1>
+@php
+    $statusClass = '';
+    if ($booking->status === 'menunggu konfirmasi' || $booking->status === 'menunggu pembayaran') {
+        $statusClass = 'bg-yellow-900 text-yellow-200';
+    } elseif ($booking->status === 'konfirmasi') {
+        $statusClass = 'bg-green-900 text-green-200';
+    } elseif ($booking->status === 'batal') {
+        $statusClass = 'bg-red-900 text-red-200';
+    } else {
+        $statusClass = 'bg-gray-700 text-white';
+    }
+@endphp
+
+<span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium {{ $statusClass }}">
+    {{ ucfirst($booking->status) }}
+</span>
+
+>>>>>>> Stashed changes:Drive_Ease/resources/views/rental/booking/show.blade.php
                             </div>
 
                             <!-- Customer Info -->
@@ -157,7 +178,11 @@
                             <!-- Action Buttons -->
                             @if ($diffInHours >= 24)
                                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
+<<<<<<< Updated upstream:Drive_Ease/resources/views/rental/rent/show.blade.php
                                     @if ($rent->status === 'menunggu')
+=======
+                                    @if ($booking->status === 'menunggu konfirmasi')
+>>>>>>> Stashed changes:Drive_Ease/resources/views/rental/booking/show.blade.php
                                         <button type="button"
                                             class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 
                                         text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
