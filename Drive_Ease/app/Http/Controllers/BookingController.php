@@ -145,42 +145,18 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        // Cegah jika status sudah approved atau cancelled
-        if (in_array($booking->status, ['approved', 'cancelled'])) {
+        // Cegah jika status sudah konfirmasi atau batal
+        if (in_array($booking->status, ['konfirmasi', 'batal'])) {
             return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
         }
 
-        // Ganti status menjadi approved
-        $booking->status = 'approved';
+        // Ganti status menjadi konfirmasi
+        $booking->status = 'konfirmasi';
         $booking->save();
 
-        return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+        return redirect()->route('admin.payment.index')->with('success', 'Booking dikonfirmasi.');
     }
 
-    // public function cancel($id)
-    // {
-    //     $booking = Booking::findOrFail($id);
-
-    //     // Cegah jika status sudah approved atau cancelled
-    //     if (in_array($booking->status, ['approved', 'cancelled'])) {
-    //         return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
-    //     }
-
-    //     $booking->status = 'cancelled';
-    //     $booking->save();
-
-    //     // push notification to vehicle owner
-    //     $notification = Notification::create([
-    //         'user_id' => $booking->vehicle->rental_id,
-    //         'title' => 'Pemesanan Dibatalkan',
-    //         'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan.',
-    //         'type' => 'rent',
-    //         'status' => 'unread',
-    //         'link' => '/rental/rents',
-    //     ]);
-
-    //     return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
-    // }
 
     public function Booking_Dashboard(Request $request)
     {
