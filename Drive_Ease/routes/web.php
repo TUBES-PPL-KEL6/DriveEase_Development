@@ -13,12 +13,14 @@ use App\Http\Controllers\{
     VehicleController,
     DriverController,
     RentalBookingController,
-    RentalRentController
+    RentalRentController,
+    AdminDashboardController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
 use App\Livewire\Admin\PaymentReportTable;
+use App\Http\Controllers\Admin\UserController;
 
 // ===========================
 // 🔐 Akses Umum
@@ -101,7 +103,14 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // User Management
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+    // Transaction Management
+    Route::get('/transactions', [App\Http\Controllers\Admin\AdminTransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{rental}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'show'])->name('transactions.show');
 
     // Riwayat pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
@@ -111,6 +120,9 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     // Approve dan Cancel Booking
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
     Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+    // User Management
+    Route::resource('users', UserController::class);
 });
 
 // ===========================
