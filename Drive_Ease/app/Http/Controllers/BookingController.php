@@ -151,16 +151,16 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        // Cegah jika status sudah approved atau cancelled
-        if (in_array($booking->status, ['approved', 'cancelled'])) {
+        // Cegah jika status sudah konfirmasi atau batal
+        if (in_array($booking->status, ['konfirmasi', 'batal'])) {
             return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
         }
 
-        // Ganti status menjadi approved
-        $booking->status = 'approved';
+        // Ganti status menjadi konfirmasi
+        $booking->status = 'konfirmasi';
         $booking->save();
 
-        return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+        return redirect()->route('admin.payment.index')->with('success', 'Booking dikonfirmasi.');
     }
 
 
