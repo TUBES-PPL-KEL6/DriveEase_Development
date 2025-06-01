@@ -109,6 +109,10 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 
     // Flagged Reviews
     Route::post('/reviews/flag', [FlaggedReviewController::class, 'store'])->name('reviews.flag');
+
+    // Rental History
+    Route::get('/history', [\App\Http\Controllers\Rental\BookingController::class, 'history'])->name('history');
+    Route::get('/bookings/export', [\App\Http\Controllers\Rental\BookingController::class, 'export'])->name('bookings.export');
 });
 
 // ===========================

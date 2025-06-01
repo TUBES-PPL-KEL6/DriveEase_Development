@@ -6,6 +6,10 @@
     $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
     $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
     $lastChangeDate = $startDateForAction->copy()->subDay();
+    $rentalReview = $booking->rentalReview;
+    $customerReview = \App\Models\Review::where('user_id', $booking->user_id)
+        ->where('vehicle_id', $booking->vehicle_id)
+        ->first();
 @endphp
 
 @section('content')
@@ -105,14 +109,7 @@
 
                                 {{-- Tombol untuk Tulis/Edit Ulasan --}}
                                 @if ($booking->status === 'selesai')
-                                    @php
-                                        // Asumsi $booking memiliki relasi 'review' (hasOne)
-                                        $userReview = $booking
-                                            ->review()
-                                            ->where('user_id', auth()->id())
-                                            ->first();
-                                    @endphp
-                                    @if (!$userReview)
+                                    @if (!$customerReview)
                                         <a href="{{ route('reviews.create', ['booking_id' => $booking->id, 'vehicle_id' => $booking->vehicle_id]) }}"
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition duration-150">
                                             <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="currentColor"
@@ -124,7 +121,7 @@
                                             Tulis Ulasan
                                         </a>
                                     @else
-                                        <a href="{{ route('reviews.edit', $userReview->id) }}"
+                                        <a href="{{ route('reviews.edit', $customerReview->id) }}"
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
                                             <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">

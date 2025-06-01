@@ -58,4 +58,17 @@ class RentalDashboardController extends Controller
             'vehicleRatings'
         ));
     }
+
+    public function history()
+    {
+        $user = auth()->user();
+        $bookings = \App\Models\Booking::whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['vehicle', 'user'])
+            ->latest()
+            ->get();
+
+        return view('rental.history', compact('bookings'));
+    }
 }
