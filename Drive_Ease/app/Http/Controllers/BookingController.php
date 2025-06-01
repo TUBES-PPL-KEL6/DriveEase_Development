@@ -57,7 +57,6 @@ class BookingController extends Controller
             'type' => 'rent',
             'status' => 'unread',
             'link' => '/rental/bookings/' . $booking->id,
-
         ]);
 
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
@@ -99,13 +98,7 @@ class BookingController extends Controller
             if ($request->has('end_date')) {
                 $booking->end_date = $request->end_date;
             }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
             $booking->status = 'menunggu pembayaran';
             $booking->side_note = $request->side_note;
             $booking->save();
@@ -149,7 +142,6 @@ class BookingController extends Controller
         }
     }
 
-
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);
@@ -190,15 +182,9 @@ class BookingController extends Controller
         ]);
     }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 public function PaymentStatus(Request $request)
-=======
-    public function PaymentStatus(Request $request)
->>>>>>> Stashed changes
-=======
-public function PaymentStatus(Request $request)
->>>>>>> Stashed changes
+
 {
     $bookings = Booking::where('user_id', auth()->id())
         ->whereIn('status', ['menunggu konfirmasi', 'konfirmasi'])
@@ -206,7 +192,6 @@ public function PaymentStatus(Request $request)
         ->latest()
         ->get();
 
-<<<<<<< Updated upstream
     // Ambil kendaraan yang tersedia dengan filter
     $vehicles = Vehicle::query()
         ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
@@ -220,14 +205,6 @@ public function PaymentStatus(Request $request)
         'bookings' => $bookings,
         'vehicles' => $vehicles,
     ]);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
-=======
-    return view('payment.status', compact('bookings'));
-}
-
->>>>>>> Stashed changes
 }
 }
