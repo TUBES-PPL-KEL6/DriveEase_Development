@@ -119,7 +119,7 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
 
     // User Management
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
