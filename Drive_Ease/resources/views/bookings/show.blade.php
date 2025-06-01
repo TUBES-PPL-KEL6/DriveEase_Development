@@ -36,7 +36,7 @@
                             </div>
 
                             <div>
-
+                                <div
                                     class="w-full text-center p-3 rounded-lg border
                                     @if ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
                                     @elseif($booking->status === 'menunggu konfirmasi') bg-gray-500 text-white
