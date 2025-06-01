@@ -34,7 +34,10 @@
                         Cari Kendaraan Baru
                     </a>
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                     <form method="POST" action="{{ route('index') }}" class="inline-block">
                         @csrf
                         <button type="submit"

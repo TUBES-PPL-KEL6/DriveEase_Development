@@ -5,8 +5,12 @@
         "This file is @generated automatically"
     ],
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "content-hash": "2d7c699645a9ac692d8aa75c74730bcc",
 
+=======
+    "content-hash": "1940ec5ece79a22c0af8670098d072ce",
+>>>>>>> Stashed changes
 =======
     "content-hash": "1940ec5ece79a22c0af8670098d072ce",
 >>>>>>> Stashed changes
@@ -2090,7 +2094,10 @@
         },
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             "name": "midtrans/midtrans-php",
@@ -2155,7 +2162,10 @@
         },
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             "name": "monolog/monolog",

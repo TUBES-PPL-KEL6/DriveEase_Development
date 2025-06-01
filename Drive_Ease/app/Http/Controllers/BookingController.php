@@ -100,7 +100,10 @@ class BookingController extends Controller
                 $booking->end_date = $request->end_date;
             }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             $booking->status = 'menunggu pembayaran';
@@ -188,9 +191,13 @@ class BookingController extends Controller
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 public function PaymentStatus(Request $request)
 =======
     public function PaymentStatus(Request $request)
+>>>>>>> Stashed changes
+=======
+public function PaymentStatus(Request $request)
 >>>>>>> Stashed changes
 {
     $bookings = Booking::where('user_id', auth()->id())
@@ -199,6 +206,7 @@ public function PaymentStatus(Request $request)
         ->latest()
         ->get();
 
+<<<<<<< Updated upstream
     // Ambil kendaraan yang tersedia dengan filter
     $vehicles = Vehicle::query()
         ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
@@ -214,6 +222,11 @@ public function PaymentStatus(Request $request)
     ]);
 <<<<<<< Updated upstream
 =======
+
+>>>>>>> Stashed changes
+=======
+    return view('payment.status', compact('bookings'));
+}
 
 >>>>>>> Stashed changes
 }

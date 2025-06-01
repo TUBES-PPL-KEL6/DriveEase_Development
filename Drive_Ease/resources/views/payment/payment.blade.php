@@ -6,10 +6,17 @@
             <!-- Back Button -->
             <div class="mb-6">
                 <a href="{{ route('index') }}"
+<<<<<<< Updated upstream
                     class="w-full lg:w-40 inline-flex items-center justify-center px-4 py-2.5 rounded-lg
                                         bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700
                                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
                                         transition ease-in-out duration-150">
+=======
+                    class="inline-flex items-center px-4 py-2 bg-dark rounded-lg border border-gray-600 
+                    text-sm font-medium text-gray-300 hover:bg-gray-800 
+                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
+                    transition-all duration-200">
+>>>>>>> Stashed changes
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -26,7 +33,11 @@
 
 
 
+<<<<<<< Updated upstream
             <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200">
+=======
+            <div class="bg-dark rounded-xl shadow-sm">
+>>>>>>> Stashed changes
                 <div class="p-8">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <!-- Car Image Section -->
@@ -41,13 +52,21 @@
                             <div class="mt-4">
                                 <div
                                     class="w-full text-center p-3 rounded-lg border border-gray-600
+<<<<<<< Updated upstream
                                     @if ($payment->status === 'menunggu pembayaran') bg-yellow-900 text-yellow-200
                                     @elseif ($payment->status === 'menunggu konfirmasi') bg-dark text-gray-200
+=======
+                                    @if ($payment->status === 'menunggu') bg-yellow-900 text-yellow-200
+>>>>>>> Stashed changes
                                     @elseif($payment->status === 'konfirmasi') bg-green-900 text-green-200
                                     @elseif($payment->status === 'berjalan') bg-blue-900 text-blue-200
                                     @elseif($payment->status === 'selesai') bg-gray-800 text-gray-200
                                     @elseif($payment->status === 'batal' || $payment->status === 'tolak') bg-red-900 text-red-200
+<<<<<<< Updated upstream
                                     @else bg-dark text-gray-200 @endif">
+=======
+                                    @else bg-gray-800 text-gray-200 @endif">
+>>>>>>> Stashed changes
                                     <span class="text-sm font-medium">Status:</span>
                                     <span class="ml-2 font-semibold">
                                         @if ($payment->status === 'menunggu')
@@ -71,7 +90,11 @@
 
                             <!-- Action Buttons -->
                             <div class="mt-6 space-y-3">
+<<<<<<< Updated upstream
                                 @if ($payment->status === 'menunggu pembayaran' || $payment->status === 'konfirmasi')
+=======
+                                @if ($payment->status === 'menunggu' || $payment->status === 'konfirmasi')
+>>>>>>> Stashed changes
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
                                         data-bs-toggle="modal" data-bs-target="#cancelRentModal">
@@ -116,11 +139,16 @@
                         <div class="lg:col-span-2 space-y-6">
                             <!-- Car Info -->
                             <div>
+<<<<<<< Updated upstream
                                 <h1 class="text-3xl font-bold mb-2">{{ $payment->vehicle->name }}</h1>
+=======
+                                <h1 class="text-3xl font-bold text-gray-100 mb-2">{{ $payment->vehicle->name }}</h1>
+>>>>>>> Stashed changes
                                 <p class="text-gray-400">{{ $payment->vehicle->description }}</p>
                             </div>
 
                             <!-- PaymentDetails -->
+<<<<<<< Updated upstream
                             <div class="border border-dark bg-white rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold">Pembayaran</h3>
                                 
@@ -164,28 +192,84 @@
                                             <p class="text-sm text-gray-400">Supported Payment</p>
                                             <p class="text-base font-medium">Gopay, ShopeePay, Bank Digital, dan lainnya.</p>
                                     </div>
+=======
+                            <div class="bg-gray-800 rounded-xl p-4 space-y-2">
+                                <h3 class="text-lg font-semibold text-gray-100">Pembayaran</h3>
+
+
+
+
+                                <!-- Include Snap.js Midtrans -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-O8tHu5YdW5g95-p5"></script>
+
+<!-- Tombol Bayar -->
+@if ($payment->status === 'sudah dibayar')
+    <button disabled class="bg-gray-500 text-white px-4 py-2 rounded cursor-not-allowed">Sudah Dibayar</button>
+@else
+    <button id="pay-button" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar Sekarang</button>
+    <!-- Script JS Midtrans disini -->
+@endif
+
+
+
+
+<script type="text/javascript">
+    document.getElementById('pay-button').addEventListener('click', function () {
+        window.snap.pay('{{ $snapToken }}', {
+            onSuccess: function(result){
+                // Simpan hasil pembayaran ke server (opsional via AJAX)
+                alert("Pembayaran Berhasil");
+                window.location.href = "{{ route('user.dashboard.user') }}"; // arahkan ke home
+            },
+            onPending: function(result){
+                alert("Menunggu Pembayaran");
+            },
+            onError: function(result){
+                alert("Pembayaran Gagal");
+            }
+        });
+    });
+</script>
+>>>>>>> Stashed changes
 
 
 
 
 </div>
                             <!-- Rental Details -->
+<<<<<<< Updated upstream
                             <div class="border border-dark bg-white rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold">Detail Penyewaan</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Tanggal Mulai</p>
                                         <p class="text-base font-medium">
+=======
+                            <div class="bg-gray-800 rounded-xl p-4 space-y-2">
+                                <h3 class="text-lg font-semibold text-gray-100">Detail Penyewaan</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-400">Tanggal Mulai</p>
+                                        <p class="text-base font-medium text-gray-100">
+>>>>>>> Stashed changes
                                             {{ \Carbon\Carbon::parse($payment->start_date)->format('l, d F Y') }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Tanggal Selesai</p>
+<<<<<<< Updated upstream
                                         <p class="text-base font-medium">
+=======
+                                        <p class="text-base font-medium text-gray-100">
+>>>>>>> Stashed changes
                                             {{ \Carbon\Carbon::parse($payment->end_date)->format('l, d F Y') }}</p>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Durasi</p>
+<<<<<<< Updated upstream
                                         <p class="text-base font-medium">
+=======
+                                        <p class="text-base font-medium text-gray-100">
+>>>>>>> Stashed changes
                                             {{ \Carbon\Carbon::parse($payment->start_date)->diffInDays($payment->end_date) }}
                                             hari</p>
                                     </div>
@@ -198,24 +282,38 @@
                             </div>
 
                             <!-- Rental Owner Info -->
+<<<<<<< Updated upstream
                             <div class="border border-dark bg-white rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold">Informasi Rental</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Nama Rental</p>
                                         <p class="text-base font-medium">
+=======
+                            <div class="bg-gray-800 rounded-xl p-4 space-y-2">
+                                <h3 class="text-lg font-semibold text-gray-100">Informasi Rental</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-400">Nama Rental</p>
+                                        <p class="text-base font-medium text-gray-100">
+>>>>>>> Stashed changes
                                             {{ ucfirst($payment->vehicle->rental->name) }}
                                         </p>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Email</p>
+<<<<<<< Updated upstream
                                         <p class="text-base font-medium">
+=======
+                                        <p class="text-base font-medium text-gray-100">
+>>>>>>> Stashed changes
                                             {{ $payment->vehicle->rental->email }}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Vehicle Details -->
+<<<<<<< Updated upstream
                             <div class="border border-dark bg-white rounded-xl p-4 space-y-2">
                                 <h3 class="text-lg font-semibold">Spesifikasi Kendaraan</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -226,11 +324,27 @@
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Kategori</p>
                                         <p class="text-base font-medium">{{ $payment->vehicle->category }}
+=======
+                            <div class="bg-gray-800 rounded-xl p-4 space-y-2">
+                                <h3 class="text-lg font-semibold text-gray-100">Spesifikasi Kendaraan</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-400">Nama</p>
+                                        <p class="text-base font-medium text-gray-100">{{ $payment->vehicle->name }}</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-400">Kategori</p>
+                                        <p class="text-base font-medium text-gray-100">{{ $payment->vehicle->category }}
+>>>>>>> Stashed changes
                                         </p>
                                     </div>
                                     <div class="space-y-2">
                                         <p class="text-sm text-gray-400">Lokasi</p>
+<<<<<<< Updated upstream
                                         <p class="text-base font-medium">{{ $payment->vehicle->location }}
+=======
+                                        <p class="text-base font-medium text-gray-100">{{ $payment->vehicle->location }}
+>>>>>>> Stashed changes
                                         </p>
                                     </div>
                                 </div>
