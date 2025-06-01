@@ -365,22 +365,6 @@
     </div>
 </section>
 
-
-{{-- Footer --}}
-<footer class="pt-5 pb-4">
-    <div class="container text-center">
-        <div class="footer-brand mb-2">🚗 DriveEase</div>
-        <p class="mb-3">Menyediakan solusi sewa mobil yang mudah, aman, dan terpercaya untuk setiap perjalanan Anda.</p>
-        <div class="social-icons mb-3">
-            <a href="#" aria-label="Instagram DriveEase"><i class="bi bi-instagram"></i></a>
-            <a href="#" aria-label="Twitter DriveEase"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" aria-label="Facebook DriveEase"><i class="bi bi-facebook"></i></a>
-            <a href="#" aria-label="LinkedIn DriveEase"><i class="bi bi-linkedin"></i></a>
-        </div>
-        <p class="text-muted"><small>&copy; <span id="currentYear"></span> DriveEase. All rights reserved. Didesain dengan ❤️</small></p>
-    </div>
-</footer>
-
 {{-- JS Scripts --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

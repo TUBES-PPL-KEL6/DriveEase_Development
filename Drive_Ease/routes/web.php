@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     RentalBookingController,
     MidtransController,
     RentalRentController,
-    RentalDashboardController
+    RentalDashboardController,
+    RentalReviewController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -98,6 +99,9 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 
     // Driver Management
     Route::resource('drivers', DriverController::class);
+
+    // Reviews
+    Route::resource('reviews', \App\Http\Controllers\RentalReviewController::class)->except(['show']);
 });
 
 // ===========================
@@ -164,6 +168,8 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
 // ===========================
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
+
+Route::post('/rental/reviews/{booking}', [RentalReviewController::class, 'store'])->name('rental.reviews.store');
 
 // 🔐 Auth
 require __DIR__ . '/auth.php';
