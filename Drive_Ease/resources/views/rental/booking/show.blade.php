@@ -44,7 +44,8 @@
                                 <h1 class="text-3xl font-bold text-gray-900">{{ $booking->vehicle->name }}</h1>
                                 <span
                                     class="mt-2 inline-flex px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide
-                                    @if ($booking->status === 'menunggu') bg-yellow-500 text-white
+                                    @if ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
+                                    @elseif($booking->status === 'menunggu konfirmasi') bg-gray-500 text-white
                                     @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
                                     @elseif($booking->status === 'berjalan') bg-green-500 text-white
                                     @elseif($booking->status === 'selesai') bg-gray-500 text-white
@@ -243,7 +244,7 @@
 
                             @if ($diffInHours >= 24)
                                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                                    @if ($booking->status === 'menunggu')
+                                    @if ($booking->status === 'menunggu konfirmasi')
                                         <button type="button"
                                             class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 
                                                    text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 

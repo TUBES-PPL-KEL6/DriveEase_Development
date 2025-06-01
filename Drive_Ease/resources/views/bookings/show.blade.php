@@ -36,14 +36,14 @@
                             </div>
 
                             <div>
-                                <div
+
                                     class="w-full text-center p-3 rounded-lg border
-                                    @if ($booking->status === 'menunggu') bg-yellow-50 text-yellow-800 border-yellow-300
-                                    @elseif($booking->status === 'konfirmasi') bg-green-50 text-green-800 border-green-300
-                                    @elseif($booking->status === 'berjalan') bg-blue-50 text-blue-800 border-blue-300
-                                    @elseif($booking->status === 'selesai') bg-gray-100 text-gray-700 border-gray-300
-                                    @elseif($booking->status === 'batal') bg-red-50 text-red-800 border-red-300  {{-- Dibatalkan oleh user --}}
-                                    @else bg-gray-50 text-gray-800 border-gray-300 @endif">
+                                    @if ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
+                                    @elseif($booking->status === 'menunggu konfirmasi') bg-gray-500 text-white
+                                    @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
+                                    @elseif($booking->status === 'berjalan') bg-green-500 text-white
+                                    @elseif($booking->status === 'selesai') bg-gray-500 text-white
+                                    @elseif($booking->status === 'batal') bg-red-500 text-white @endif">
                                     <span class="text-sm font-medium">Status:</span>
                                     <span class="ml-1.5 rtl:mr-1.5 rtl:ml-0 font-semibold text-sm">
                                         @if ($booking->status === 'menunggu')
