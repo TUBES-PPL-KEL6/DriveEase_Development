@@ -38,6 +38,7 @@
                             </div>
                         </div>
 
+<<<<<<< Updated upstream
                         <div class="lg:col-span-2 space-y-6">
 
                             <div class="pb-4 border-b border-gray-200">
@@ -52,6 +53,30 @@
                                     @elseif($booking->status === 'batal') bg-red-500 text-white @endif">
                                     {{ ucfirst($booking->status) }}
                                 </span>
+=======
+                        <!-- Rental Details Section -->
+                        <div class="lg:col-span-2 space-y-8">
+                            <!-- Header with Status -->
+                            <div class="space-y-4">
+                                <h1 class="text-3xl font-bold text-gray-100">{{ $booking->vehicle->name }}</h1>
+@php
+    $statusClass = '';
+    if ($booking->status === 'menunggu konfirmasi' || $booking->status === 'menunggu pembayaran') {
+        $statusClass = 'bg-yellow-900 text-yellow-200';
+    } elseif ($booking->status === 'konfirmasi') {
+        $statusClass = 'bg-green-900 text-green-200';
+    } elseif ($booking->status === 'batal') {
+        $statusClass = 'bg-red-900 text-red-200';
+    } else {
+        $statusClass = 'bg-gray-700 text-white';
+    }
+@endphp
+
+<span class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium {{ $statusClass }}">
+    {{ ucfirst($booking->status) }}
+</span>
+
+>>>>>>> Stashed changes
                             </div>
 
                             <div class=" rounded-lg p-6 border border-gray-200 space-y-4">
@@ -243,7 +268,11 @@
                             </div>
 
                             @if ($diffInHours >= 24)
+<<<<<<< Updated upstream
                                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
+=======
+                                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+>>>>>>> Stashed changes
                                     @if ($booking->status === 'menunggu konfirmasi')
                                         <button type="button"
                                             class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 

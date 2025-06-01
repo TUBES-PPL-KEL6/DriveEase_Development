@@ -13,11 +13,15 @@ use App\Http\Controllers\{
     VehicleController,
     DriverController,
     RentalBookingController,
+<<<<<<< Updated upstream
     MidtransController,
     RentalDashboardController
     RentalRentController,
     AdminDashboardController
 
+=======
+    MidtransController
+>>>>>>> Stashed changes
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -61,8 +65,12 @@ Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles
 // ===========================
 // 👤 Pelanggan
 // ===========================
+<<<<<<< Updated upstream
 
 Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
+=======
+    Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->group(function () {
+>>>>>>> Stashed changes
 
     Route::get('/dashboard', fn() => view('dashboard.user'))->name('dashboard');
     Route::get('/rents', [RentController::class, 'index'])->name('rents.index');
@@ -94,7 +102,10 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 
     // Dashboard
     Route::get('/payment-status', [BookingController::class, 'PaymentStatus'])->name('payment.status')->middleware('auth');
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 });
 
 // ===========================
@@ -166,6 +177,22 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 
     // Lihat histori pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
+<<<<<<< Updated upstream
+=======
+});
+
+require __DIR__ . '/auth.php';
+
+
+// ===========================
+// 🛠️ Admin Routes
+// ===========================
+    Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
+
+    // Lihat histori pembayaran
+    Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('admin.payment.index');
+>>>>>>> Stashed changes
 
     // Approve dan Reject Status
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
@@ -186,8 +213,11 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
     Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
     Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
     Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
+<<<<<<< Updated upstream
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
+=======
+>>>>>>> Stashed changes
 
 Route::post('/payment/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
@@ -200,11 +230,15 @@ Route::prefix('payment-history')->name('payment_history.')->group(function () {
 // ===========================
 // 🔔 Notifikasi
 // ===========================
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     Route::get('/notifications/fetch', [NotificationController::class, 'fetchNotifications'])->name('notifications.fetch');
     Route::get('/notifications/count', [NotificationController::class, 'countNotification'])->name('notifications.count');
     Route::post('/notifications/store', [NotificationController::class, 'store'])->name('notifications.store');
     Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+<<<<<<< Updated upstream
 
 Route::prefix('notifications')->name('notifications.')->group(function () {
     Route::get('/fetch', [NotificationController::class, 'fetchNotifications'])->name('fetch');
@@ -213,10 +247,13 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
     Route::post('/markAsRead', [NotificationController::class, 'markAsRead'])->name('markAsRead');
 });
 
+=======
+>>>>>>> Stashed changes
 
 // ===========================
 // ⭐ Review
 // ===========================
+<<<<<<< Updated upstream
 
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 
@@ -224,6 +261,12 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+=======
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+>>>>>>> Stashed changes
 
 Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
 
