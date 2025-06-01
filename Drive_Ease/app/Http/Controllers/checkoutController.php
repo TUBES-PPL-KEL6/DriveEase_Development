@@ -40,11 +40,7 @@ class CheckoutController extends Controller
         return view('payment.payment', compact('payment'));
     }
 
-<<<<<<< Updated upstream
-   public function payment($id)
-=======
 public function payment($id)
->>>>>>> Stashed changes
 {
     $payment = Booking::findOrFail($id);
 
@@ -52,17 +48,12 @@ public function payment($id)
         return redirect()->route('home')->with('success', 'Pembayaran sudah dilakukan.');
     }
 
-<<<<<<< Updated upstream
-    Config::$serverKey = config('midtrans.server_key');
-    Config::$isProduction = config('midtrans.is_production');
-=======
     // Konfigurasi Midtrans
     Config::$serverKey = config('services.midtrans.server_key');
     Config::$clientKey = config('services.midtrans.client_key');
     Config::$isProduction = config('services.midtrans.is_production');
     Config::$isSanitized = true;
     Config::$is3ds = true;
->>>>>>> Stashed changes
 
     // Buat order ID dan simpan
     $orderId = 'TRX-' . uniqid();
@@ -85,12 +76,6 @@ public function payment($id)
 
     $snapToken = Snap::getSnapToken($params);
 
-<<<<<<< Updated upstream
-    return view('payment.payment', compact('payment', 'snapToken'));
-}
-
-
-=======
     return view('payment.payment', [
         'payment' => $payment,
         'snapToken' => $snapToken,
@@ -99,7 +84,6 @@ public function payment($id)
 
 
 
->>>>>>> Stashed changes
         public function Dashboard(Request $request)
     {
         // logic buat dashboard user (kalau ada)

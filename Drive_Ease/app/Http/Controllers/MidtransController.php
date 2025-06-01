@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< Updated upstream
-=======
 use App\Models\Booking;
 use Midtrans\Config;
 use Midtrans\Snap;
->>>>>>> Stashed changes
 
 class MidtransController extends Controller
 {

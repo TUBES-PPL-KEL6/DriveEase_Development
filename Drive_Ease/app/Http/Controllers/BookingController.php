@@ -57,7 +57,6 @@ class BookingController extends Controller
             'type' => 'rent',
             'status' => 'unread',
             'link' => '/rental/bookings/' . $booking->id,
-
         ]);
 
         return redirect()->route('user.bookings.mine')->with('success', 'Pemesanan berhasil dikirim!');
@@ -99,10 +98,6 @@ class BookingController extends Controller
             if ($request->has('end_date')) {
                 $booking->end_date = $request->end_date;
             }
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
             $booking->status = 'menunggu pembayaran';
             $booking->side_note = $request->side_note;
             $booking->save();
@@ -146,21 +141,20 @@ class BookingController extends Controller
         }
     }
 
-
     public function approve($id)
     {
         $booking = Booking::findOrFail($id);
 
-        // Cegah jika status sudah approved atau cancelled
-        if (in_array($booking->status, ['approved', 'cancelled'])) {
+        // Cegah jika status sudah konfirmasi atau batal
+        if (in_array($booking->status, ['konfirmasi', 'batal'])) {
             return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
         }
 
-        // Ganti status menjadi approved
-        $booking->status = 'approved';
+        // Ganti status menjadi konfirmasi
+        $booking->status = 'konfirmasi';
         $booking->save();
 
-        return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+        return redirect()->route('admin.payment.index')->with('success', 'Booking dikonfirmasi.');
     }
 
 
@@ -187,11 +181,7 @@ class BookingController extends Controller
         ]);
     }
 
-<<<<<<< Updated upstream
-public function PaymentStatus(Request $request)
-=======
     public function PaymentStatus(Request $request)
->>>>>>> Stashed changes
 {
     $bookings = Booking::where('user_id', auth()->id())
         ->whereIn('status', ['menunggu konfirmasi', 'konfirmasi'])
@@ -212,9 +202,6 @@ public function PaymentStatus(Request $request)
         'bookings' => $bookings,
         'vehicles' => $vehicles,
     ]);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 }
 }
