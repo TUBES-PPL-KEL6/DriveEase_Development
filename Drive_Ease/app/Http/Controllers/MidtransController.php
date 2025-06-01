@@ -7,6 +7,7 @@ use App\Models\Booking;
 use Midtrans\Config;
 use Midtrans\Snap;
 
+
 class MidtransController extends Controller
 {
     public function notificationHandler(Request $request)

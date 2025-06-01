@@ -98,6 +98,7 @@ class BookingController extends Controller
             if ($request->has('end_date')) {
                 $booking->end_date = $request->end_date;
             }
+
             $booking->status = 'menunggu pembayaran';
             $booking->side_note = $request->side_note;
             $booking->save();
@@ -181,7 +182,9 @@ class BookingController extends Controller
         ]);
     }
 
-    public function PaymentStatus(Request $request)
+
+public function PaymentStatus(Request $request)
+
 {
     $bookings = Booking::where('user_id', auth()->id())
         ->whereIn('status', ['menunggu konfirmasi', 'konfirmasi'])
