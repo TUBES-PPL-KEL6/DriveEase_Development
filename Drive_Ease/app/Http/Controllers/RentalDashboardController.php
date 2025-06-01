@@ -21,14 +21,20 @@ class RentalDashboardController extends Controller
             ->flatMap->bookings // gabungkan semua bookings
             ->sum('total_price'); // jumlahkan total_price dari semua booking
 
-
-
         $mostRentedVehicles = $user->vehicles()
             ->withCount('bookings')
             ->orderByDesc('bookings_count')
             ->take(5)
             ->get();
 
-        return view('dashboard.rental', compact('totalBookings', 'totalRevenue', 'mostRentedVehicles'));
+        // Show all completed bookings for this rental, not just those not yet reviewed
+        $completedBookings = \App\Models\Booking::where('status', 'selesai')
+            ->whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['user', 'vehicle', 'rentalReview'])
+            ->get();
+
+        return view('dashboard.rental', compact('totalBookings', 'totalRevenue', 'mostRentedVehicles', 'completedBookings'));
     }
 }
