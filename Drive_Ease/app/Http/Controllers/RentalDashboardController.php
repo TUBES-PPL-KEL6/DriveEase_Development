@@ -17,9 +17,11 @@ class RentalDashboardController extends Controller
 
         $totalRevenue = $user->vehicles()
             ->with('bookings')
-            ->get()
-            ->flatMap->bookings
-            ->sum('total_price');
+            ->get() // gunakan get() untuk ambil koleksi kendaraan
+            ->flatMap->bookings // gabungkan semua bookings
+            ->sum('total_price'); // jumlahkan total_price dari semua booking
+
+
 
         $mostRentedVehicles = $user->vehicles()
             ->withCount('bookings')

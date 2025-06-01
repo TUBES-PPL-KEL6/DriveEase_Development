@@ -14,12 +14,10 @@ use App\Http\Controllers\{
     DriverController,
     RentalBookingController,
     MidtransController,
-<<<<<<< Updated upstream
-    RentalRentController
-=======
-    RentalRentController,
     RentalDashboardController
->>>>>>> Stashed changes
+    RentalRentController,
+    AdminDashboardController
+
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -121,10 +119,7 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 // ===========================
 // 🛠️ Admin
 // ===========================
-<<<<<<< Updated upstream
-    Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
-=======
+
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -134,7 +129,6 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     // Transaction Management
     Route::get('/transactions', [App\Http\Controllers\Admin\AdminTransactionController::class, 'index'])->name('transactions.index');
     Route::get('/transactions/{rental}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'show'])->name('transactions.show');
->>>>>>> Stashed changes
 
     // Riwayat pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
@@ -184,12 +178,7 @@ Route::middleware(['auth', 'isRental'])->prefix('rental')->name('rental.')->grou
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
-<<<<<<< Updated upstream
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
-=======
-
- Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
->>>>>>> Stashed changes
     Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
     Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
     Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
