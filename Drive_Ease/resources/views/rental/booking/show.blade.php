@@ -45,10 +45,19 @@
                                 <h1 class="text-3xl font-bold text-gray-100">{{ $booking->vehicle->name }}</h1>
                                 <span
                                     class="mt-2 inline-flex px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide
+<<<<<<< Updated upstream
                                     @if ($booking->status === 'menunggu') bg-yellow-700 text-yellow-100
                                     @elseif($booking->status === 'konfirmasi') bg-green-700 text-green-100
                                     @elseif($booking->status === 'batal') bg-red-700 text-red-100 
                                     @else bg-gray-700 text-gray-100 @endif"> {{-- Warna badge disesuaikan tema gelap --}}
+=======
+                                    @if ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
+                                    @elseif($booking->status === 'menunggu konfirmasi') bg-gray-500 text-white
+                                    @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
+                                    @elseif($booking->status === 'berjalan') bg-green-500 text-white
+                                    @elseif($booking->status === 'selesai') bg-gray-500 text-white
+                                    @elseif($booking->status === 'batal') bg-red-500 text-white @endif">
+>>>>>>> Stashed changes
                                     {{ ucfirst($booking->status) }}
                                 </span>
                             </div>
@@ -213,7 +222,7 @@
 
                             @if ($diffInHours >= 24) {{-- Kondisi umum untuk bisa aksi --}}
                                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                                    @if ($booking->status === 'menunggu')
+                                    @if ($booking->status === 'menunggu konfirmasi')
                                         <button type="button"
                                             class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-green-600 rounded-lg font-semibold 
                                                    text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 

@@ -55,7 +55,11 @@ class DriverController extends Controller
      */
     public function create()
     {
+<<<<<<< Updated upstream
         return view('rental.driver.form');
+=======
+        return view('rental.driver.create');
+>>>>>>> Stashed changes
     }
 
     /**
