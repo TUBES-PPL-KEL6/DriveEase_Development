@@ -186,15 +186,6 @@
                     class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Kelola Driver
                 </a>
-            </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mt-4">
-                <a href="{{ route('rental.reviews.index') }}"
-                    class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-semibold shadow-md">
-                    ⭐ Kelola Review Pelanggan
-                </a>
-                <p class="mt-2 text-sm text-gray-600">Lihat dan kelola review pelanggan yang telah menyewa kendaraan Anda.</p>
-            </div>
-        </div>
         {{-- Rental to Customer Review Section --}}
 <div class="bg-white p-8 rounded-2xl shadow-xl mt-12 border border-gray-200 max-w-7xl mx-auto">
     <h3 class="text-2xl font-bold text-gray-800 mb-6">Review Pelanggan <span class="text-base font-normal text-gray-500">(Oleh Rental)</span></h3>
@@ -420,7 +411,185 @@
         @endif
     @endforeach
 @endif
-@endsection
+
+{{-- Vehicle Reviews Section --}}
+<div class="bg-white p-8 rounded-2xl shadow-xl mt-12 border border-gray-200 max-w-7xl mx-auto">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">Rating & Ulasan Kendaraan</h3>
+    
+    {{-- Vehicle Ratings Summary --}}
+    <div class="mb-8">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Ringkasan Rating Kendaraan</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @forelse($vehicleRatings as $vehicle)
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h5 class="font-medium text-gray-900">{{ $vehicle->name }}</h5>
+                            <p class="text-sm text-gray-500">{{ $vehicle->category }}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-center">
+                                <span class="text-2xl font-bold text-gray-900">{{ number_format($vehicle->reviews_avg_rating, 1) }}</span>
+                                <span class="text-gray-500 ml-1">/5</span>
+                            </div>
+                            <p class="text-sm text-gray-500">{{ $vehicle->total_reviews }} ulasan</p>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-center">
+                        @for($i = 1; $i <= 5; $i++)
+                            <svg class="w-4 h-4 {{ $i <= round($vehicle->reviews_avg_rating) ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                 fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                        @endfor
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Belum ada ulasan</h4>
+                    <p class="text-gray-500">Kendaraan Anda belum menerima ulasan dari pelanggan.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    {{-- Detailed Reviews List --}}
+    <div class="mt-8">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Daftar Ulasan Terbaru</h4>
+        <div class="overflow-x-auto rounded-xl border border-gray-100 bg-white shadow-sm">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kendaraan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelanggan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ulasan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($vehicleReviews as $review)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ $review->vehicle->name }}</div>
+                                <div class="text-xs text-gray-500">{{ $review->vehicle->category }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                                        <span class="text-indigo-600 font-medium text-sm">{{ substr($review->user->name ?? 'U', 0, 1) }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">{{ $review->user->name ?? '-' }}</div>
+                                        <div class="text-sm text-gray-500">{{ $review->user->email ?? '-' }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                             fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    @endfor
+                                    <span class="ml-1 text-sm text-gray-500">({{ $review->rating }}/5)</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-900 max-w-md">{{ Str::limit($review->comment, 100) }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ $review->created_at->format('d M Y') }}</div>
+                                <div class="text-xs text-gray-500">{{ $review->created_at->format('H:i') }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button onclick="openFlagModal('{{ $review->id }}')" 
+                                        class="text-red-600 hover:text-red-900">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                    </svg>
+                                    <p class="font-semibold text-lg text-gray-700">Belum Ada Ulasan</p>
+                                    <p class="text-sm">Kendaraan Anda belum menerima ulasan dari pelanggan.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{-- Flag Review Modal --}}
+<div id="flag-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form id="flag-form" action="{{ route('rental.reviews.flag') }}" method="POST">
+                @csrf
+                <input type="hidden" name="review_id" id="flag-review-id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Laporkan Ulasan
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Berikan alasan mengapa ulasan ini perlu ditinjau ulang oleh tim moderasi.
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <label for="flag-reason" class="block text-sm font-medium text-gray-700">Alasan</label>
+                                <select name="reason" id="flag-reason" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="spam">Spam atau konten tidak relevan</option>
+                                    <option value="inappropriate">Konten tidak pantas</option>
+                                    <option value="fake">Ulasan palsu</option>
+                                    <option value="other">Lainnya</option>
+                                </select>
+                            </div>
+                            <div class="mt-4">
+                                <label for="flag-details" class="block text-sm font-medium text-gray-700">Detail Tambahan</label>
+                                <textarea name="details" id="flag-details" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Laporkan
+                    </button>
+                    <button type="button" onclick="closeFlagModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -573,4 +742,31 @@ function addKeyboardSupport() {
         }
     });
 }
+
+function openFlagModal(reviewId) {
+    document.getElementById('flag-review-id').value = reviewId;
+    document.getElementById('flag-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFlagModal() {
+    document.getElementById('flag-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+    document.getElementById('flag-form').reset();
+}
+
+// Close modal when clicking outside
+document.getElementById('flag-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeFlagModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFlagModal();
+    }
+});
 </script>
+@endsection

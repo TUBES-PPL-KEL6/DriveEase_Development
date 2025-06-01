@@ -16,7 +16,8 @@ use App\Http\Controllers\{
     MidtransController,
     RentalRentController,
     RentalDashboardController,
-    RentalReviewController
+    RentalReviewController,
+    FlaggedReviewController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -102,6 +103,9 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 
     // Reviews
     Route::resource('reviews', \App\Http\Controllers\RentalReviewController::class)->except(['show']);
+
+    // Flagged Reviews
+    Route::post('/reviews/flag', [FlaggedReviewController::class, 'store'])->name('reviews.flag');
 });
 
 // ===========================
