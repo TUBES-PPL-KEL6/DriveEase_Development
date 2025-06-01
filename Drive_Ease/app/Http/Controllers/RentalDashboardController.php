@@ -35,6 +35,27 @@ class RentalDashboardController extends Controller
             ->with(['user', 'vehicle', 'rentalReview'])
             ->get();
 
-        return view('dashboard.rental', compact('totalBookings', 'totalRevenue', 'mostRentedVehicles', 'completedBookings'));
+        // Get all reviews for rental's vehicles
+        $vehicleReviews = \App\Models\Review::whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['user', 'vehicle'])
+            ->latest()
+            ->get();
+
+        // Calculate average ratings for each vehicle
+        $vehicleRatings = \App\Models\Vehicle::where('rental_id', $user->id)
+            ->withCount(['reviews as total_reviews'])
+            ->withAvg('reviews', 'rating')
+            ->get();
+
+        return view('dashboard.rental', compact(
+            'totalBookings', 
+            'totalRevenue', 
+            'mostRentedVehicles', 
+            'completedBookings',
+            'vehicleReviews',
+            'vehicleRatings'
+        ));
     }
 }
