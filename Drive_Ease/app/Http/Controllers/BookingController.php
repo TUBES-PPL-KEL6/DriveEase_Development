@@ -207,4 +207,15 @@ public function PaymentStatus(Request $request)
     ]);
 
 }
+
+    public function history()
+    {
+        $user = auth()->user();
+        $bookings = $user->bookings()
+            ->with(['vehicle'])
+            ->latest()
+            ->get();
+
+        return view('user.history', compact('bookings'));
+    }
 }

@@ -81,6 +81,9 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     // Booking Driver
     Route::post('/drivers/available/{vehicle}', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
     Route::get('/bookings/history', [BookingController::class, 'myBookings']);
+
+    // Booking History
+    Route::get('/history', [BookingController::class, 'history'])->name('history');
 });
 
 // ===========================
