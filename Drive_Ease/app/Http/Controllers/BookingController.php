@@ -158,7 +158,6 @@ class BookingController extends Controller
         return redirect()->route('admin.payment.index')->with('success', 'Booking dikonfirmasi.');
     }
 
-
     public function Booking_Dashboard(Request $request)
     {
         // Ambil bookings user yang login

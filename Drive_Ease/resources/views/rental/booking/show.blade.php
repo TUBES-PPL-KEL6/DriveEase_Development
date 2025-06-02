@@ -96,6 +96,8 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                {{-- Tombol Konfirmasi --}}
                                 @if ($booking->status === 'menunggu konfirmasi')
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150"
@@ -108,6 +110,8 @@
                                         Konfirmasi Sewa
                                     </button>
                                 @endif
+
+                                {{-- Tombol Batalkan --}}
                                 @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150"
