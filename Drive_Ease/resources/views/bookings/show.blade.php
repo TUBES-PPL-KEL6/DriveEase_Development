@@ -6,6 +6,10 @@
     $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
     $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
     $lastChangeDate = $startDateForAction->copy()->subDay();
+    // Get the review for this vehicle by the current user
+    $userReview = \App\Models\Review::where('user_id', auth()->id())
+        ->where('vehicle_id', $booking->vehicle_id)
+        ->first();
 @endphp
 
 @section('content')
@@ -38,12 +42,12 @@
                             <div>
                                 <div
                                     class="w-full text-center p-3 rounded-lg border
-                                    @if ($booking->status === 'menunggu') bg-yellow-50 text-yellow-800 border-yellow-300
-                                    @elseif($booking->status === 'konfirmasi') bg-green-50 text-green-800 border-green-300
-                                    @elseif($booking->status === 'berjalan') bg-blue-50 text-blue-800 border-blue-300
-                                    @elseif($booking->status === 'selesai') bg-gray-100 text-gray-700 border-gray-300
-                                    @elseif($booking->status === 'batal') bg-red-50 text-red-800 border-red-300  {{-- Dibatalkan oleh user --}}
-                                    @else bg-gray-50 text-gray-800 border-gray-300 @endif">
+                                    @if ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
+                                    @elseif($booking->status === 'menunggu konfirmasi') bg-gray-500 text-white
+                                    @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
+                                    @elseif($booking->status === 'berjalan') bg-green-500 text-white
+                                    @elseif($booking->status === 'selesai') bg-gray-500 text-white
+                                    @elseif($booking->status === 'batal') bg-red-500 text-white @endif">
                                     <span class="text-sm font-medium">Status:</span>
                                     <span class="ml-1.5 rtl:mr-1.5 rtl:ml-0 font-semibold text-sm">
                                         @if ($booking->status === 'menunggu')
@@ -105,13 +109,6 @@
 
                                 {{-- Tombol untuk Tulis/Edit Ulasan --}}
                                 @if ($booking->status === 'selesai')
-                                    @php
-                                        // Asumsi $booking memiliki relasi 'review' (hasOne)
-                                        $userReview = $booking
-                                            ->review()
-                                            ->where('user_id', auth()->id())
-                                            ->first();
-                                    @endphp
                                     @if (!$userReview)
                                         <a href="{{ route('reviews.create', ['booking_id' => $booking->id, 'vehicle_id' => $booking->vehicle_id]) }}"
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition duration-150">

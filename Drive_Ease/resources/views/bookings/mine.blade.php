@@ -32,7 +32,8 @@
                                                     {{ $booking->vehicle->name }}</h2>
                                                 <span
                                                     class="mt-2 inline-flex px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide
-                                                @if ($booking->status === 'menunggu') bg-yellow-500 text-white
+                                                @if ($booking->status === 'menunggu konfirmasi') bg-yellow-500 text-white
+                                                @elseif ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
                                                 @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
                                                 @elseif($booking->status === 'berjalan') bg-green-500 text-white
                                                 @elseif($booking->status === 'selesai') bg-gray-500 text-white
