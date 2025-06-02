@@ -16,7 +16,7 @@
     <div class="py-10 px-4 md:px-8">
         <div class="max-w-7xl mx-auto">
             <div class="mb-8">
-                <a href="{{ route('user.bookings.mine') }}" {{-- Menggunakan route standar booking --}}
+                <a href="{{ route('rental.bookings.index') }}" {{-- Menggunakan route standar booking --}}
                     class="inline-flex items-center px-4 py-2 bg-white rounded-lg border border-gray-300 
                            text-sm font-medium text-gray-700 hover:bg-gray-50 
                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
@@ -50,8 +50,10 @@
                                     @elseif($booking->status === 'batal') bg-red-500 text-white @endif">
                                     <span class="text-sm font-medium">Status:</span>
                                     <span class="ml-1.5 rtl:mr-1.5 rtl:ml-0 font-semibold text-sm">
-                                        @if ($booking->status === 'menunggu')
+                                        @if ($booking->status === 'menunggu konfirmasi')
                                             Menunggu Konfirmasi
+                                        @elseif ($booking->status === 'menunggu pembayaran')
+                                            Menunggu Pembayaran
                                         @elseif ($booking->status === 'konfirmasi')
                                             Terkonfirmasi
                                         @elseif ($booking->status === 'berjalan')
@@ -94,7 +96,19 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if (($booking->status === 'menunggu' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
+                                @if ($booking->status === 'menunggu konfirmasi')
+                                    <button type="button"
+                                        class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150"
+                                        data-bs-toggle="modal" data-bs-target="#confirmBookingModal">
+                                        <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Konfirmasi Sewa
+                                    </button>
+                                @endif
+                                @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150"
                                         data-bs-toggle="modal" data-bs-target="#cancelBookingModal">
@@ -313,8 +327,42 @@
         </div>
     </div>
 
+    {{-- Modal Konfirmasi --}}
+    <div class="modal fade" id="confirmBookingModal" tabindex="-1" aria-labelledby="confirmBookingModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-white text-gray-900">
+                <div class="modal-header border-b border-gray-200">
+                    <h5 class="modal-title text-lg font-medium" id="confirmBookingModalLabel">Konfirmasi Penyewaan</h5>
+                    <button type="button" class="btn-close text-gray-600 hover:text-gray-700" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form action="{{ route('rental.bookings.confirm', $booking->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin ingin mengkonfirmasi penyewaan ini?</p>
+                        <div class="mt-4">
+                            <label for="side_note_confirm" class="block text-sm font-medium text-gray-700 mb-1">Catatan
+                                (opsional)</label>
+                            <textarea name="side_note" id="side_note_confirm" rows="3"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white text-gray-900 placeholder-gray-500"
+                                placeholder="Tulis catatan tambahan..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-t border-gray-200">
+                        <button type="button"
+                            class="btn btn-secondary bg-gray-200 hover:bg-gray-300 text-gray-700 border-gray-300"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success bg-green-600 hover:bg-green-700 text-white">Ya,
+                            Konfirmasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Modal Pembatalan --}}
-    @if (($booking->status === 'menunggu' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
+    @if (($booking->status === 'menunggu konfirmasi ' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
         <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

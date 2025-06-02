@@ -31,7 +31,7 @@ use App\Http\Controllers\Admin\UserController;
 Route::get('/', fn() => view('landing'));
 
 // Redirect ke dashboard sesuai role
-Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
@@ -145,14 +145,14 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // 💳 Checkout & Pembayaran
 // ===========================
 
- Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
-    Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
-    Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
-    Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
-    Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
-    Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
-    Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
-    Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
+Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
+Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
+Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
+Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
