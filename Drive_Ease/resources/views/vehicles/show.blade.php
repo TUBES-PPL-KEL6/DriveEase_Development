@@ -586,6 +586,7 @@
                     }
                 }
 
+                // Mendeteksi perubahan pada tanggal mulai dan selesai
                 startDateInput.addEventListener('change', updateEndDateMin);
                 endDateInput.addEventListener('change', function() {
                     if (startDateInput.value && endDateInput.value) {
@@ -629,6 +630,32 @@
 
 
             // Fungsi AJAX untuk mengambil Driver (dari a3b21da...)
+            // Fungsi ini digunakan untuk mengambil data driver yang tersedia berdasarkan tanggal yang dipilih
+            // dan menampilkannya dalam modal
+
+            // Ketika fungsi ini dipanggil, akan melakukan request AJAX ke endpoint yang ditentukan
+            // untuk mendapatkan daftar driver yang tersedia pada rentang waktu yang dipilih
+
+            // Parameter yang dikirim dalam request:
+            // - start_date: Tanggal mulai rental
+            // - end_date: Tanggal selesai rental  
+            // - vehicle_id: ID kendaraan yang akan dirental
+
+            // Response yang diharapkan berupa JSON yang berisi:
+            // - Data driver yang tersedia (id, nama, foto, dll)
+            // - Status ketersediaan
+            // - Pesan error jika terjadi kesalahan
+
+            // Hasil response akan diproses untuk:
+            // 1. Menampilkan daftar driver dalam modal
+            // 2. Memungkinkan pemilihan driver
+            // 3. Mengupdate dropdown driver di form utama
+            // 4. Menampilkan pesan jika tidak ada driver yang tersedia
+
+            // Fungsi ini bekerja sama dengan:
+            // - updateDrivers() : untuk refresh data driver
+            // - selectDriver() : untuk memilih driver yang diklik
+            // - openDriverModal() & closeDriverModal() : untuk kontrol tampilan modal
             const driverSelect = document.getElementById('driver-select');
 
             function selectDriver(driverId, driverName) {
