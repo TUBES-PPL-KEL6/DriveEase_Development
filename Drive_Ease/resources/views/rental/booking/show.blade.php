@@ -362,7 +362,7 @@
     </div>
 
     {{-- Modal Pembatalan --}}
-    @if (($booking->status === 'menunggu konfirmasi ' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
+    @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
         <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -374,7 +374,7 @@
                         <button type="button" class="btn-close text-gray-400 hover:text-gray-600"
                             data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('user.bookings.cancel', $booking->id) }}" method="POST">
+                    <form action="{{ route('rental.bookings.reject', $booking->id) }}" method="POST">
                         @csrf
                         <div class="modal-body text-gray-700">
                             <p>Apakah Anda yakin ingin membatalkan pemesanan untuk <strong
