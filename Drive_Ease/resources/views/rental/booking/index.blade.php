@@ -28,7 +28,8 @@
                                             <h2 class="text-xl font-bold text-gray-900">{{ $booking->vehicle->name }}</h2>
                                             <span
                                                 class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
-                                                @if ($booking->status === 'menunggu') bg-yellow-500 text-white
+                                                @if ($booking->status === 'menunggu konfirmasi') bg-yellow-500 text-white
+                                                @elseif ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
                                                 @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
                                                 @elseif($booking->status === 'berjalan') bg-green-500 text-white
                                                 @elseif($booking->status === 'selesai') bg-gray-500 text-white
@@ -42,12 +43,14 @@
                                             <div>
                                                 <p class="text-sm text-gray-500 mb-1">Tanggal Mulai</p>
                                                 <p class="text-base font-medium">
-                                                    {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}</p>
+                                                    {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}
+                                                </p>
                                             </div>
                                             <div>
                                                 <p class="text-sm text-gray-500 mb-1">Tanggal Selesai</p>
                                                 <p class="text-base font-medium">
-                                                    {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
+                                                    {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}
+                                                </p>
                                             </div>
                                             <div>
                                                 <p class="text-sm text-gray-500 mb-1">Total Biaya</p>
@@ -56,26 +59,28 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm text-gray-500 mb-1">Penyewa</p>
-                                                <p class="text-base font-medium text-blue-600">{{ $booking->user->name }}
+                                                <p class="text-base font-medium text-blue-600">
+                                                    {{ $booking->user->name }}
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                {{-- Tombol --}}
-                                <div class="mt-6 lg:mt-0 flex flex-col items-stretch justify-center lg:justify-end">
-                                    <a href="{{ route('rental.bookings.show', $booking->id) }}"
-                                        class="w-full lg:w-40 inline-flex items-center justify-center px-4 py-2.5 rounded-lg
-                                        bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700
-                                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-                                        transition ease-in-out duration-150">
-                                        <span>Lihat Detail</span>
-                                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
+                                        {{-- Tombol --}}
+                                        <div class="mt-6 flex justify-end">
+                                            <a href="{{ route('rental.bookings.show', $booking->id) }}"
+                                                class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg
+                                                bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700
+                                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                                                transition ease-in-out duration-150">
+                                                <span>Lihat Detail</span>
+                                                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -78,7 +78,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('userRegistrationChart').getContext('2d');
     const userData = {!! json_encode($userRegistrations) !!};
-    
+
     new Chart(ctx, {
         type: 'line',
         data: {
