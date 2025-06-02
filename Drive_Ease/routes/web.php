@@ -26,7 +26,7 @@ use App\Livewire\Admin\PaymentReportTable;
 Route::get('/', fn() => view('landing'));
 
 // Redirect ke dashboard sesuai role
-Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
@@ -101,7 +101,7 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard.admin'))->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard.admin'))->name('dashboard');
 
     // Riwayat pembayaran
     Route::get('/payment-history', [PaymentHistoryController::class, 'index'])->name('payment.index');
