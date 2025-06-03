@@ -40,51 +40,51 @@ class CheckoutController extends Controller
         return view('payment.payment', compact('payment'));
     }
 
-public function payment($id)
-{
-    $payment = Booking::findOrFail($id);
+    public function payment($id)
+    {
+        $payment = Booking::findOrFail($id);
 
-    if ($payment->status === 'paid') {
-        return redirect()->route('home')->with('success', 'Pembayaran sudah dilakukan.');
+        if ($payment->status === 'paid') {
+            return redirect()->route('home')->with('success', 'Pembayaran sudah dilakukan.');
+        }
+
+        // Konfigurasi Midtrans
+        Config::$serverKey = config('services.midtrans.server_key');
+        Config::$clientKey = config('services.midtrans.client_key');
+        Config::$isProduction = config('services.midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // Buat order ID dan simpan
+        $orderId = 'TRX-' . uniqid();
+        $payment->order_id = $orderId;
+        $payment->save();
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $payment->total_price,
+            ],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+            'callbacks' => [
+                'finish' => route('payment.finish')
+            ]
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+
+        return view('payment.payment', [
+            'payment' => $payment,
+            'snapToken' => $snapToken,
+        ]);
     }
 
-    // Konfigurasi Midtrans
-    Config::$serverKey = config('services.midtrans.server_key');
-    Config::$clientKey = config('services.midtrans.client_key');
-    Config::$isProduction = config('services.midtrans.is_production');
-    Config::$isSanitized = true;
-    Config::$is3ds = true;
-
-    // Buat order ID dan simpan
-    $orderId = 'TRX-' . uniqid();
-    $payment->order_id = $orderId;
-    $payment->save();
-
-    $params = [
-        'transaction_details' => [
-            'order_id' => $orderId,
-            'gross_amount' => $payment->total_price,
-        ],
-        'customer_details' => [
-            'first_name' => auth()->user()->name,
-            'email' => auth()->user()->email,
-        ],
-        'callbacks' => [
-            'finish' => route('payment.finish')
-        ]
-    ];
-
-    $snapToken = Snap::getSnapToken($params);
-
-    return view('payment.payment', [
-        'payment' => $payment,
-        'snapToken' => $snapToken,
-    ]);
-}
 
 
-
-        public function Dashboard(Request $request)
+    public function Dashboard(Request $request)
     {
         // logic buat dashboard user (kalau ada)
         $bookings = Booking::where('user_id', auth()->id())
@@ -92,7 +92,7 @@ public function payment($id)
             ->latest()
             ->get();
 
-             $vehicles = Vehicle::query()
+        $vehicles = Vehicle::query()
             ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
             ->when($request->category, fn($q) => $q->where('category', $request->category))
             ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
@@ -106,23 +106,22 @@ public function payment($id)
         ]);
     }
 
-public function finish(Request $request)
-{
-    $orderId = $request->get('order_id'); // ini dikirim Midtrans
-    $this->updateStatus($orderId);
+    public function finish(Request $request)
+    {
+        $orderId = $request->get('order_id'); // ini dikirim Midtrans
+        $this->updateStatus($orderId);
 
-    return redirect()->route('user.dashboard.user')->with('success', 'Pembayaran sudah dilakukan.');
-}
+        return redirect()->route('user.dashboard.user')->with('success', 'Pembayaran sudah dilakukan.');
+    }
 
 
     private function updateStatus($orderId)
-        {
-            $payment = Booking::where('order_id', $orderId)->first();
+    {
+        $payment = Booking::where('order_id', $orderId)->first();
 
-            if ($payment) {
-                $payment->status = 'menunggu konfirmasi';
-                $payment->save();
-            }
+        if ($payment) {
+            $payment->status = 'menunggu konfirmasi';
+            $payment->save();
         }
     }
-
+}
