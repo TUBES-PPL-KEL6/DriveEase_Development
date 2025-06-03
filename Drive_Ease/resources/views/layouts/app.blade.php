@@ -16,28 +16,38 @@
     @livewireStyles
 
     @auth
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const countNotification = async () => {
-                const response = await fetch('{{ route('notifications.count') }}');
-                const data = await response.json();
-                document.getElementById('notification-count').innerHTML = data;
-            };
-            countNotification();
-            setInterval(countNotification, 5000);
-        });
 
-        function fetchNotifications() {
-            fetch('{{ route('notifications.fetch') }}')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('notifications-container');
-                    container.innerHTML = '';
-                    if (data.length === 0) {
-                        container.innerHTML = '<div class="text-center text-sm font-bold text-gray-600">Tidak ada notifikasi</div>';
-                    } else {
-                        data.forEach(notification => {
-                            container.innerHTML += `
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const countNotification = async () => {
+                    const response = await fetch('{{ route('notifications.count') }}');
+                    const data = await response.json();
+                    document.getElementById('notification-count').innerHTML = data;
+                };
+                countNotification();
+                setInterval(countNotification, 5000);
+            });
+
+            // Fungsi ini digunakan untuk mengambil data notifikasi dari server
+            // dan menampilkannya dalam dropdown notifikasi
+
+            // Ketika fungsi ini dipanggil, akan melakukan request AJAX ke endpoint yang ditentukan
+            // untuk mendapatkan daftar notifikasi
+
+            // Parameter yang dikirim dalam request:
+            function fetchNotifications() {
+                fetch('{{ route('notifications.fetch') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('notifications-container');
+                        container.innerHTML = '';
+                        if (data.length === 0) {
+                            container.innerHTML =
+                                '<div class="text-center text-sm font-bold text-gray-600">Tidak ada notifikasi</div>';
+                        } else {
+                            data.forEach(notification => {
+                                container.innerHTML += `
+
                                 <div class="card mb-2">
                                     <div class="card-body d-flex justify-content-between gap-4 p-3">
                                         <div>
@@ -50,8 +60,24 @@
                                         </div>
                                     </div>
                                 </div>`;
-                        });
-                    }
+
+                            });
+                        }
+                    });
+            }
+
+            // Fungsi untuk menandai notifikasi sebagai sudah dibaca
+            function markAsRead(id) {
+                fetch('{{ route('notifications.markAsRead') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        id
+                    })
+
                 });
         }
 
