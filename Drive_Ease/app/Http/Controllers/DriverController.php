@@ -58,7 +58,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('rental.driver.edit');
+        return view('rental.driver.create');
     }
 
     /**
