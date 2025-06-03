@@ -28,12 +28,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Force rental users to always land at /rental/dashboard
-        if (auth()->user()->role === 'rental') {
-            return redirect()->route('rental.dashboard');
-        }
-
-        // Other roles: keep default intended redirect
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

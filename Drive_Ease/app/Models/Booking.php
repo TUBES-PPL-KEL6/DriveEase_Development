@@ -32,14 +32,4 @@ class Booking extends Model
     {
         return $this->belongsTo(Driver::class);
     }
-
-    public function rentalReview()
-    {
-        return $this->hasOne(\App\Models\RentalReview::class, 'booking_id');
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(\App\Models\Review::class, 'booking_id');
-    }
 }
