@@ -91,6 +91,31 @@
                                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-30 sm:text-sm text-gray-900 py-2.5" required>
                                             @error('end_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                                         </div>
+
+                                        <button type="submit" id="btn-pesan-sekarang"
+                                            class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-md text-base font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 transform hover:scale-105">
+                                            <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            Pesan Sekarang
+                                        </button>
+                                    </form>
+                                @elseif(auth()->check() && isset($vehicle->owner_id) && auth()->id() === $vehicle->owner_id)
+                                    <div class="text-center bg-indigo-50 p-6 rounded-lg">
+                                        <p class="text-sm text-indigo-700">Anda adalah pemilik kendaraan ini.</p>
+                                        <a href="{{ route('rental.vehicles.edit', $vehicle->id) }}"
+                                            class="mt-2 inline-flex items-center px-4 py-2.5 border border-indigo-300 rounded-lg shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-indigo-100 transition">
+                                            <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                </path>
+                                            </svg>
+                                            Kelola Kendaraan
+                                        </a>
+
                                     </div>
 
                                     {{-- Integrasi Pilihan Driver --}}
@@ -352,28 +377,34 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div id="driverModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-75">
-    <div class="flex items-center justify-center min-h-screen px-4">
-        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl">
-            <div class="flex items-start justify-between p-4 border-b rounded-t">
-                <h3 class="text-xl font-semibold text-gray-900">
-                    Profil Driver Tersedia
-                </h3>
-                <button type="button" onclick="closeDriverModal()"
-                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="driver-profile-content">
-                    {{-- Konten driver akan diisi oleh JavaScript --}}
-                    <p class="text-gray-500 col-span-full text-center">Pilih tanggal mulai dan selesai untuk melihat driver yang tersedia.</p>
+
+        <div id="driverModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-75">
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl">
+                    <div class="flex items-start justify-between p-4 border-b rounded-t">
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            Profil Driver Tersedia
+                        </h3>
+                        <button type="button" onclick="closeDriverModal()" id="close-driver-modal"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <div
+                        class="p-6 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="driver-profile-content">
+                            {{-- Konten driver akan diisi oleh JavaScript --}}
+                            <p class="text-gray-500 col-span-full text-center">Pilih tanggal mulai dan selesai untuk
+                                melihat driver yang tersedia.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -425,8 +456,22 @@
                 if (endDateInput.value && endDateInput.value < minEndDate) {
                     endDateInput.value = minEndDate; 
                 }
-            } else {
-                endDateInput.min = tomorrow;
+
+
+                // Mendeteksi perubahan pada tanggal mulai dan selesai
+                startDateInput.addEventListener('change', updateEndDateMin);
+                endDateInput.addEventListener('change', function() {
+                    if (startDateInput.value && endDateInput.value) {
+                        updateDrivers();
+                        if (driverSelectionContainer) driverSelectionContainer.classList.remove('hidden');
+                    } else {
+                        if (driverSelectionContainer) driverSelectionContainer.classList.add('hidden');
+                    }
+                });
+
+                // Initial check
+                if (startDateInput.value) updateEndDateMin();
+
             }
             // Panggil updateDrivers setelah tanggal berubah
             if (startDateInput.value && endDateInput.value) {
@@ -532,6 +577,50 @@
             const data = await response.json();
             const drivers = Array.isArray(data.drivers) ? data.drivers : (Array.isArray(data) ? data : []);
 
+            // Fungsi AJAX untuk mengambil Driver (dari a3b21da...)
+            // Fungsi ini digunakan untuk mengambil data driver yang tersedia berdasarkan tanggal yang dipilih
+            // dan menampilkannya dalam modal
+
+            // Ketika fungsi ini dipanggil, akan melakukan request AJAX ke endpoint yang ditentukan
+            // untuk mendapatkan daftar driver yang tersedia pada rentang waktu yang dipilih
+
+            // Parameter yang dikirim dalam request:
+            // - start_date: Tanggal mulai rental
+            // - end_date: Tanggal selesai rental  
+            // - vehicle_id: ID kendaraan yang akan dirental
+
+            // Response yang diharapkan berupa JSON yang berisi:
+            // - Data driver yang tersedia (id, nama, foto, dll)
+            // - Status ketersediaan
+            // - Pesan error jika terjadi kesalahan
+
+            // Hasil response akan diproses untuk:
+            // 1. Menampilkan daftar driver dalam modal
+            // 2. Memungkinkan pemilihan driver
+            // 3. Mengupdate dropdown driver di form utama
+            // 4. Menampilkan pesan jika tidak ada driver yang tersedia
+
+            // Fungsi ini bekerja sama dengan:
+            // - updateDrivers() : untuk refresh data driver
+            // - selectDriver() : untuk memilih driver yang diklik
+            // - openDriverModal() & closeDriverModal() : untuk kontrol tampilan modal
+            const driverSelect = document.getElementById('driver-select');
+
+            function selectDriver(driverId, driverName) {
+                if (driverSelect) {
+                    // Cek jika opsi sudah ada
+                    let existingOption = driverSelect.querySelector(`option[value="${driverId}"]`);
+                    if (!existingOption) {
+                        const option = document.createElement('option');
+                        option.value = driverId;
+                        option.textContent = driverName;
+                        driverSelect.appendChild(option);
+                    }
+                    driverSelect.value = driverId; // Pilih driver yang diklik
+                }
+                closeDriverModal();
+            }
+
 
             if (driverSelect) {
                 const currentSelectedDriver = driverSelect.value;
@@ -554,9 +643,59 @@
                 }
             }
 
-            if (drivers.length > 0) {
-                driverProfileContent.innerHTML = drivers.map(driver => `
-                    <div class="bg-white rounded-lg border border-gray-300 p-4 cursor-pointer hover:shadow-lg hover:border-blue-500 transition-all" onclick="selectDriver('${driver.id}', '${driver.name}')">
+
+                driverProfileContent.innerHTML = '<p class="text-gray-500 col-span-full text-center">Mencari driver...</p>';
+
+                try {
+                    const response = await fetch(
+                        "{{ route('user.drivers.available', ['vehicle' => $vehicle->id]) }}", { // Pastikan route ini ada dan menerima vehicle ID
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    'content')
+                            },
+                            body: JSON.stringify({
+                                start_date: startDateValue,
+                                end_date: endDateValue,
+                                vehicle_id: "{{ $vehicle->id }}" // Kirim juga vehicle_id jika diperlukan di backend
+                            })
+                        });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const drivers = Array.isArray(data.drivers) ? data.drivers : (Array.isArray(data) ? data : []);
+
+
+                    if (driverSelect) {
+                        const currentSelectedDriver = driverSelect.value;
+                        driverSelect.innerHTML = ''; // Kosongkan opsi yang ada
+
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.textContent = '-- Tidak Menggunakan Driver --';
+                        driverSelect.appendChild(defaultOption);
+
+                        drivers.forEach(driver => {
+                            const option = document.createElement('option');
+                            option.value = driver.id;
+                            option.textContent = driver.name;
+                            driverSelect.appendChild(option);
+                        });
+                        // Kembalikan pilihan jika masih valid
+                        if (drivers.find(d => d.id == currentSelectedDriver)) {
+                            driverSelect.value = currentSelectedDriver;
+                        }
+                    }
+
+                    if (drivers.length > 0) {
+                        driverProfileContent.innerHTML = drivers.map(driver => `
+                    <div class="driver-profile-item bg-white rounded-lg border border-gray-300 p-4 cursor-pointer hover:shadow-lg hover:border-blue-500 transition-all" onclick="selectDriver('${driver.id}', '${driver.name}')">
+
                         <div class="flex items-center space-x-4 rtl:space-x-reverse">
                             <div class="flex-shrink-0">
                                 <img class="h-12 w-12 rounded-full object-cover" src="${driver.photo_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(driver.name) + '&background=EBF4FF&color=007BFF&font-size=0.5'}" alt="${driver.name}">

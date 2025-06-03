@@ -157,6 +157,15 @@ class BookingController extends Controller
         return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
     }
 
+
+    public function Booking_Dashboard(Request $request)
+    {
+        // Ambil bookings user yang login
+        $bookings = Booking::where('user_id', auth()->id())
+            ->with('vehicle')
+            ->latest()
+            ->get();
+
     // public function cancel($id)
     // {
     //     $booking = Booking::findOrFail($id);
@@ -165,6 +174,7 @@ class BookingController extends Controller
     //     if (in_array($booking->status, ['approved', 'cancelled'])) {
     //         return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
     //     }
+
 
     //     $booking->status = 'cancelled';
     //     $booking->save();
