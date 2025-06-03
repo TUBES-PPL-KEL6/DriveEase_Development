@@ -13,11 +13,13 @@ use App\Http\Controllers\{
     VehicleController,
     DriverController,
     RentalBookingController,
-    MidtransController,
     RentalRentController,
+    AdminDashboardController,
+    MidtransController,
     RentalDashboardController,
     RentalReviewController,
     FlaggedReviewController
+
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -119,7 +121,9 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
 
     // User Management
     Route::get('/users', [UserController::class, 'index'])->name('users.index');

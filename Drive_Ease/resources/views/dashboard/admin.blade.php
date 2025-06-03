@@ -74,6 +74,7 @@
                     <div class="h-80">
                         <canvas id="userRegistrationChart"></canvas>
                     </div>
+
                 </div>
             </div>
         </div>
