@@ -22,6 +22,7 @@
 
                                 {{-- Info Utama --}}
                                 <div class="flex-1 min-w-0">
+<<<<<<< Updated upstream
                                     <div class="flex flex-col gap-4">
                                         <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-3">
                                             <h2 class="text-xl font-bold text-gray-900">{{ $booking->vehicle->name }}</h2>
@@ -32,6 +33,27 @@
                                                 @else bg-gray-100 text-gray-800 @endif">
                                                 {{ ucfirst($booking->status) }}
                                             </span>
+=======
+                                    <div class="flex flex-col gap-6">
+                                        <!-- Header -->
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
+                                            <h2 class="text-xl font-bold text-white">{{ $booking->vehicle->name }}
+                                            </h2>
+                                                <span
+                                                    class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
+                                                    @if ($booking->status === 'menunggu konfirmasi' || $booking->status === 'menunggu pembayaran')
+                                                        bg-yellow-900 text-yellow-200
+                                                    @elseif($booking->status === 'konfirmasi')
+                                                        bg-green-900 text-green-200
+                                                    @elseif($booking->status === 'batal')
+                                                        bg-red-900 text-red-200
+                                                    @else
+                                                        bg-gray-700 text-white
+                                                    @endif
+                                                ">
+                                                    {{ ucfirst($booking->status) }}
+                                                </span>
+>>>>>>> Stashed changes
                                         </div>
 
                                         {{-- Detail Grid --}}

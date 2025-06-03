@@ -27,7 +27,7 @@ class BookingController extends Controller
             'vehicle_id' => $vehicle->id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'status' => 'menunggu',
+            'status' => 'menunggu pembayaran',
             'total_price' => $vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))),
             'side_note' => $request->side_note,
         ]);
@@ -98,7 +98,8 @@ class BookingController extends Controller
             if ($request->has('end_date')) {
                 $booking->end_date = $request->end_date;
             }
-            $booking->status = 'menunggu';
+
+            $booking->status = 'menunggu pembayaran';
             $booking->side_note = $request->side_note;
             $booking->save();
         } catch (\Exception $e) {
@@ -214,7 +215,33 @@ class BookingController extends Controller
             'vehicles' => $vehicles,
         ]);
     }
+
+
+public function PaymentStatus(Request $request)
+
+{
+    $bookings = Booking::where('user_id', auth()->id())
+        ->whereIn('status', ['menunggu konfirmasi', 'konfirmasi'])
+        ->with('vehicle')
+        ->latest()
+        ->get();
+
+    // Ambil kendaraan yang tersedia dengan filter
+    $vehicles = Vehicle::query()
+        ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
+        ->when($request->category, fn($q) => $q->where('category', $request->category))
+        ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
+        ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
+        ->where('available', true)
+        ->get();
+
+    return view('dashboard.user', [
+        'bookings' => $bookings,
+        'vehicles' => $vehicles,
+    ]);
+
 }
+
 
 
     public function history()

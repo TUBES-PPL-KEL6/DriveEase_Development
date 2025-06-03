@@ -13,11 +13,14 @@ use App\Http\Controllers\{
     VehicleController,
     DriverController,
     RentalBookingController,
+    MidtransController,
     RentalRentController,
+
 
     RentalDashboardController,
     RentalReviewController,
     FlaggedReviewController
+
 
 };
 use App\Http\Middleware\IsAdmin;
@@ -145,7 +148,19 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
+
+ Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+    Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
+    Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
+    Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
+    Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+    Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
+    Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+    Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
+
+Route::post('/payment/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
 Route::prefix('payment-history')->name('payment_history.')->group(function () {
