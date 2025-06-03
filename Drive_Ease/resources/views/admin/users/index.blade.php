@@ -12,7 +12,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Username</th>
+                            <th>Nama</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th>Tanggal Daftar</th>
