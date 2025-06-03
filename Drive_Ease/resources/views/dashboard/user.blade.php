@@ -35,7 +35,7 @@
                     DriveEase.</p>
 
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="{{ route('vehicles.index') }}"
+                    <a href="{{ route('vehicles.index') }}" id="btn-cari-kendaraan"
                         class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 text-center font-semibold shadow-md transform hover:scale-105">
                         <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">

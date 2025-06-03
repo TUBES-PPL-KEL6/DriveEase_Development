@@ -157,7 +157,7 @@
                                                 <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                             @enderror
                                         </div>
-                                        <button type="submit"
+                                        <button type="submit" id="btn-pesan-sekarang"
                                             class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-md text-base font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 transform hover:scale-105">
                                             <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -506,7 +506,7 @@
                         <h3 class="text-xl font-semibold text-gray-900">
                             Profil Driver Tersedia
                         </h3>
-                        <button type="button" onclick="closeDriverModal()"
+                        <button type="button" onclick="closeDriverModal()" id="close-driver-modal"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
@@ -736,7 +736,7 @@
 
                     if (drivers.length > 0) {
                         driverProfileContent.innerHTML = drivers.map(driver => `
-                    <div class="bg-white rounded-lg border border-gray-300 p-4 cursor-pointer hover:shadow-lg hover:border-blue-500 transition-all" onclick="selectDriver('${driver.id}', '${driver.name}')">
+                    <div class="driver-profile-item bg-white rounded-lg border border-gray-300 p-4 cursor-pointer hover:shadow-lg hover:border-blue-500 transition-all" onclick="selectDriver('${driver.id}', '${driver.name}')">
                         <div class="flex items-center space-x-4 rtl:space-x-reverse">
                             <div class="flex-shrink-0">
                                 <img class="h-12 w-12 rounded-full object-cover" src="${driver.photo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(driver.name) + '&background=EBF4FF&color=007BFF&font-size=0.5'}" alt="${driver.name}">
