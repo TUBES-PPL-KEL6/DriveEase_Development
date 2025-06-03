@@ -1,19 +1,13 @@
 @extends('layouts.app')
 
+{{-- Reminder & Date Setup --}}
 @php
-    // Mendefinisikan variabel waktu di awal untuk digunakan di beberapa tempat
     $now = \Carbon\Carbon::now();
-
-
-
-    $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
-    $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
-    $lastChangeDate = $startDateForAction->copy()->subDay();
-    $rentalReview = $booking->rentalReview;
-    $customerReview = \App\Models\Review::where('user_id', $booking->user_id)
-        ->where('vehicle_id', $booking->vehicle_id)
-        ->first();
-
+    // Menggunakan $booking sebagai variabel utama
+    $startDate = \Carbon\Carbon::parse($booking->start_date);
+    $diffInHours = $now->diffInHours($startDate, false);
+    // Batas terakhir untuk perubahan/keputusan adalah H-1 dari tanggal mulai
+    $lastChangeDate = $startDate->copy()->subDay();
 @endphp
 
 @section('content')
@@ -23,7 +17,6 @@
                 <a href="{{ route('rental.bookings.index') }}" {{-- Konsisten ke bookings --}}
                     class="inline-flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 
                            text-sm font-medium text-gray-300 hover:bg-gray-800 
-
                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
                            transition-all duration-200 shadow-sm hover:shadow-md">
                     <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,7 +29,6 @@
 
             <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700"> {{-- Styling dari HEAD dengan warna gelap --}}
                 <div class="p-6 md:p-8">
-
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8"> {{-- Mengambil gap lebih besar dari HEAD --}}
                         
                         <div class="lg:col-span-1">
@@ -44,9 +36,8 @@
                                 <img src="{{ $booking->vehicle->image_url ?? $booking->vehicle->image_path ?? 'https://placehold.co/600x450/374151/9CA3AF?text=Gambar+Kendaraan' }}" {{-- Menggabungkan pilihan gambar & placeholder gelap --}}
                                      alt="{{ $booking->vehicle->name }}"
                                      class="w-full h-full object-cover rounded-lg shadow-md">
-
                             </div>
-
+                        </div>
 
                         <div class="lg:col-span-2 space-y-6"> {{-- Menggunakan space-y-6 dari HEAD --}}
                             
@@ -91,7 +82,6 @@
 
                                 {{-- Tombol Batalkan --}}
                                 @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
-
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150"
                                         data-bs-toggle="modal" data-bs-target="#cancelBookingModal">
@@ -106,9 +96,7 @@
 
                                 {{-- Tombol untuk Tulis/Edit Ulasan --}}
                                 @if ($booking->status === 'selesai')
-
                                     @if (!$customerReview)
-
                                         <a href="{{ route('reviews.create', ['booking_id' => $booking->id, 'vehicle_id' => $booking->vehicle_id]) }}"
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition duration-150">
                                             <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="currentColor"
@@ -120,9 +108,7 @@
                                             Tulis Ulasan
                                         </a>
                                     @else
-
                                         <a href="{{ route('reviews.edit', $customerReview->id) }}"
-
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
                                             <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -160,41 +146,17 @@
                                             <p class="text-blue-600">{{ $booking->side_note }}</p>
                                         </div>
 
-
-                                    <div>
-                                        <p class="text-sm text-gray-400">Email</p>
-                                        <p class="text-base font-medium text-gray-200">{{ $booking->user->email }}</p>
-
-
                                     </div>
                                 </div>
-                            @endif
-                        </div>
-
-                        {{-- Kolom Kanan: Detail Kendaraan, Sewa, Rental, Driver, Ketentuan --}}
-                        <div class="lg:col-span-2 space-y-6">
-                            <div>
-                                <h1 class="text-3xl font-bold text-gray-800 mb-1">{{ $booking->vehicle->name }}</h1>
-                                <p class="text-sm text-gray-500">
-                                    {{ $booking->vehicle->brand ?? 'N/A' }} &bull;
-                                    {{ $booking->vehicle->model ?? 'N/A' }} &bull;
-                                    Tahun {{ $booking->vehicle->year ?? 'N/A' }}
-                                </p>
-                                <p class="mt-3 text-gray-600 text-sm leading-relaxed">
-                                    {{ $booking->vehicle->description ?? 'Deskripsi mobil tidak tersedia.' }}
-                                </p>
                             </div>
 
-
                             <div class="bg-gray-700 rounded-lg p-6 border border-gray-600 space-y-4">
-
                                 <div class="flex items-center space-x-3 rtl:space-x-reverse mb-3">
                                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     <h3 class="text-xl font-semibold text-gray-100">Detail Penyewaan</h3>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                                     <div>
-
                                         <p class="text-sm text-gray-400">Tanggal Mulai</p>
                                         <p class="text-base font-medium text-gray-200">
                                             {{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d M Y') }} {{-- Menggunakan translatedFormat --}}
@@ -215,22 +177,18 @@
                                     <div>
                                         <p class="text-sm text-gray-400">Total Biaya</p>
                                         <p class="text-2xl font-bold text-green-400"> {{-- Ukuran teks harga dari HEAD --}}
-
                                             Rp {{ number_format($booking->total_price, 0, ',', '.') }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
-
                             
                             <div class="bg-gray-700 rounded-lg p-6 border border-gray-600 space-y-4">
-
                                 <div class="flex items-center space-x-3 rtl:space-x-reverse mb-3">
                                      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     <h3 class="text-xl font-semibold text-gray-100">Spesifikasi Kendaraan</h3>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-
                                     {{-- Mengambil spesifikasi dari HEAD jika ada, atau dari booking jika ada --}}
                                     @if(isset($booking->vehicle->brand))
                                     <div>
@@ -283,13 +241,11 @@
                                     <div class="flex items-center space-x-3 rtl:space-x-reverse mb-3">
                                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-
                                         </svg>
                                         <h3 class="text-xl font-semibold text-gray-100">Informasi Driver</h3>
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <div>
-
                                             <img src="{{ $booking->driver->image_url ?? 'https://placehold.co/100x100/374151/9CA3AF?text=' . substr($booking->driver->name, 0, 1) }}"
                                                  alt="Driver Image" class="w-20 h-20 rounded-lg object-cover shadow-md">
                                         </div>
@@ -300,14 +256,11 @@
                                             @endif
                                             @if(isset($booking->driver->email))
                                             <p class="text-sm text-gray-300">{{ $booking->driver->email }}</p>
-
                                             @endif
-                                            {{-- <p class="text-gray-500">{{ $booking->driver->email ?? '' }}</p> --}}
                                         </div>
                                     </div>
                                 </div>
                             @endif
-
 
                             @if (!empty($booking->side_note))
                                 <div class="bg-blue-800 border-l-4 border-blue-500 p-4 rounded-md shadow-sm"> {{-- Warna disesuaikan --}}
@@ -371,14 +324,12 @@
                                     @endif
                                 </div>
                             @endif
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     {{-- Modals --}}
     <div class="modal fade" id="confirmBookingModal" tabindex="-1" aria-labelledby="confirmBookingModalLabel" aria-hidden="true">
@@ -402,37 +353,11 @@
                     <div class="modal-footer border-t border-gray-700">
                         <button type="button" class="btn btn-secondary bg-gray-600 hover:bg-gray-500 text-white border-gray-600" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success bg-green-600 hover:bg-green-700 text-white">Ya, Konfirmasi</button>
-
                     </div>
-                    <form action="{{ route('user.bookings.cancel', $booking->id) }}" method="POST">
-                        @csrf
-                        <div class="modal-body text-gray-700">
-                            <p>Apakah Anda yakin ingin membatalkan pemesanan untuk <strong
-                                    class="text-gray-800">{{ $booking->vehicle->name }}</strong>?</p>
-                            <p class="text-xs text-gray-500 mt-1">Pembatalan ini tidak dapat diurungkan setelah
-                                dikonfirmasi.</p>
-                            <div class="mt-4">
-                                <label for="cancel_side_note" class="block text-sm font-medium text-gray-700 mb-1">Alasan
-                                    Pembatalan (opsional)</label>
-                                <textarea name="side_note" id="cancel_side_note" rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm bg-white text-gray-900 placeholder-gray-400"
-                                    placeholder="Berikan alasan Anda..."></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer bg-gray-50 border-t border-gray-200">
-                            <button type="button"
-                                class="btn btn-light border border-gray-300 hover:bg-gray-100 shadow-sm"
-                                data-bs-dismiss="modal">Tidak, Kembali</button>
-                            <button type="submit"
-                                class="btn btn-danger bg-red-600 hover:bg-red-700 text-white shadow-sm">Ya, Batalkan
-                                Pemesanan</button>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
-    @endif
-
+    </div>
 
 
     {{-- Modal Pembatalan --}}
@@ -477,12 +402,10 @@
         </div>
     @endif
 
-
     {{-- Modal Ajukan Perubahan (Contoh, jika ingin diimplementasikan) --}}
     {{-- 
     @if ($booking->status === 'konfirmasi' && $diffInHoursForAction >= 24)
     <div class="modal fade" id="requestChangeModal" tabindex="-1" aria-labelledby="requestChangeModalLabel" aria-hidden="true">
-
 
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-gray-800 text-gray-100">
@@ -504,42 +427,41 @@
                     <div class="modal-footer border-t border-gray-700">
                         <button type="button" class="btn btn-secondary bg-gray-600 hover:bg-gray-500 text-white border-gray-600" data-bs-dismiss="modal">Tidak</button>
                         <button type="submit" class="btn btn-danger bg-red-600 hover:bg-red-700 text-white">Ya, Batalkan</button>
-
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    @endif
-    --}}
 
+    {{-- Session Notifications --}}
     @if (session('success'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition
-            class="fixed bottom-4 right-4 z-50 p-4 rounded-md bg-green-500 text-white shadow-lg flex items-center">
-            <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span>{{ session('success') }}</span>
+            class="fixed bottom-4 right-4 z-50">
+            <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ session('success') }}
+            </div>
         </div>
     @endif
 
     @if (session('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition
-            class="fixed bottom-4 right-4 z-50 p-4 rounded-md bg-red-500 text-white shadow-lg flex items-center">
-            <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clip-rule="evenodd"></path>
-            </svg>
-            <span>{{ session('error') }}</span>
+            class="fixed bottom-4 right-4 z-50">
+            <div class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                {{ session('error') }}
+            </div>
         </div>
     @endif
+
 @endsection
 
 @push('scripts')
-
 {{-- Alpine.js untuk notifikasi (jika belum ada global). Biasanya sudah di layout utama. --}}
 {{-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
 {{-- Pastikan Bootstrap JS juga dimuat untuk fungsi modal --}}
 @endpush
-
