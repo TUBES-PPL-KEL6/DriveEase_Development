@@ -65,8 +65,6 @@
                                     </div>
 
                                 @endif
-
-                                {{-- Tombol Konfirmasi --}}
                                 @if ($booking->status === 'menunggu konfirmasi')
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150"
@@ -79,8 +77,6 @@
                                         Konfirmasi Sewa
                                     </button>
                                 @endif
-
-                                {{-- Tombol Batalkan --}}
                                 @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
                                     <button type="button"
                                         class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150"
@@ -361,7 +357,7 @@
 
 
     {{-- Modal Pembatalan --}}
-    @if (($booking->status === 'menunggu konfirmasi' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
+    @if (($booking->status === 'menunggu konfirmasi ' || $booking->status === 'konfirmasi') && $diffInHoursForAction >= 24)
         <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -373,7 +369,7 @@
                         <button type="button" class="btn-close text-gray-400 hover:text-gray-600"
                             data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('rental.bookings.reject', $booking->id) }}" method="POST">
+                    <form action="{{ route('user.bookings.cancel', $booking->id) }}" method="POST">
                         @csrf
                         <div class="modal-body text-gray-700">
                             <p>Apakah Anda yakin ingin membatalkan pemesanan untuk <strong
