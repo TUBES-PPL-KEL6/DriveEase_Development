@@ -14,7 +14,11 @@ use App\Http\Controllers\{
     DriverController,
     RentalBookingController,
     RentalRentController,
-    AdminDashboardController
+
+    RentalDashboardController,
+    RentalReviewController,
+    FlaggedReviewController
+
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -78,6 +82,9 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     // Booking Driver
     Route::post('/drivers/available/{vehicle}', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
     Route::get('/bookings/history', [BookingController::class, 'myBookings']);
+
+    // Booking History
+    Route::get('/history', [BookingController::class, 'history'])->name('history');
 });
 
 // ===========================
@@ -97,13 +104,23 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 
     // Driver Management
     Route::resource('drivers', DriverController::class);
+
+    // Reviews
+    Route::resource('reviews', \App\Http\Controllers\RentalReviewController::class)->except(['show']);
+
+    // Flagged Reviews
+    Route::post('/reviews/flag', [FlaggedReviewController::class, 'store'])->name('reviews.flag');
+
+    // Rental History
+    Route::get('/history', [\App\Http\Controllers\Rental\BookingController::class, 'history'])->name('history');
+    Route::get('/bookings/export', [\App\Http\Controllers\Rental\BookingController::class, 'export'])->name('bookings.export');
 });
 
 // ===========================
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
 
     // User Management
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -151,6 +168,8 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
 // ===========================
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
+
+Route::post('/rental/reviews/{booking}', [RentalReviewController::class, 'store'])->name('rental.reviews.store');
 
 // 🔐 Auth
 require __DIR__ . '/auth.php';

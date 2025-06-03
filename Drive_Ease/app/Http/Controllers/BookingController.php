@@ -215,3 +215,17 @@ class BookingController extends Controller
         ]);
     }
 }
+
+
+    public function history()
+    {
+        $user = auth()->user();
+        $bookings = $user->bookings()
+            ->with(['vehicle'])
+            ->latest()
+            ->get();
+
+        return view('user.history', compact('bookings'));
+    }
+}
+

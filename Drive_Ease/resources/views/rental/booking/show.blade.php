@@ -3,11 +3,15 @@
 {{-- Reminder & Date Setup --}}
 @php
     $now = \Carbon\Carbon::now();
-    // Menggunakan $booking sebagai variabel utama
-    $startDate = \Carbon\Carbon::parse($booking->start_date);
-    $diffInHours = $now->diffInHours($startDate, false);
-    // Batas terakhir untuk perubahan/keputusan adalah H-1 dari tanggal mulai
-    $lastChangeDate = $startDate->copy()->subDay();
+
+    $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
+    $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
+    $lastChangeDate = $startDateForAction->copy()->subDay();
+    $rentalReview = $booking->rentalReview;
+    $customerReview = \App\Models\Review::where('user_id', $booking->user_id)
+        ->where('vehicle_id', $booking->vehicle_id)
+        ->first();
+
 @endphp
 
 @section('content')

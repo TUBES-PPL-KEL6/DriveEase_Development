@@ -5,13 +5,18 @@
         </div>
     </x-slot>
 
-    @php
-        // Mendefinisikan variabel waktu di awal untuk digunakan di beberapa tempat
-        $now = \Carbon\Carbon::now();
-        $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
-        $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
-        $lastChangeDate = $startDateForAction->copy()->subDay();
-    @endphp
+
+@php
+    // Mendefinisikan variabel waktu di awal untuk digunakan di beberapa tempat
+    $now = \Carbon\Carbon::now();
+    $startDateForAction = \Carbon\Carbon::parse($booking->start_date);
+    $diffInHoursForAction = $now->diffInHours($startDateForAction, false); // false: bisa negatif jika sudah lewat
+    $lastChangeDate = $startDateForAction->copy()->subDay();
+    // Get the review for this vehicle by the current user
+    $userReview = \App\Models\Review::where('user_id', auth()->id())
+        ->where('vehicle_id', $booking->vehicle_id)
+        ->first();
+@endphp
 
     <div class="py-10 px-4 md:px-8">
         <div class="max-w-7xl mx-auto">
@@ -77,10 +82,7 @@
                                 
                                 {{-- Tombol untuk Tulis/Edit Ulasan --}}
                                 @if ($booking->status === 'selesai')
-                                    @php
-                                        // Asumsi $booking memiliki relasi 'review' (hasOne)
-                                        $userReview = $booking->review()->where('user_id', auth()->id())->first();
-                                    @endphp
+
                                     @if (!$userReview)
                                         <a href="{{ route('reviews.create', ['booking_id' => $booking->id, 'vehicle_id' => $booking->vehicle_id]) }}"
                                             class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition duration-150">
