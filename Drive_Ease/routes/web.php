@@ -84,7 +84,7 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 // 🚘 Rental
 // ===========================
 Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\RentalDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [RentalDashboardController::class, 'index'])->name('dashboard');
 
     // Kendaraan
     Route::resource('vehicles', RentalVehicleController::class)->except(['show']);
@@ -97,6 +97,18 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
 
     // Driver Management
     Route::resource('drivers', DriverController::class);
+
+
+    // Reviews
+    Route::resource('reviews', RentalReviewController::class)->except(['show']);
+
+    // Flagged Reviews
+    Route::post('/reviews/flag', [FlaggedReviewController::class, 'store'])->name('reviews.flag');
+
+    // Rental History
+    Route::get('/history', [\App\Http\Controllers\Rental\BookingController::class, 'history'])->name('history');
+    Route::get('/bookings/export', [\App\Http\Controllers\Rental\BookingController::class, 'export'])->name('bookings.export');
+
 });
 
 // ===========================
