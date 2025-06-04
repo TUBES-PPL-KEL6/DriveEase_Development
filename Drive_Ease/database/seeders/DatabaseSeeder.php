@@ -15,21 +15,34 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::insert([
+        // Create default users if they don't exist
+        User::updateOrCreate(
+            ['email' => 'pelanggan@gmail.com'],
             [
                 'name' => 'pelanggan',
                 'username' => 'pelanggan',
-                'email' => 'pelanggan@gmail.com',
-                'role' => 'pelanggan',
+                'role' => 'customer',
                 'password' => bcrypt('password'),
-            ],
+                'telepon' => '081234567890',
+                'alamat' => 'Jl. Pelanggan No. 1'
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'rental@gmail.com'],
             [
                 'name' => 'rental',
                 'username' => 'rental',
-                'email' => 'rental@gmail.com',
-                'role' => 'rental',
+                'role' => 'owner',
                 'password' => bcrypt('password'),
+                'telepon' => '081234567891',
+                'alamat' => 'Jl. Rental No. 1'
             ]
+        );
+
+        // Run the review feature seeder
+        $this->call([
+            ReviewFeatureSeeder::class,
         ]);
     }
 }
