@@ -44,5 +44,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ReviewFeatureSeeder::class,
         ]);
+
+        $this->call([
+            CarSeeder::class,
+        ]);
     }
 }

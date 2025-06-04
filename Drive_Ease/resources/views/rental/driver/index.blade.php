@@ -6,8 +6,8 @@
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center">
                     <a href="{{ route('rental.dashboard') }}"
-                        class="inline-flex items-center px-4 py-2 bg-gray-100 rounded-lg border border-gray-300 
-               text-sm font-medium text-gray-700 hover:bg-gray-200 
+                        class="inline-flex items-center px-4 py-2 bg-dark rounded-lg border border-gray-600 
+               text-sm font-medium text-gray-300 hover:bg-gray-800 
                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
                transition-all duration-200 me-4">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                     </a>
-                    <h1 class="text-2xl font-bold text-gray-900">Daftar Driver</h1>
+                    <h1 class="text-2xl font-bold text-gray-100">Daftar Driver</h1>
                 </div>
                 <a href="{{ route('rental.drivers.create') }}"
                     class="inline-flex items-center px-4 py-2 bg-blue-600 rounded-lg text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
@@ -26,30 +26,30 @@
                 </a>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="bg-dark rounded-xl shadow-sm border border-gray-700">
                 <div class="p-6">
                     <div class="overflow-x-auto w-full">
-                        <table class="w-full table-auto divide-y divide-gray-200">
+                        <table class="w-full table-auto divide-y divide-gray-700">
                             <thead>
                                 <tr>
                                     <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                        class="px-6 py-3 bg-gray-800 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                         Foto</th>
                                     <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                        class="px-6 py-3 bg-gray-800 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                         Nama</th>
                                     <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                        class="px-6 py-3 bg-gray-800 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                         Telepon</th>
                                     <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                        class="px-6 py-3 bg-gray-800 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                         Email</th>
                                     <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                        class="px-6 py-3 bg-gray-800 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                         Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-dark divide-y divide-gray-700">
                                 @forelse ($drivers as $driver)
                                     <tr>
                                         <td class="px-2 py-4 whitespace-nowrap">
@@ -57,18 +57,18 @@
                                                 alt="{{ $driver->name }}" class="h-12 w-12 rounded-full object-cover">
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ $driver->name }}</div>
+                                            <div class="text-sm font-medium text-gray-100">{{ $driver->name }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $driver->phone }}</div>
+                                            <div class="text-sm text-gray-100">{{ $driver->phone }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $driver->email ?? '-' }}</div>
+                                            <div class="text-sm text-gray-100">{{ $driver->email ?? '-' }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
                                                 <a href="{{ route('rental.drivers.show', $driver->id) }}"
-                                                    class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                                                    class="inline-flex items-center px-3 py-1.5 bg-blue-900 text-blue-200 rounded-lg hover:bg-blue-800 transition-colors">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -80,7 +80,7 @@
                                                     Detail
                                                 </a>
                                                 <a href="{{ route('rental.drivers.edit', $driver->id) }}"
-                                                    class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition-colors">
+                                                    class="inline-flex items-center px-3 py-1.5 bg-yellow-900 text-yellow-200 rounded-lg hover:bg-yellow-800 transition-colors">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -95,7 +95,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                                                        class="inline-flex items-center px-3 py-1.5 bg-red-900 text-red-200 rounded-lg hover:bg-red-800 transition-colors">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -110,7 +110,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-400">
                                             Belum ada data driver
                                         </td>
                                     </tr>
