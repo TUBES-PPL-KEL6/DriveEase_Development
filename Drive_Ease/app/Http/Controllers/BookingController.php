@@ -20,12 +20,14 @@ class BookingController extends Controller
             'side_note' => 'nullable',
         ]);
 
+        // return dd($vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))));
+
         $booking = Booking::create([
             'user_id' => auth()->id(),
             'vehicle_id' => $vehicle->id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'status' => 'menunggu',
+            'status' => 'menunggu pembayaran',
             'total_price' => $vehicle->price_per_day * (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date))),
             'side_note' => $request->side_note,
         ]);
@@ -48,7 +50,7 @@ class BookingController extends Controller
         }
 
         // push notification to vehicle owner
-        Notification::create([
+        $notification = Notification::create([
             'user_id' => $vehicle->rental_id,
             'title' => 'Pemesanan Baru',
             'message' => 'Pemesanan baru untuk ' . $vehicle->name,
@@ -65,13 +67,12 @@ class BookingController extends Controller
         $bookings = Booking::where('user_id', auth()->id())->with('vehicle')->latest()->get();
 
         $vehicles = Vehicle::query()
-            ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
+            ->when($request->location, fn($q) => $q->where('location', 'like', $request->location))
             ->when($request->category, fn($q) => $q->where('category', $request->category))
             ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
             ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
             ->where('available', true)
             ->get();
-
         return view('bookings.mine', [
             'bookings' => $bookings,
             'vehicles' => $vehicles,
@@ -97,14 +98,15 @@ class BookingController extends Controller
             if ($request->has('end_date')) {
                 $booking->end_date = $request->end_date;
             }
-            $booking->status = 'menunggu';
+
+            $booking->status = 'menunggu pembayaran';
             $booking->side_note = $request->side_note;
             $booking->save();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengajukan ulang konfirmasi: ' . $e->getMessage());
         } finally {
             // push notification to rental owner
-            Notification::create([
+            $notification = Notification::create([
                 'user_id' => $booking->vehicle->rental_id,
                 'title' => 'Permintaan Konfirmasi Ulang',
                 'message' => 'Pelanggan mengajukan ulang konfirmasi untuk penyewaan ' . $booking->vehicle->name . '. ' . $booking->side_note,
@@ -127,7 +129,7 @@ class BookingController extends Controller
             return redirect()->back()->with('error', 'Gagal menolak sewa: ' . $e->getMessage());
         } finally {
             // push notification to rental owner
-            Notification::create([
+            $notification = Notification::create([
                 'user_id' => $booking->vehicle->rental_id,
                 'title' => 'Pemesanan Dibatalkan',
                 'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan oleh penyewa. ' . $booking->side_note,
@@ -144,58 +146,19 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        // Cegah jika status sudah approved atau cancelled
-        if (in_array($booking->status, ['approved', 'cancelled'])) {
+        // Cegah jika status sudah konfirmasi atau batal
+        if (in_array($booking->status, ['konfirmasi', 'batal'])) {
             return redirect()->route('admin.payment.index')->with('error', 'Booking status already changed.');
         }
 
-        // Ganti status menjadi approved
-        $booking->status = 'approved';
+        // Ganti status menjadi konfirmasi
+        $booking->status = 'konfirmasi';
         $booking->save();
 
-        return redirect()->route('admin.payment.index')->with('success', 'Booking approved.');
+        return redirect()->route('admin.payment.index')->with('success', 'Booking dikonfirmasi.');
     }
 
-
     public function Booking_Dashboard(Request $request)
-    {
-        // Ambil bookings user yang login
-        $bookings = Booking::where('user_id', auth()->id())
-            ->with('vehicle')
-            ->latest()
-            ->get();
-
-    // public function cancel($id)
-    // {
-    //     $booking = Booking::findOrFail($id);
-
-    //     // Cegah jika status sudah approved atau cancelled
-    //     if (in_array($booking->status, ['approved', 'cancelled'])) {
-    //         return redirect()->route('admin.payment.index')->with('error', 'Booking status sudah tidak bisa diubah.');
-    //     }
-
-
-    //     $booking->status = 'cancelled';
-    //     $booking->save();
-
-
-    public function PaymentStatus(Request $request)
-
-    //     // push notification to vehicle owner
-    //     $notification = Notification::create([
-    //         'user_id' => $booking->vehicle->rental_id,
-    //         'title' => 'Pemesanan Dibatalkan',
-    //         'message' => 'Pemesanan ' . $booking->vehicle->name . ' Anda telah dibatalkan.',
-    //         'type' => 'rent',
-    //         'status' => 'unread',
-    //         'link' => '/rental/rents',
-    //     ]);
-
-    //     return redirect()->route('admin.payment.index')->with('success', 'Booking cancelled.');
-    // }
-
-   // public function Booking_Dashboard(Request $request)
-
     {
         // Ambil bookings user yang login
         $bookings = Booking::where('user_id', auth()->id())
@@ -219,6 +182,30 @@ class BookingController extends Controller
     }
 
 
+    public function PaymentStatus(Request $request)
+
+    {
+        $bookings = Booking::where('user_id', auth()->id())
+            ->whereIn('status', ['menunggu konfirmasi', 'konfirmasi'])
+            ->with('vehicle')
+            ->latest()
+            ->get();
+
+        // Ambil kendaraan yang tersedia dengan filter
+        $vehicles = Vehicle::query()
+            ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
+            ->when($request->category, fn($q) => $q->where('category', $request->category))
+            ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
+            ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
+            ->where('available', true)
+            ->get();
+
+        return view('dashboard.user', [
+            'bookings' => $bookings,
+            'vehicles' => $vehicles,
+        ]);
+    }
+
     public function history()
     {
         $user = auth()->user();
@@ -230,4 +217,3 @@ class BookingController extends Controller
         return view('user.history', compact('bookings'));
     }
 }
-

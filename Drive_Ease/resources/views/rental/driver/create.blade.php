@@ -8,7 +8,7 @@
                 <div class="card-header">Add New Driver</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('drivers.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('rental.drivers.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
@@ -57,7 +57,7 @@
 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Add Driver</button>
-                            <a href="{{ route('drivers.index') }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ route('rental.drivers.index') }}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

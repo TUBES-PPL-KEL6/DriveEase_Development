@@ -42,7 +42,7 @@ return array(
     'Laravel\\Prompts\\' => array($vendorDir . '/laravel/prompts/src'),
     'Illuminate\\Validation\\' => array($vendorDir . '/illuminate/validation'),
     'Illuminate\\Translation\\' => array($vendorDir . '/illuminate/translation'),
-    'Illuminate\\Support\\' => array($vendorDir . '/illuminate/conditionable', $vendorDir . '/illuminate/macroable', $vendorDir . '/illuminate/collections', $vendorDir . '/illuminate/support'),
+    'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support', $vendorDir . '/illuminate/collections', $vendorDir . '/illuminate/conditionable', $vendorDir . '/illuminate/macroable'),
     'Illuminate\\Session\\' => array($vendorDir . '/illuminate/session'),
     'Illuminate\\Routing\\' => array($vendorDir . '/illuminate/routing'),
     'Illuminate\\Pipeline\\' => array($vendorDir . '/illuminate/pipeline'),
