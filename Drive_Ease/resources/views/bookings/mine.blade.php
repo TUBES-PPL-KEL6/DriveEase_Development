@@ -12,12 +12,13 @@
             <div class="p-6 rounded-md">
                 <div class="space-y-6">
                     @forelse ($bookings as $booking)
-                        <div class="bg-dark rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 transform transition duration-300 hover:shadow-lg hover:scale-[1.01]">
                             <div class="p-6">
                                 <div class="flex flex-col lg:flex-row gap-8">
                                     <!-- Vehicle Image -->
                                     <div class="w-full lg:w-64 h-48 lg:h-40">
-                                        <img src="{{ $booking->vehicle->image_url ?? 'https://placehold.co/300x200' }}"
+                                        <img src="{{ $booking->vehicle->image_path ? asset('storage/' . $booking->vehicle->image_path) : 'https://placehold.co/300x200' }}"
                                             alt="{{ $booking->vehicle->name }}"
                                             class="w-full h-full object-cover rounded-lg">
                                     </div>
@@ -27,11 +28,12 @@
                                         <div class="flex flex-col gap-6">
                                             <!-- Header -->
                                             <div class="flex flex-col sm:flex-row sm:items-center justify-start gap-4">
-                                                <h2 class="text-xl font-bold text-white">
+                                                <h2 class="text-xl font-bold text-gray-900">
                                                     {{ $booking->vehicle->name }}</h2>
                                                 <span
-                                                    class="inline-flex px-4 py-1.5 rounded-full text-sm font-medium
-                                                @if ($booking->status === 'menunggu') bg-yellow-500 text-white
+                                                    class="mt-2 inline-flex px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide
+                                                @if ($booking->status === 'menunggu konfirmasi') bg-yellow-500 text-white
+                                                @elseif ($booking->status === 'menunggu pembayaran') bg-yellow-500 text-white
                                                 @elseif($booking->status === 'konfirmasi') bg-blue-500 text-white
                                                 @elseif($booking->status === 'berjalan') bg-green-500 text-white
                                                 @elseif($booking->status === 'selesai') bg-gray-500 text-white
@@ -43,36 +45,36 @@
                                             <!-- Details Grid -->
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
                                                 <div class="space-y-1">
-                                                    <p class="text-sm text-gray-400">Tanggal Mulai</p>
-                                                    <p class="text-base font-medium text-white">
-                                                        {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}
+                                                    <p class="text-sm text-gray-500">Tanggal Mulai</p>
+                                                    <p class="text-base font-medium text-gray-900">
+                                                        {{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('l, d M Y') }}
                                                     </p>
                                                 </div>
                                                 <div class="space-y-1">
-                                                    <p class="text-sm text-gray-400">Tanggal Selesai</p>
-                                                    <p class="text-base font-medium text-white">
+                                                    <p class="text-sm text-gray-500">Tanggal Selesai</p>
+                                                    <p class="text-base font-medium text-gray-900">
                                                         {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}
                                                     </p>
                                                 </div>
 
                                                 @if ($booking->driver)
                                                     <div class="space-y-1">
-                                                        <p class="text-sm text-gray-400">Driver</p>
+                                                        <p class="text-sm text-gray-500">Driver</p>
                                                         <span class="flex items-center">
-                                                            <svg class="inline-block w-5 h-5 mr-1 text-white" fill="white"
-                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg class="inline-block w-5 h-5 mr-1 text-gray-600"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="1"
                                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                             </svg>
-                                                            <p class="text-base font-medium text-white">
+                                                            <p class="text-base font-medium text-gray-900">
                                                                 {{ $booking->driver->name }}</p>
                                                         </span>
                                                     </div>
                                                 @else
                                                     <div class="space-y-1">
-                                                        <p class="text-sm text-gray-400">Driver</p>
-                                                        <p class="text-base font-medium text-gray-400">Tidak
+                                                        <p class="text-sm text-gray-500">Driver</p>
+                                                        <p class="text-base font-medium text-gray-600">Tidak
                                                             Menggunakan Driver
                                                         </p>
                                                     </div>
@@ -100,7 +102,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="bg-dark border-l-4 border-yellow-400 p-6 rounded-lg">
+                        <div class="bg-white border-l-4 border-yellow-400 p-6 rounded-lg">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <svg class="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -110,7 +112,7 @@
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-base text-yellow-400">
+                                    <p class="text-base text-yellow-700">
                                         Belum ada data pemesanan yang tersedia
                                     </p>
                                 </div>
@@ -119,18 +121,17 @@
                     @endforelse
                 </div>
                 <br>
-                <h2><span style="color:#00ffae; text-shadow: 0 0 5px rgba(0,255,174,0.6);"
-                        class="fw-bold text-2xl">Rekomendasi kendaraan yang lain</span></h2>
+                <h2><span class="fw-bold text-2xl text-gray-900">Rekomendasi kendaraan yang lain</span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($vehicles as $vehicle)
-                        <div class="bg-dark shadow rounded overflow-hidden" style="margin-top: 10px;">
+                        <div class="bg-white shadow rounded overflow-hidden" style="margin-top: 10px;">
                             @if ($vehicle->image_path)
                                 <img src="{{ asset('storage/' . $vehicle->image_path) }}" alt="{{ $vehicle->name }}"
                                     class="w-full h-40 object-cover">
                             @endif
 
-                            <div class="bg-dark p-4">
-                                <h3 class="text-lg font-semibold">{{ $vehicle->name }}</h3>
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $vehicle->name }}</h3>
                                 <p class="text-sm text-gray-500">{{ $vehicle->location }} - {{ $vehicle->category }}</p>
                                 <p class="text-blue-600 font-bold mt-1">Rp{{ number_format($vehicle->price_per_day) }}/hari
                                 </p>

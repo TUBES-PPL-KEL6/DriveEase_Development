@@ -14,8 +14,11 @@ use App\Http\Controllers\{
     VehicleController,
     DriverController,
     RentalBookingController,
+    MidtransController,
     RentalRentController,
-    AdminDashboardController
+    RentalDashboardController,
+    RentalReviewController,
+    FlaggedReviewController
 };
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsRental;
@@ -29,7 +32,7 @@ use App\Http\Controllers\Admin\UserController;
 Route::get('/', fn() => view('landing'));
 
 // Redirect ke dashboard sesuai role
-Route::get('/dashboard', fn () => redirect()->route('dashboard.redirect'))
+Route::get('/dashboard', fn() => redirect()->route('dashboard.redirect'))
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/redirect', function () {
@@ -79,13 +82,16 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     // Booking Driver
     Route::post('/drivers/available/{vehicle}', [DriverController::class, 'getAvailDriver'])->name('drivers.available');
     Route::get('/bookings/history', [BookingController::class, 'myBookings']);
+
+    // Booking History
+    Route::get('/history', [BookingController::class, 'history'])->name('history');
 });
 
 // ===========================
 // 🚘 Rental
 // ===========================
 Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', [RentalDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\RentalDashboardController::class, 'index'])->name('dashboard');
 
     // Kendaraan
     Route::resource('vehicles', RentalVehicleController::class)->except(['show']);
@@ -99,9 +105,8 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
     // Driver Management
     Route::resource('drivers', DriverController::class);
 
-
     // Reviews
-    Route::resource('reviews', RentalReviewController::class)->except(['show']);
+    Route::resource('reviews', \App\Http\Controllers\RentalReviewController::class)->except(['show']);
 
     // Flagged Reviews
     Route::post('/reviews/flag', [FlaggedReviewController::class, 'store'])->name('reviews.flag');
@@ -109,14 +114,13 @@ Route::middleware(['auth', IsRental::class])->prefix('rental')->name('rental.')-
     // Rental History
     Route::get('/history', [\App\Http\Controllers\Rental\BookingController::class, 'history'])->name('history');
     Route::get('/bookings/export', [\App\Http\Controllers\Rental\BookingController::class, 'export'])->name('bookings.export');
-
 });
 
 // ===========================
 // 🛠️ Admin
 // ===========================
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
 
     // User Management
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -141,7 +145,19 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
+Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
+Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
+Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
+//Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
+
+Route::post('/payment/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
 Route::prefix('payment-history')->name('payment_history.')->group(function () {
@@ -164,6 +180,8 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
 // ===========================
 Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
+
+Route::post('/rental/reviews/{booking}', [RentalReviewController::class, 'store'])->name('rental.reviews.store');
 
 // 🔐 Auth
 require __DIR__ . '/auth.php';
