@@ -274,28 +274,18 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-1 bg-white rounded-xl shadow-xl border border-gray-200 p-6 md:p-8"
-                        id="reviews-section-anchor">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Ulasan Pengguna
-                            ({{ $vehicle->reviews_count ?? 0 }})</h3>
+                    <div class="lg:col-span-1 bg-white rounded-xl shadow-xl border border-gray-200 p-6 md:p-8" id="reviews-section-anchor">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Ulasan Pengguna ({{ $vehicle->reviews()->count() }})</h3>
                         @auth
                             @php
-                                $userReview = $vehicle
-                                    ->reviews()
-                                    ->where('user_id', auth()->id())
-                                    ->first();
-                                // Asumsi: $completedRent didapat dari controller atau relasi yang valid
-                                // Untuk contoh ini, kita sederhanakan saja. Jika ada relasi `rents` di user model:
-                                $completedRent = auth()
-                                    ->user()
-                                    ->rents()
-                                    ->where('vehicle_id', $vehicle->id)
-                                    ->whereIn('status', ['selesai', 'completed'])
-                                    ->exists(); // Sesuaikan status
+                                $userReview = $vehicle->reviews()->where('user_id', auth()->id())->first();
+                                $completedRent = auth()->user()->rents()->where('vehicle_id', $vehicle->id)
+                                    ->whereIn('status', ['selesai', 'completed'])->exists();
                                 $canReview = $completedRent && !$userReview;
-                                $editModeQueryParam = request()->query('edit_review'); // String atau null
+                                $editModeQueryParam = request()->query('edit_review');
                                 $editMode = $userReview && $editModeQueryParam == $userReview->id;
                             @endphp
+
 
                             @if ($canReview && !$editMode)
                                 <div

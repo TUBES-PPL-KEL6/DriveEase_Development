@@ -151,7 +151,7 @@ Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.sh
 Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
 Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
 Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
-Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+//Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
 Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
 Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
