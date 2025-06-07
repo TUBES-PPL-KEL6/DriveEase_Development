@@ -54,8 +54,7 @@
                         </svg>
                         Lihat Riwayat Pemesanan
                     </a>
-                    <form method="POST" action="{{ route('checkout') }}" class="inline-block w-full sm:w-auto">
-                        @csrf
+<form method="POST" action="{{ route('checkout.index') }}" class="inline-block w-full sm:w-auto">                        @csrf
                         <button type="submit"
                             class="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 text-center font-semibold shadow-md transform hover:scale-105 w-full">
                             <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"

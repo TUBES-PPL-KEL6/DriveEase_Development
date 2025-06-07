@@ -69,6 +69,16 @@ class RentalDashboardController extends Controller
         $data[] = $found ? $found->total : 0;
     }
 
+    // Dummy grafik hanya untuk rental1
+    if ($user->name === 'rental1') {
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $data = [1200000, 900000, 1500000, 2000000, 1700000, 0, 0, 0, 0, 0, 0, 0];
+    } else {
+        // Data asli atau kosong untuk user lain
+        $labels = [];
+        $data = [];
+    }
+
     return view('dashboard.rental', compact(
         'totalBookings',
         'totalRevenue',

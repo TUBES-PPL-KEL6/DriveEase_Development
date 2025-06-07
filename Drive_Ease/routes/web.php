@@ -1,5 +1,4 @@
 <?php
-<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
@@ -142,7 +141,6 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     Route::resource('users', UserController::class);
 });
 
-<?php
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
