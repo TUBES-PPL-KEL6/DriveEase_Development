@@ -8,78 +8,78 @@ use App\Models\Booking;
 class RentalDashboardController extends Controller
 {
     public function index()
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Statistik utama
-        $totalBookings = $user->vehicles()
-            ->withCount('bookings')
-            ->get()
-            ->sum('bookings_count');
+    // Statistik utama
+    $totalBookings = $user->vehicles()
+        ->withCount('bookings')
+        ->get()
+        ->sum('bookings_count');
 
-        $totalRevenue = $user->vehicles()
-            ->with('bookings')
-            ->get()
-            ->flatMap->bookings
-            ->sum('total_price');
+    $totalRevenue = $user->vehicles()
+        ->with('bookings')
+        ->get()
+        ->flatMap->bookings
+        ->sum('total_price');
 
-        $mostRentedVehicles = $user->vehicles()
-            ->withCount('bookings')
-            ->orderByDesc('bookings_count')
-            ->take(5)
-            ->get();
+    $mostRentedVehicles = $user->vehicles()
+        ->withCount('bookings')
+        ->orderByDesc('bookings_count')
+        ->take(5)
+        ->get();
 
-        // Semua booking selesai untuk rental ini
-        $completedBookings = \App\Models\Booking::where('status', 'selesai')
-            ->whereHas('vehicle', function ($q) use ($user) {
-                $q->where('rental_id', $user->id);
-            })
-            ->with(['user', 'vehicle', 'rentalReview'])
-            ->get();
+    // Semua booking selesai untuk rental ini
+    $completedBookings = \App\Models\Booking::where('status', 'selesai')
+        ->whereHas('vehicle', function ($q) use ($user) {
+            $q->where('rental_id', $user->id);
+        })
+        ->with(['user', 'vehicle', 'rentalReview'])
+        ->get();
 
-        // Semua review untuk kendaraan rental ini
-        $vehicleReviews = \App\Models\Review::whereHas('vehicle', function ($q) use ($user) {
-                $q->where('rental_id', $user->id);
-            })
-            ->with(['user', 'vehicle'])
-            ->latest()
-            ->get();
+    // Semua review untuk kendaraan rental ini
+    $vehicleReviews = \App\Models\Review::whereHas('vehicle', function ($q) use ($user) {
+            $q->where('rental_id', $user->id);
+        })
+        ->with(['user', 'vehicle'])
+        ->latest()
+        ->get();
 
-        // Rata-rata rating tiap kendaraan
-        $vehicleRatings = \App\Models\Vehicle::where('rental_id', $user->id)
-            ->withCount(['reviews as total_reviews'])
-            ->withAvg('reviews', 'rating')
-            ->get();
+    // Rata-rata rating tiap kendaraan
+    $vehicleRatings = \App\Models\Vehicle::where('rental_id', $user->id)
+        ->withCount(['reviews as total_reviews'])
+        ->withAvg('reviews', 'rating')
+        ->get();
 
-        // Grafik pendapatan bulanan
-        $monthlyRevenue = Booking::whereHas('vehicle', function($q) use ($user) {
-                $q->where('rental_id', $user->id);
-            })
-            ->where('status', 'selesai')
-            ->selectRaw('MONTH(start_date) as month, SUM(total_price) as total')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+    // Grafik pendapatan bulanan
+    $monthlyRevenue = \App\Models\Booking::whereHas('vehicle', function($q) use ($user) {
+            $q->where('rental_id', $user->id);
+        })
+        ->where('status', 'selesai')
+        ->selectRaw('MONTH(start_date) as month, SUM(total_price) as total')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
 
-        $labels = [];
-        $data = [];
-        foreach (range(1, 12) as $m) {
-            $labels[] = date('M', mktime(0, 0, 0, $m, 1));
-            $found = $monthlyRevenue->firstWhere('month', $m);
-            $data[] = $found ? $found->total : 0;
-        }
-
-        return view('dashboard.rental', compact(
-            'totalBookings',
-            'totalRevenue',
-            'mostRentedVehicles',
-            'completedBookings',
-            'vehicleReviews',
-            'vehicleRatings',
-            'labels',
-            'data'
-        ));
+    $labels = [];
+    $data = [];
+    foreach (range(1, 12) as $m) {
+        $labels[] = date('M', mktime(0, 0, 0, $m, 1));
+        $found = $monthlyRevenue->firstWhere('month', $m);
+        $data[] = $found ? $found->total : 0;
     }
+
+    return view('dashboard.rental', compact(
+        'totalBookings',
+        'totalRevenue',
+        'mostRentedVehicles',
+        'completedBookings',
+        'vehicleReviews',
+        'vehicleRatings',
+        'labels',
+        'data'
+    ));
+}
 
     public function history()
     {

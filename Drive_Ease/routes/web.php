@@ -165,7 +165,6 @@ Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name(
 
 // Return ke dashboard setelah checkout
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
-
 // ===========================
 // 🔔 Notifikasi
 // ===========================

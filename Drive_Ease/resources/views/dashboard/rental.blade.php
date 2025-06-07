@@ -84,7 +84,6 @@
                                 <tr class="hover:bg-slate-50 transition-colors duration-150">
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-900">{{ $vehicle->name }}</div>
-                                        {{-- <div class="text-xs text-slate-500">{{ $vehicle->category ?? 'N/A' }}</div> --}}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
                                         <span class="font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">
