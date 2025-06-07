@@ -140,13 +140,31 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // ===========================
 // 💳 Checkout & Pembayaran
 // ===========================
-Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
-Route::prefix('payment-history')->name('payment_history.')->group(function () {
-    Route::get('/create', [PaymentHistoryController::class, 'create'])->name('create');
-    Route::post('/store', [PaymentHistoryController::class, 'store'])->name('store');
-});
+// Halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+// Lihat detail checkout
+Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('checkout.show');
+
+// Proses pembayaran (jika ada)
+Route::get('/checkout/{id}/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+
+// Notifikasi Midtrans
+Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+
+// Dashboard user setelah pembayaran
+Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
+
+// Selesai pembayaran
+Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
+
+// Proses checkout
+Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('payment.checkout');
+
+// Return ke dashboard setelah checkout
+Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
 // ===========================
 // 🔔 Notifikasi

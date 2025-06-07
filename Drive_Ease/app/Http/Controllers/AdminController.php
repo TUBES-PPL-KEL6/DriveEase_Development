@@ -15,8 +15,8 @@ class AdminController extends Controller
         $users = User::all();
 
         // Hitung user aktif per role
-        $activeUsers = User::where('role', 'pelanggan')->count();
-        $activeRentals = User::where('role', 'rental')->count();
+            $totalUsers = \App\Models\User::where('role', 'pelanggan')->count();
+            $totalRentals = \App\Models\User::where('role', 'rental')->count();
 
         // Ambil data transaksi per bulan tahun ini
         $monthlyBookings = Booking::selectRaw('MONTH(created_at) as month, COUNT(*) as total')

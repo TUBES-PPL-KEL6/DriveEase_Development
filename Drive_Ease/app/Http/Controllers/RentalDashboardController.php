@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Booking;
 
 class RentalDashboardController extends Controller
 {
@@ -10,6 +11,7 @@ class RentalDashboardController extends Controller
     {
         $user = auth()->user();
 
+        // Statistik utama
         $totalBookings = $user->vehicles()
             ->withCount('bookings')
             ->get()
@@ -17,11 +19,9 @@ class RentalDashboardController extends Controller
 
         $totalRevenue = $user->vehicles()
             ->with('bookings')
-            ->get() // gunakan get() untuk ambil koleksi kendaraan
-            ->flatMap->bookings // gabungkan semua bookings
-            ->sum('total_price'); // jumlahkan total_price dari semua booking
-
-
+            ->get()
+            ->flatMap->bookings
+            ->sum('total_price');
 
         $mostRentedVehicles = $user->vehicles()
             ->withCount('bookings')
@@ -29,6 +29,68 @@ class RentalDashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('dashboard.rental', compact('totalBookings', 'totalRevenue', 'mostRentedVehicles'));
+        // Semua booking selesai untuk rental ini
+        $completedBookings = \App\Models\Booking::where('status', 'selesai')
+            ->whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['user', 'vehicle', 'rentalReview'])
+            ->get();
+
+        // Semua review untuk kendaraan rental ini
+        $vehicleReviews = \App\Models\Review::whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['user', 'vehicle'])
+            ->latest()
+            ->get();
+
+        // Rata-rata rating tiap kendaraan
+        $vehicleRatings = \App\Models\Vehicle::where('rental_id', $user->id)
+            ->withCount(['reviews as total_reviews'])
+            ->withAvg('reviews', 'rating')
+            ->get();
+
+        // Grafik pendapatan bulanan
+        $monthlyRevenue = Booking::whereHas('vehicle', function($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->where('status', 'selesai')
+            ->selectRaw('MONTH(start_date) as month, SUM(total_price) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $labels = [];
+        $data = [];
+        foreach (range(1, 12) as $m) {
+            $labels[] = date('M', mktime(0, 0, 0, $m, 1));
+            $found = $monthlyRevenue->firstWhere('month', $m);
+            $data[] = $found ? $found->total : 0;
+        }
+
+        return view('dashboard.rental', compact(
+            'totalBookings',
+            'totalRevenue',
+            'mostRentedVehicles',
+            'completedBookings',
+            'vehicleReviews',
+            'vehicleRatings',
+            'labels',
+            'data'
+        ));
+    }
+
+    public function history()
+    {
+        $user = auth()->user();
+        $bookings = \App\Models\Booking::whereHas('vehicle', function ($q) use ($user) {
+                $q->where('rental_id', $user->id);
+            })
+            ->with(['vehicle', 'user'])
+            ->latest()
+            ->get();
+
+        return view('rental.history', compact('bookings'));
     }
 }

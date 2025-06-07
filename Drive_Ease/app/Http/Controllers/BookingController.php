@@ -158,12 +158,27 @@ class BookingController extends Controller
 
 
     public function Booking_Dashboard(Request $request)
-    {
-        // Ambil bookings user yang login
-        $bookings = Booking::where('user_id', auth()->id())
-            ->with('vehicle')
-            ->latest()
-            ->get();
+{
+    // Ambil bookings user yang login
+    $bookings = Booking::where('user_id', auth()->id())
+        ->with('vehicle')
+        ->latest()
+        ->get();
+
+    // Ambil kendaraan yang tersedia dengan filter
+    $vehicles = Vehicle::query()
+        ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
+        ->when($request->category, fn($q) => $q->where('category', $request->category))
+        ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
+        ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
+        ->where('available', true)
+        ->get();
+
+    return view('dashboard.user', [
+        'bookings' => $bookings,
+        'vehicles' => $vehicles,
+    ]);
+}
 
     // public function cancel($id)
     // {

@@ -9,9 +9,10 @@ class VehicleController extends Controller
 {
     public function index(Request $request)
 {
-    if (auth()->user()->role !== 'pelanggan') {
+    if (!auth()->check() || auth()->user()->role != 'pelanggan') {
         abort(403, 'Akses hanya untuk pelanggan.');
     }
+
 
     $vehicles = Vehicle::query()
         ->when($request->location, fn($q) => $q->where('location', 'like', "%{$request->location}%"))
