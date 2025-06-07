@@ -11,41 +11,33 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Ambil semua user
-        $users = User::all();
+        // Total user pelanggan
+        $totalUsers = User::where('role', 'pelanggan')->count();
 
-        // Hitung user aktif per role
-            $totalUsers = \App\Models\User::where('role', 'pelanggan')->count();
-            $totalRentals = \App\Models\User::where('role', 'rental')->count();
+        // Total rental
+        $totalRentals = User::where('role', 'rental')->count();
 
-        // Ambil data transaksi per bulan tahun ini
-        $monthlyBookings = Booking::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        // Total profit dari semua booking
+        $totalProfit = Booking::sum('total_price');
 
-        $transactions = Booking::with(['user', 'vehicle'])->latest()->get();
+        // Data registrasi user pelanggan per bulan tahun ini
+        $userRegistrations = collect(range(1, 12))->map(function ($month) {
+            $count = User::where('role', 'pelanggan')
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', date('Y'))
+                ->count();
 
-        // Siapkan data chart
-        $chartLabels = [];
-        $chartData = [];
-
-        for ($i = 1; $i <= 12; $i++) {
-            $label = Carbon::create()->month($i)->format('M');
-            $chartLabels[] = $label;
-
-            $data = $monthlyBookings->firstWhere('month', $i);
-            $chartData[] = $data ? $data->total : 0;
-        }
+            return [
+                'month' => date('F', mktime(0, 0, 0, $month, 1)),
+                'count' => $count
+            ];
+        });
 
         return view('dashboard.admin', compact(
-            'users',
-            'activeUsers',
-            'activeRentals',
-            'chartLabels',
-            'chartData',
-            'transactions'
+            'totalUsers',
+            'totalRentals',
+            'totalProfit',
+            'userRegistrations'
         ));
     }
 

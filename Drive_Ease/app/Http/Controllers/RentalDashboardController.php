@@ -85,8 +85,8 @@ class RentalDashboardController extends Controller
     {
         $user = auth()->user();
         $bookings = \App\Models\Booking::whereHas('vehicle', function ($q) use ($user) {
-                $q->where('rental_id', $user->id);
-            })
+            $q->where('rental_id', $user->id);
+        })
             ->with(['vehicle', 'user'])
             ->latest()
             ->get();

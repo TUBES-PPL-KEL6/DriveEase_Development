@@ -16,7 +16,6 @@
     @livewireStyles
 
     @auth
-
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const countNotification = async () => {
@@ -28,13 +27,6 @@
                 setInterval(countNotification, 5000);
             });
 
-            // Fungsi ini digunakan untuk mengambil data notifikasi dari server
-            // dan menampilkannya dalam dropdown notifikasi
-
-            // Ketika fungsi ini dipanggil, akan melakukan request AJAX ke endpoint yang ditentukan
-            // untuk mendapatkan daftar notifikasi
-
-            // Parameter yang dikirim dalam request:
             function fetchNotifications() {
                 fetch('{{ route('notifications.fetch') }}')
                     .then(response => response.json())
@@ -47,7 +39,6 @@
                         } else {
                             data.forEach(notification => {
                                 container.innerHTML += `
-
                                 <div class="card mb-2">
                                     <div class="card-body d-flex justify-content-between gap-4 p-3">
                                         <div>
@@ -60,13 +51,11 @@
                                         </div>
                                     </div>
                                 </div>`;
-
                             });
                         }
                     });
             }
 
-            // Fungsi untuk menandai notifikasi sebagai sudah dibaca
             function markAsRead(id) {
                 fetch('{{ route('notifications.markAsRead') }}', {
                     method: 'POST',
@@ -77,21 +66,9 @@
                     body: JSON.stringify({
                         id
                     })
-
                 });
-        }
-
-        function markAsRead(id) {
-            fetch('{{ route('notifications.markAsRead') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ id })
-            });
-        }
-    </script>
+            }
+        </script>
     @endauth
 
     <style>
@@ -100,7 +77,9 @@
             border-bottom: 1px solid #e2e8f0;
         }
 
-        .navbar-brand, .navbar-nav .nav-link, .space-x-4 a {
+        .navbar-brand,
+        .navbar-nav .nav-link,
+        .space-x-4 a {
             color: #334155 !important;
         }
 
@@ -143,25 +122,34 @@
                     @auth
                         <div class="dropdown">
                             <button class="text-sm text-gray-700 hover:text-blue-600 dropdown-toggle d-flex items-center"
-                                type="button" id="notificationDropdown" data-bs-toggle="dropdown" onclick="fetchNotifications()">
+                                type="button" id="notificationDropdown" data-bs-toggle="dropdown"
+                                onclick="fetchNotifications()">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20"
                                     fill="currentColor">
-                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                    <path
+                                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                 </svg>
                                 <span id="notification-count" class="badge bg-danger rounded-pill">0</span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end p-2 space-y-2" style="width: 300px;" id="notifications-container">
+                            <ul class="dropdown-menu dropdown-menu-end p-2 space-y-2" style="width: 300px;"
+                                id="notifications-container">
                                 <li><a class="dropdown-item" href="#">Lihat Semua Notifikasi</a></li>
                             </ul>
                         </div>
 
                         @if (auth()->user()->role === 'pelanggan')
-                            <a href="{{ route('user.dashboard') }}" class="text-sm text-gray-700 hover:text-blue-600">Dashboard</a>
-                            <a href="{{ route('vehicles.index') }}" class="text-sm text-gray-700 hover:text-blue-600">Cari Kendaraan</a>
+                            <a href="{{ route('user.dashboard') }}"
+                                class="text-sm text-gray-700 hover:text-blue-600">Dashboard</a>
+                            <a href="{{ route('vehicles.index') }}" class="text-sm text-gray-700 hover:text-blue-600">Cari
+                                Kendaraan</a>
                         @elseif(auth()->user()->role === 'rental')
-                            <a href="{{ route('rental.dashboard') }}" class="text-sm text-gray-700 hover:text-blue-600">Dashboard Rental</a>
+                            <a href="{{ route('rental.dashboard') }}"
+                                class="text-sm text-gray-700 hover:text-blue-600">Dashboard Rental</a>
+                            <a href="{{ route('rental.drivers.index') }}"
+                                class="text-sm text-gray-700 hover:text-blue-600">Driver</a>
                         @elseif(auth()->user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-700 hover:text-blue-600">Dashboard Admin</a>
+                            <a href="{{ route('admin.dashboard') }}"
+                                class="text-sm text-gray-700 hover:text-blue-600">Dashboard Admin</a>
                         @endif
 
                         <form method="POST" action="{{ route('logout') }}" class="inline">

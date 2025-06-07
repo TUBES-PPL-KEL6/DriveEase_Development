@@ -20,17 +20,14 @@ class DriverController extends Controller
             // Mengambil driver yang tidak memiliki job pada rentang tanggal yang dipilih
             $driver = Driver::where('rental_id', $vehicle->rental_id)
                 ->whereDoesntHave('jobs', function ($query) use ($start_date, $end_date) {
-                    $query->whereHas('booking', function ($q) {
-                        $q->where('status', '!=', 'batal');
-                    })
-                        ->where(function ($q) use ($start_date, $end_date) {
-                            $q->whereBetween('start_date', [$start_date, $end_date])
-                                ->orWhereBetween('end_date', [$start_date, $end_date])
-                                ->orWhere(function ($q) use ($start_date, $end_date) {
-                                    $q->where('start_date', '<=', $start_date)
-                                        ->where('end_date', '>=', $end_date);
-                                });
-                        });
+                    $query->where(function ($q) use ($start_date, $end_date) {
+                        $q->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhere(function ($q) use ($start_date, $end_date) {
+                                $q->where('start_date', '<=', $start_date)
+                                    ->where('end_date', '>=', $end_date);
+                            });
+                    });
                 })->get();
             return response()->json($driver);
         } catch (\Exception $e) {
@@ -58,7 +55,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('rental.driver.create');
+        return view('rental.driver.edit');
     }
 
     /**
@@ -92,6 +89,7 @@ class DriverController extends Controller
      */
     public function show(Driver $driver)
     {
+
         $driver->load('jobs.booking.vehicle');
         return view('rental.driver.show', compact('driver'));
     }

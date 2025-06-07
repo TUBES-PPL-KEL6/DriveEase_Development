@@ -2,16 +2,28 @@
 
 @section('styles')
     <style>
-        table, th, td { border: none !important; }
-        table { border-collapse: collapse; }
+        table, th, td {
+            border: none !important;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        /* Tambahan styling untuk sel header table agar teks hitam */
         thead th {
             color: #334155 !important;
+            /* Warna teks gelap */
         }
+
         tbody tr:nth-child(even) {
             background-color: #f8fafc;
+            /* Warna background untuk baris genap */
         }
+
         tbody tr:hover {
             background-color: #eff6ff;
+            /* Warna background saat hover */
         }
     </style>
 @endsection
@@ -181,16 +193,24 @@
                 </div>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-6 flex flex-col sm:flex-row gap-4">
                 <a href="{{ route('rental.vehicles.create') }}"
-                   class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 text-center font-semibold shadow-md">
+                    class="w-full sm:w-auto bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 text-center font-semibold shadow-md flex items-center justify-center">
                     + Tambah Kendaraan
                 </a>
-            </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <a href="{{ route('rental.drivers.index') }}"
-                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    class="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 text-center font-semibold shadow-md flex items-center justify-center">
                     Kelola Driver
+                </a>
+                <a href="{{ route('rental.history') }}"
+                    class="w-full sm:w-auto bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition duration-300 text-center font-semibold shadow-md flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    Lihat Riwayat Pemesanan
                 </a>
             </div>
         </div>
