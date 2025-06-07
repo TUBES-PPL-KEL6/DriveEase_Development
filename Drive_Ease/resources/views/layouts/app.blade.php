@@ -27,13 +27,6 @@
                 setInterval(countNotification, 5000);
             });
 
-            // Fungsi ini digunakan untuk mengambil data notifikasi dari server
-            // dan menampilkannya dalam dropdown notifikasi
-
-            // Ketika fungsi ini dipanggil, akan melakukan request AJAX ke endpoint yang ditentukan
-            // untuk mendapatkan daftar notifikasi
-
-            // Parameter yang dikirim dalam request:
             function fetchNotifications() {
                 fetch('{{ route('notifications.fetch') }}')
                     .then(response => response.json())
@@ -63,7 +56,6 @@
                     });
             }
 
-            // Fungsi untuk menandai notifikasi sebagai sudah dibaca
             function markAsRead(id) {
                 fetch('{{ route('notifications.markAsRead') }}', {
                     method: 'POST',
