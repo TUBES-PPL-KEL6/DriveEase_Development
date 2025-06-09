@@ -142,6 +142,8 @@
                                 class="text-sm text-gray-700 hover:text-blue-600">Dashboard</a>
                             <a href="{{ route('vehicles.index') }}" class="text-sm text-gray-700 hover:text-blue-600">Cari
                                 Kendaraan</a>
+                            <a href="{{ route('user.upload.form') }}" class="text-sm text-gray-700 hover:text-blue-600">Upload Dokumen</a>
+
                         @elseif(auth()->user()->role === 'rental')
                             <a href="{{ route('rental.dashboard') }}"
                                 class="text-sm text-gray-700 hover:text-blue-600">Dashboard Rental</a>

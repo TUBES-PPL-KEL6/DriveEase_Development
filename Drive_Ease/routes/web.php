@@ -24,6 +24,8 @@ use App\Http\Middleware\IsRental;
 use App\Http\Middleware\IsPelanggan;
 use App\Livewire\Admin\PaymentReportTable;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DocumentController;
+
 
 // ===========================
 // 🔐 Akses Umum
@@ -65,11 +67,11 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
     Route::get('/dashboard', [BookingController::class, 'Booking_Dashboard'])->name('dashboard');
 
     // Pemesanan (Rents)
-    Route::get('/rents', [\App\Http\Controllers\RentController::class, 'index'])->name('rents.index');
-    Route::get('/rents/{id}', [\App\Http\Controllers\RentController::class, 'show'])->name('rents.show');
-    Route::post('/rents', [\App\Http\Controllers\RentController::class, 'store'])->name('rents.store');
-    Route::post('/rents/{id}/reject', [\App\Http\Controllers\RentController::class, 'rejectRent'])->name('rents.reject');
-    Route::post('/rents/{id}/confirm', [\App\Http\Controllers\RentController::class, 'reConfirm'])->name('rents.reConfirm');
+    //Route::get('/rents', [\App\Http\Controllers\RentController::class, 'index'])->name('rents.index');
+    //Route::get('/rents/{id}', [\App\Http\Controllers\RentController::class, 'show'])->name('rents.show');
+    //Route::post('/rents', [\App\Http\Controllers\RentController::class, 'store'])->name('rents.store');
+    //Route::post('/rents/{id}/reject', [\App\Http\Controllers\RentController::class, 'rejectRent'])->name('rents.reject');
+    //Route::post('/rents/{id}/confirm', [\App\Http\Controllers\RentController::class, 'reConfirm'])->name('rents.reConfirm');
 
     // Booking
     Route::post('/bookings/{vehicle}', [BookingController::class, 'store'])->name('bookings.store');
@@ -84,6 +86,10 @@ Route::middleware(['auth', IsPelanggan::class])->prefix('user')->name('user.')->
 
     // Booking History
     Route::get('/history', [BookingController::class, 'history'])->name('history');
+
+    // Verifikasi Dokumen Pelanggan
+    Route::get('/upload-dokumen', [DocumentController::class, 'showUploadForm'])->name('upload.form');
+    Route::post('/upload-dokumen', [DocumentController::class, 'upload'])->name('upload.submit');
 });
 
 // ===========================
@@ -137,8 +143,12 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
     Route::post('/booking/{id}/approve', [BookingController::class, 'approve'])->name('booking.approve');
     Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
-    // User Management
+    // User Management (resource)
     Route::resource('users', UserController::class);
+
+    // ✅ Upload dan Verifikasi Dokumen
+    Route::get('/verifikasi-dokumen', [\App\Http\Controllers\AdminController::class, 'listDocuments'])->name('verify.documents');
+    Route::post('/verifikasi-dokumen/{id}', [\App\Http\Controllers\AdminController::class, 'verifyDocument'])->name('verify.document');
 });
 
 // ===========================
@@ -177,7 +187,7 @@ Route::prefix('notifications')->name('notifications.')->group(function () {
 // ===========================
 // ⭐ Review
 // ===========================
-Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
+//Route::get('/review', [CarController::class, 'reviewPage'])->name('cars.review');
 Route::resource('reviews', ReviewController::class)->except(['index', 'show', 'create']);
 
 Route::post('/rental/reviews/{booking}', [RentalReviewController::class, 'store'])->name('rental.reviews.store');
