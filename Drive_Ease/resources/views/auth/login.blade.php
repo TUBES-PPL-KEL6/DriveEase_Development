@@ -41,10 +41,9 @@
                 </a>
             @endif
 
-            <div class="flex space-x-2">
-                <x-primary-button>
-                    {{ __('Log in') }}
-                </x-primary-button>
+            <x-primary-button dusk="submit-login">
+    {{ __('Log in') }}
+</x-primary-button>
 
                 {{-- Tombol Register --}}
                 <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">

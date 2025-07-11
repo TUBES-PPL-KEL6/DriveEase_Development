@@ -165,6 +165,10 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
             $results[$key] = $values;
         }
 
+        if (! $results) {
+            return new static;
+        }
+
         return new static(array_replace(...$results));
     }
 
@@ -1232,7 +1236,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get and remove the first N items from the collection.
      *
-     * @param  int  $count
+     * @param  int<0, max>  $count
      * @return static<int, TValue>|TValue|null
      *
      * @throws \InvalidArgumentException
@@ -1725,8 +1729,10 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Transform each item in the collection using a callback.
      *
-     * @param  callable(TValue, TKey): TValue  $callback
-     * @return $this
+     * @template TMapValue
+     *
+     * @param  callable(TValue, TKey): TMapValue  $callback
+     * @return $this<TKey, TMapValue>
      */
     public function transform(callable $callback)
     {
@@ -1838,7 +1844,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Count the number of items in the collection.
      *
-     * @return int
+     * @return int<0, max>
      */
     public function count(): int
     {

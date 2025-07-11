@@ -1,5 +1,4 @@
 <?php
-<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
@@ -146,20 +145,32 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 // 💳 Checkout & Pembayaran
 // ===========================
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('index');
-Route::post('/checkout', [CheckoutController::class, 'index'])->name('index');
-Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('user.show');
-Route::get('/checkout/{id}', [CheckoutController::class, 'payment'])->name('user.show');
+// Halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+// Lihat detail checkout
+Route::get('/checkout/{id}', [CheckoutController::class, 'show'])->name('checkout.show');
+
+// Proses pembayaran (jika ada)
+Route::get('/checkout/{id}/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+
+// Notifikasi Midtrans
 Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+
+// Dashboard user setelah pembayaran
 Route::get('/dashboard/user', [CheckoutController::class, 'Dashboard'])->name('user.dashboard.user');
-//Route::get('/dashboard', [CheckoutController::class, 'Dashboard'])->name('dashboard');
+
+// Selesai pembayaran
 Route::get('/payment/finish', [CheckoutController::class, 'finish'])->name('payment.finish');
-Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+
+// Proses checkout
+Route::post('/payment/checkout', [CheckoutController::class, 'checkout'])->name('payment.checkout');
+
+// Return ke dashboard setelah checkout
 Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
 
-Route::post('/payment/checkout', [CheckoutController::class, 'index'])->name('checkout');
-Route::get('/checkout/return', [CheckoutController::class, 'returnToDashboard'])->name('checkout.return');
-
+// Payment History (jika memang diperlukan)
 Route::prefix('payment-history')->name('payment_history.')->group(function () {
     Route::get('/create', [PaymentHistoryController::class, 'create'])->name('create');
     Route::post('/store', [PaymentHistoryController::class, 'store'])->name('store');

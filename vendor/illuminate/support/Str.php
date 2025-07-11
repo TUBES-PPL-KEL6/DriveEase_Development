@@ -297,6 +297,10 @@ class Str
      */
     public static function contains($haystack, $needles, $ignoreCase = false)
     {
+        if (is_null($haystack)) {
+            return false;
+        }
+
         if ($ignoreCase) {
             $haystack = mb_strtolower($haystack);
         }
@@ -384,12 +388,12 @@ class Str
      */
     public static function endsWith($haystack, $needles)
     {
-        if (! is_iterable($needles)) {
-            $needles = (array) $needles;
-        }
-
         if (is_null($haystack)) {
             return false;
+        }
+
+        if (! is_iterable($needles)) {
+            $needles = (array) $needles;
         }
 
         foreach ($needles as $needle) {
@@ -399,6 +403,18 @@ class Str
         }
 
         return false;
+    }
+
+    /**
+     * Determine if a given string doesn't end with a given substring.
+     *
+     * @param  string  $haystack
+     * @param  string|iterable<string>  $needles
+     * @return bool
+     */
+    public static function doesntEndWith($haystack, $needles)
+    {
+        return ! static::endsWith($haystack, $needles);
     }
 
     /**
@@ -1638,12 +1654,12 @@ class Str
      */
     public static function startsWith($haystack, $needles)
     {
-        if (! is_iterable($needles)) {
-            $needles = [$needles];
-        }
-
         if (is_null($haystack)) {
             return false;
+        }
+
+        if (! is_iterable($needles)) {
+            $needles = [$needles];
         }
 
         foreach ($needles as $needle) {
@@ -1653,6 +1669,18 @@ class Str
         }
 
         return false;
+    }
+
+    /**
+     * Determine if a given string doesn't start with a given substring.
+     *
+     * @param  string  $haystack
+     * @param  string|iterable<string>  $needles
+     * @return bool
+     */
+    public static function doesntStartWith($haystack, $needles)
+    {
+        return ! static::startsWith($haystack, $needles);
     }
 
     /**

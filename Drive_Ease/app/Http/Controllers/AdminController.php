@@ -1,5 +1,4 @@
 <?php
-<?php
 
 namespace App\Http\Controllers;
 
@@ -12,22 +11,22 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Get total users count
-        $totalUsers = \App\Models\User::where('role', 'pelanggan')->count();
-        
-        // Get total rentals count
-        $totalRentals = \App\Models\User::where('role', 'rental')->count();
-        
-        // Get total profit from all bookings
-        $totalProfit = \App\Models\Booking::sum('total_price');
-        
-        // Get user registration data for all months of the current year
+        // Total user pelanggan
+        $totalUsers = User::where('role', 'pelanggan')->count();
+
+        // Total rental
+        $totalRentals = User::where('role', 'rental')->count();
+
+        // Total profit dari semua booking
+        $totalProfit = Booking::sum('total_price');
+
+        // Data registrasi user pelanggan per bulan tahun ini
         $userRegistrations = collect(range(1, 12))->map(function ($month) {
-            $count = \App\Models\User::where('role', 'pelanggan')
+            $count = User::where('role', 'pelanggan')
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', date('Y'))
                 ->count();
-                
+
             return [
                 'month' => date('F', mktime(0, 0, 0, $month, 1)),
                 'count' => $count

@@ -9,7 +9,7 @@ class VehicleController extends Controller
 {
     public function index(Request $request)
     {
-        if (auth()->user()->role !== 'pelanggan') {
+        if (!auth()->check() || auth()->user()->role !== 'pelanggan') {
             abort(403, 'Akses hanya untuk pelanggan.');
         }
 
@@ -20,7 +20,7 @@ class VehicleController extends Controller
             ->when($request->price_min, fn($q) => $q->where('price_per_day', '>=', $request->price_min))
             ->when($request->price_max, fn($q) => $q->where('price_per_day', '<=', $request->price_max))
             ->where('available', true)
-            ->paginate(9);  // Menggunakan pagination untuk membatasi hasil
+            ->paginate(9);
 
         return view('vehicles.index', compact('vehicles'));
     }
