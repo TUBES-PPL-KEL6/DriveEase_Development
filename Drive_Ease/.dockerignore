@@ -1,0 +1,16 @@
+# Abaikan dependensi Node & PHP
+node_modules/
+vendor/
+
+# Abaikan file environment lokal
+.env
+
+# Abaikan file log dan cache Laravel
+storage/logs
+storage/framework/sessions
+storage/framework/cache
+storage/framework/views
+
+# Abaikan file sistem operasi dan git
+.git
+.DS_Store
