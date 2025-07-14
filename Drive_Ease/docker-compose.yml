@@ -1,49 +1,53 @@
-# 'version' sudah tidak relevan dan bisa dihapus
+version: '3.8'
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: driveease-app
-    container_name: driveease-app
+    container_name: laravel-app
     restart: unless-stopped
     working_dir: /var/www
-    user: "root" # <--- TAMBAHKAN BARIS INI
     volumes:
-      - ./:/var/www # <--- KEMBALIKAN BARIS INI
-    environment:
-      - DB_HOST=db
-      - DB_DATABASE=driveease
-      - DB_USERNAME=driveease
-      - DB_PASSWORD=driveease
+      - .:/var/www
+    ports:
+      - "9000:9000"
     depends_on:
-      - db
-  webserver:
-    image: nginx:alpine
-    container_name: driveease-nginx
+      - postgres
+    networks:
+      - laravel
+
+  postgres:
+    image: postgres:15
+    container_name: laravel-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: driveease
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel
+
+  nginx:
+    image: nginx:latest
+    container_name: laravel-nginx
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8000:80"
     volumes:
-      # Mount ini penting agar Nginx bisa melihat file yang sama dengan 'app'
-      - ./:/var/www 
+      - .:/var/www
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
+    networks:
+      - laravel
 
-  db:
-    image: mysql:8.0
-    container_name: driveease-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: driveease
-      MYSQL_USER: driveease
-      MYSQL_PASSWORD: driveease
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3307:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
+networks:
+  laravel:
 
 volumes:
-  dbdata:
+  pgdata:
